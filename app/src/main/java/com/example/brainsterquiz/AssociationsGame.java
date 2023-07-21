@@ -1,37 +1,34 @@
 package com.example.brainsterquiz;
 
-import static android.content.ContentValues.TAG;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.text.InputType;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+
+import io.socket.client.Socket;
 
 public class AssociationsGame extends AppCompatActivity {
+
         private TextView A2Txt;
         private TextView A1Txt;
         private TextView A3Txt;
         private TextView A4Txt;
+
         private int Aopen;
     private int Bopen;
     private int Copen;
@@ -54,6 +51,7 @@ public class AssociationsGame extends AppCompatActivity {
     private TextView D1Txt;
     private TextView D3Txt;
     private TextView D4Txt;
+
     private TextView ATxt;
     private TextView BTxt;
     private TextView CTxt;
@@ -71,6 +69,7 @@ public class AssociationsGame extends AppCompatActivity {
     private TextView bScore1;
     private int hint = 0;
     private int opened;
+    private Socket mSocket;
     CountDownTimer timera;
 
     FirebaseFirestore db;
@@ -89,6 +88,8 @@ public class AssociationsGame extends AppCompatActivity {
         Cg= 0;
         Dg= 0;
         this.opened = 0;
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_associations_game);
         getSupportActionBar().hide();

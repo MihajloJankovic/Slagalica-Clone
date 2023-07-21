@@ -33,7 +33,10 @@ android {
 }
 
 dependencies {
-
+    implementation ('io.socket:socket.io-client:2.0.0') {
+        exclude group: 'org.json', module: 'json'
+    }
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.3'
     implementation platform('com.google.firebase:firebase-bom:32.1.0')
     implementation 'com.google.firebase:firebase-firestore'
     implementation group: 'com.jtransc', name: 'jtransc-rt', version: '0.5.3'
