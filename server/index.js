@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
       }
     }
     socket.on('start', () => {
-      io.to(socket.id).emit("startMatch",true);
+      io.emit("startMatch",true);
      
     
   })
@@ -44,6 +44,20 @@ io.on('connection', (socket) => {
      
     
   })
+   socket.on('turn', () => {
+
+    if(socket.id == a)
+    {
+      io.to(b).emit("changeturn");
+    }
+    if(socket.id == b)
+    {
+      io.to(a).emit("changeturn");
+    }
+     
+    
+  })
+  
    
     socket.on('Ime', (zika) => {
        

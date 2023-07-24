@@ -86,6 +86,8 @@ public class BrainsterHome extends AppCompatActivity {
 
         app =new ChatApplication();
         mSocket = app.getSocket();
+        con app = (con)BrainsterHome.this.getApplication();
+        Socket socket = app.setSocket(mSocket);
         mSocket.on("pleyer1",(a) -> {
             Tost();
         });
@@ -131,6 +133,7 @@ public class BrainsterHome extends AppCompatActivity {
                 intent.putExtra("rName", rname);
                 intent.putExtra("rScore", "0");
                 intent.putExtra("bScore", "0");
+                intent.putExtra("turn", turn);
 
                 startActivity(intent);
 

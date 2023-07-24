@@ -117,10 +117,17 @@ public class AssociationsGame extends AppCompatActivity {
             this.bName = extras.getString("bName");
             this.rScore = extras.getString("rScore");
             this.bScore = extras.getString("bScore");
+            this.turn = extras.getInt("turn");
+                con app = (con)AssociationsGame.this.getApplication();
+                this.mSocket = app.getSocket();
         }
             //The key argument here must match that used in the other activity
         }
 
+        mSocket.on("changeturn",(a) -> {
+
+            this.turn = 1;
+        });
         this.A2Txt = (TextView) findViewById(R.id.A2Txt);
         this.A1Txt = (TextView) findViewById(R.id.A1Txt);
         this.A3Txt = (TextView) findViewById(R.id.A3Txt);
@@ -265,6 +272,8 @@ public class AssociationsGame extends AppCompatActivity {
                   }
                   String finalIdd = idd;
                   int finalRes = res;
+                  mSocket.emit("turn");
+                  turn = 2;
                   db.collection("/games/asocijacije/1").document(round+"")
                           .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                               @Override
