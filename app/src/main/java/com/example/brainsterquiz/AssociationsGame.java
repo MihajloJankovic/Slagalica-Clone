@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -127,7 +125,21 @@ public class AssociationsGame extends AppCompatActivity {
         mSocket.on("changeturn",(a) -> {
 
             this.turn = 1;
+            opened = 0;
         });
+        mSocket.on("opens",(a) -> {
+
+           openOne(a[0].toString());
+        });
+        mSocket.on("opencs",(a) -> {
+
+            openCOlumn(a[0].toString());
+        });
+        mSocket.on("ennemywin",(a) -> {
+
+            Pobeda();
+        });
+
         this.A2Txt = (TextView) findViewById(R.id.A2Txt);
         this.A1Txt = (TextView) findViewById(R.id.A1Txt);
         this.A3Txt = (TextView) findViewById(R.id.A3Txt);
@@ -229,6 +241,132 @@ public class AssociationsGame extends AppCompatActivity {
 
 
     }
+    public void openCOlumn(String a) {
+        if( turn != 3)
+        {
+
+                    opened=0;
+                    String idd = "";
+                    int res = 6 ;
+                    int is = 0;
+                    switch (a) {
+                        case "BTxt":
+                            // do something
+                            idd = "BTxt";
+                            is = R.id.BTxt;
+                            res=   res - Bopen;
+
+                            break;
+                        case "CTxt":
+                            // do something else
+                            idd = "CTxt";
+                            is = R.id.CTxt;
+                            res=   res - Copen;
+                            break;
+                        case "DTxt":
+                            // i'm lazy, do nothing
+                            idd = "DTxt";
+                            is = R.id.DTxt;
+                            res=   res - Dopen;
+                            break;
+                        case "ATxt":
+                            // do something
+                            idd = "ATxt";
+                            is = R.id.ATxt;
+                            res=   res - Aopen;
+                            break;
+                    }
+                    String finalIdd = idd;
+                    int finalRes = res;
+
+            int finalIs = is;
+            int finalIs1 = is;
+            db.collection("/games/asocijacije/1").document(round+"")
+                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    if(true)
+                                    {
+
+
+                                        bScore =String.valueOf(Integer.valueOf(bScore) + finalRes);
+                                        TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
+                                        field1.setText(bScore);
+                                        TextView field = (TextView) findViewById(finalIs);
+                                        field.setText(documentSnapshot.getString(a));
+                                        switch (finalIs1) {
+                                            case R.id.ATxt:
+                                                // do something
+                                                Ag=1;
+                                                TextView field5 = (TextView) findViewById(R.id.A1Txt);
+                                                field5.setText(documentSnapshot.getString("A1Txt"));
+                                                TextView field2 = (TextView) findViewById(R.id.A2Txt);
+                                                field2.setText(documentSnapshot.getString("A2Txt"));
+
+                                                TextView field3 = (TextView) findViewById(R.id.A3Txt);
+                                                field3.setText(documentSnapshot.getString("A3Txt"));
+
+                                                TextView field4 = (TextView) findViewById(R.id.A4Txt);
+                                                field4.setText(documentSnapshot.getString("A4Txt"));
+
+                                                break;
+                                            case R.id.BTxt:
+                                                Bg = 1;
+                                                TextView field51 = (TextView) findViewById(R.id.B1Txt);
+                                                field51.setText(documentSnapshot.getString("B1Txt"));
+                                                TextView field21 = (TextView) findViewById(R.id.B2Txt);
+                                                field21.setText(documentSnapshot.getString("B2Txt"));
+
+                                                TextView field31 = (TextView) findViewById(R.id.B3Txt);
+                                                field31.setText(documentSnapshot.getString("B3Txt"));
+
+                                                TextView field41 = (TextView) findViewById(R.id.B4Txt);
+                                                field41.setText(documentSnapshot.getString("B4Txt"));
+
+                                                break;
+                                            case R.id.CTxt:
+                                                Cg= 1;
+                                                TextView field52 = (TextView) findViewById(R.id.C1Txt);
+                                                field52.setText(documentSnapshot.getString("C1Txt"));
+                                                TextView field22 = (TextView) findViewById(R.id.C2Txt);
+                                                field22.setText(documentSnapshot.getString("C2Txt"));
+
+                                                TextView field32 = (TextView) findViewById(R.id.C3Txt);
+                                                field32.setText(documentSnapshot.getString("C3Txt"));
+
+                                                TextView field42 = (TextView) findViewById(R.id.C4Txt);
+                                                field42.setText(documentSnapshot.getString("C4Txt"));
+
+                                                break;
+                                            case R.id.DTxt:
+                                                Dg = 1;
+                                                TextView field53 = (TextView) findViewById(R.id.D1Txt);
+                                                field53.setText(documentSnapshot.getString("D1Txt"));
+                                                TextView field23 = (TextView) findViewById(R.id.D2Txt);
+                                                field23.setText(documentSnapshot.getString("D2Txt"));
+
+                                                TextView field33 = (TextView) findViewById(R.id.D3Txt);
+                                                field33.setText(documentSnapshot.getString("D3Txt"));
+
+                                                TextView field43 = (TextView) findViewById(R.id.D4Txt);
+                                                field43.setText(documentSnapshot.getString("D4Txt"));
+
+                                                break;
+                                        }
+
+                                    }
+
+
+                                }
+
+                                //db get string and set it to int
+                            });
+
+
+                }
+            }
+
+
     public void addStep(View v) {
       if((turn == 1 || turn == 3) && opened == 1)
       {
@@ -272,14 +410,20 @@ public class AssociationsGame extends AppCompatActivity {
                   }
                   String finalIdd = idd;
                   int finalRes = res;
-                  mSocket.emit("turn");
-                  turn = 2;
+
+                  String finalIdd1 = idd;
                   db.collection("/games/asocijacije/1").document(round+"")
                           .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                               @Override
                               public void onSuccess(DocumentSnapshot documentSnapshot) {
                                   if(value.equals(documentSnapshot.getString(finalIdd)))
                                   {
+
+                                      if(turn != 3)
+                                      {
+                                          mSocket.emit("openColumn", finalIdd1);
+
+                                      }
 
                                       rScore =String.valueOf(Integer.valueOf(rScore) + finalRes);
                                       TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
@@ -352,6 +496,14 @@ public class AssociationsGame extends AppCompatActivity {
                                       }
                                         Konacno(v);
 
+                                  }
+                                  else{
+                                      if(turn != 3 )
+                                      {
+                                          mSocket.emit("turn");
+                                          turn = 2;
+                                          opened = 0;
+                                      }
                                   }
 
                               }
@@ -467,6 +619,7 @@ public class AssociationsGame extends AppCompatActivity {
             }
 
             String finalIdd = idd;
+            mSocket.emit("open",finalIdd);
             db.collection("/games/asocijacije/1").document(round+"")
                     .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
@@ -482,6 +635,329 @@ public class AssociationsGame extends AppCompatActivity {
 
     }
 }
+    public void openOne(String a) {
+        if( turn != 3)
+        {
+            String idd = "";
+            int is = 0;
+            switch (a) {
+                case "A1Txt":
+                    // do something
+                    idd = "A1Txt"  ;
+                    is = R.id.A1Txt;
+                    ++Aopen;
+                    break;
+                case "A2Txt":
+                    // do something else
+                    idd =  "A2Txt" ;
+                    is = R.id.A2Txt;
+                    ++Aopen;
+                    break;
+                case "A3Txt" :
+                    // i'm lazy, do nothing
+                    idd ="A3Txt"   ;
+                    is = R.id.A3Txt;
+                    ++Aopen;
+                    break;
+                case "A4Txt":
+                    // do something
+                    idd =  "A4Txt" ;
+                    is = R.id.A4Txt;
+                    ++Aopen;
+                    break;
+                case  "B1Txt" :
+                    // do something else
+                    idd =  "B1Txt" ;
+                    is = R.id.B1Txt;
+                    ++Bopen;
+                    break;
+                case "B2Txt":
+                    // i'm lazy, do nothing
+                    idd = "B2Txt"  ;
+                    is = R.id.B2Txt;
+                    ++Bopen;
+                    break;
+                case "B3Txt":
+                    // do something
+                    idd =  "B3Txt" ;
+                    is = R.id.B3Txt;
+                    ++Bopen;
+                    break;
+                case "B4Txt":
+                    // do something else
+                    idd =   "B4Txt";
+                    is = R.id.B4Txt;
+                    ++Bopen;
+                    break;
+                case "C1Txt":
+                    // i'm lazy, do nothing
+                    idd =  "C1Txt" ;
+                    is = R.id.C1Txt;
+                    ++Copen;
+                    break;
+                case "C2Txt" :
+                    // do something
+                    idd =  "C2Txt" ;
+                    is = R.id.C2Txt;
+                    ++Copen;
+                    break;
+                case "C3Txt" :
+                    // do something else
+                    idd =  "C3Txt" ;
+                    is = R.id.C3Txt;
+                    ++Copen;
+                    break;
+                case "C4Txt":
+                    // i'm lazy, do nothing
+                    idd =  "C4Txt" ;
+                    is = R.id.C4Txt;
+                    ++Copen;
+                    break;
+                case  "D1Txt":
+                    // do something
+                    idd =  "D1Txt" ;
+                    is = R.id.D1Txt;
+                    ++Dopen;
+                    break;
+                case"D2Txt":
+                    // do something else
+                    idd =   "D2Txt";
+                    is = R.id.D2Txt;
+                    ++Dopen;
+                    break;
+                case "D3Txt" :
+                    // i'm lazy, do nothing
+                    idd =  "D3Txt" ;
+                    ++Dopen;
+                    is = R.id.D3Txt;
+                    break;
+                case  "D4Txt" :
+                    // i'm lazy, do nothing
+                    idd =  "D4Txt" ;
+                    is = R.id.D4Txt;
+                    ++Dopen;
+
+                    break;
+            }
+
+            String finalIdd = idd;
+            int finalIs = is;
+            db.collection("/games/asocijacije/1").document(round+"")
+                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            String   value = documentSnapshot.getString(finalIdd);
+                            TextView field = (TextView) findViewById(finalIs);
+                            field.setText(value);
+                            opened = 1;
+                        }
+
+                        //db get string and set it to int
+                    });
+
+        }
+    }
+    public void Pobeda() {
+        if(turn != 3) {
+
+
+            String finalIdd = "Konacno";
+            db.collection("/games/asocijacije/1").document(round+"")
+                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                            if(true)
+                            {
+
+                                int rs = 31;
+                                if(Ag == 1)
+                                {
+                                    rs= rs-6;
+                                }
+                                else{
+                                    rs=  rs-Aopen;
+                                }
+                                if(Bg == 1)
+                                {
+                                    rs= rs-6;
+                                }else{
+                                    rs=  rs-Bopen;
+                                }
+                                if(Cg == 1)
+                                {
+                                    rs= rs-6;
+                                }else{
+                                    rs=  rs-Copen;
+                                }
+                                if(Dg == 1)
+                                {
+                                    rs= rs-6;
+                                }else{
+                                    rs=  rs-Dopen;
+                                }
+                                bScore =String.valueOf(Integer.valueOf(bScore) + rs);
+                                TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
+                                field1.setText(rScore);
+
+                                TextView field5 = (TextView) findViewById(R.id.A1Txt);
+                                field5.setText(documentSnapshot.getString("A1Txt"));
+                                TextView field2 = (TextView) findViewById(R.id.A2Txt);
+                                field2.setText(documentSnapshot.getString("A2Txt"));
+
+                                TextView field3 = (TextView) findViewById(R.id.A3Txt);
+                                field3.setText(documentSnapshot.getString("A3Txt"));
+
+                                TextView field4 = (TextView) findViewById(R.id.A4Txt);
+                                field4.setText(documentSnapshot.getString("A4Txt"));
+
+
+                                TextView field51 = (TextView) findViewById(R.id.B1Txt);
+                                field51.setText(documentSnapshot.getString("B1Txt"));
+                                TextView field21 = (TextView) findViewById(R.id.B2Txt);
+                                field21.setText(documentSnapshot.getString("B2Txt"));
+
+                                TextView field31 = (TextView) findViewById(R.id.B3Txt);
+                                field31.setText(documentSnapshot.getString("B3Txt"));
+
+                                TextView field41 = (TextView) findViewById(R.id.B4Txt);
+                                field41.setText(documentSnapshot.getString("B4Txt"));
+
+
+                                TextView field52 = (TextView) findViewById(R.id.C1Txt);
+                                field52.setText(documentSnapshot.getString("C1Txt"));
+                                TextView field22 = (TextView) findViewById(R.id.C2Txt);
+                                field22.setText(documentSnapshot.getString("C2Txt"));
+
+                                TextView field32 = (TextView) findViewById(R.id.C3Txt);
+                                field32.setText(documentSnapshot.getString("C3Txt"));
+
+                                TextView field42 = (TextView) findViewById(R.id.C4Txt);
+                                field42.setText(documentSnapshot.getString("C4Txt"));
+
+
+                                TextView field53 = (TextView) findViewById(R.id.D1Txt);
+                                field53.setText(documentSnapshot.getString("D1Txt"));
+                                TextView field23 = (TextView) findViewById(R.id.D2Txt);
+                                field23.setText(documentSnapshot.getString("D2Txt"));
+
+                                TextView field33 = (TextView) findViewById(R.id.D3Txt);
+                                field33.setText(documentSnapshot.getString("D3Txt"));
+
+                                TextView field43 = (TextView) findViewById(R.id.D4Txt);
+                                field43.setText(documentSnapshot.getString("D4Txt"));
+
+                                TextView field531 = (TextView) findViewById(R.id.ATxt);
+                                field531.setText(documentSnapshot.getString("ATxt"));
+                                TextView field231 = (TextView) findViewById(R.id.BTxt);
+                                field231.setText(documentSnapshot.getString("BTxt"));
+
+                                TextView field331 = (TextView) findViewById(R.id.CTxt);
+                                field331.setText(documentSnapshot.getString("CTxt"));
+
+                                TextView field431 = (TextView) findViewById(R.id.DTxt);
+                                field431.setText(documentSnapshot.getString("DTxt"));
+
+                                TextView field4312 = (TextView) findViewById(R.id.finalTxt);
+                                field4312.setText(documentSnapshot.getString("Konacno"));
+                                if(turn != 3)
+                                {
+                                    mSocket.emit("Pobeda");
+
+                                }
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if(round == 1 && turn !=3)
+                                        {
+                                            ab=1;
+                                            timera.cancel();
+                                            Intent intent = new Intent(getApplicationContext(), CombinationsGame.class);
+                                            intent.putExtra("rName", rName);
+                                            intent.putExtra("bName", bName);
+                                            intent.putExtra("rScore", rScore);
+                                            intent.putExtra("bScore",bScore);
+                                            if(turn == 3)
+                                            {
+                                                intent.putExtra("solo", 1);
+                                            }else{
+                                                intent.putExtra("solo", 0);
+                                            }
+                                            intent.putExtra("round", 0);
+
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                        if(round == 0 && turn !=3)
+                                        {
+                                            ab=1;
+                                            timera.cancel();
+                                            Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
+                                            intent.putExtra("rName", rName);
+                                            intent.putExtra("bName", bName);
+                                            intent.putExtra("rScore", rScore);
+                                            intent.putExtra("bScore",bScore);
+                                            if(turn == 3)
+                                            {
+                                                intent.putExtra("solo", 1);
+                                            }else{
+                                                intent.putExtra("solo", 0);
+                                            }
+                                            intent.putExtra("round", 1);
+
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                        if(round == 0 && turn ==3)
+                                        {
+                                            ab=1;
+                                            timera.cancel();
+                                            Intent intent = new Intent(getApplicationContext(), CombinationsGame.class);
+                                            intent.putExtra("rName", rName);
+                                            intent.putExtra("bName", bName);
+                                            intent.putExtra("rScore", rScore);
+                                            intent.putExtra("bScore",bScore);
+                                            if(turn == 3)
+                                            {
+                                                intent.putExtra("solo", 1);
+                                            }else{
+                                                intent.putExtra("solo", 0);
+                                            }
+                                            intent.putExtra("round", 0);
+
+                                            startActivity(intent);
+
+                                        }
+
+
+                                    }
+                                }, 2000);
+
+                            }
+                            else{
+
+                                if(turn != 3 )
+                                {
+                                    mSocket.emit("turn");
+                                    turn = 2;
+                                    opened = 0;
+                                }
+                            }
+
+                        }
+
+
+                        //db get string and set it to int by Mihajlo
+                    });
+        }
+            }
+
+
+
+
+
+
     public void Konacno(View v) {
         if((turn == 1 || turn == 3) && opened == 1)
         {
@@ -498,6 +974,7 @@ public class AssociationsGame extends AppCompatActivity {
                     if(Aopen == 4 && Bopen==4 &&Copen==4 &&Dopen ==4)
                     {
                         opened = 1;
+
                     }
                    String valuea = String.valueOf(input.getText());
 
@@ -510,8 +987,15 @@ public class AssociationsGame extends AppCompatActivity {
                             .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
+
                                     if(valuea.equals(documentSnapshot.getString(finalIdd)))
                                     {
+                                        if(turn != 3 )
+                                        {
+                                            mSocket.emit("turn");
+                                            turn = 2;
+                                            opened = 0;
+                                        }
                                         int rs = 31;
                                         if(Ag == 1)
                                         {
@@ -602,6 +1086,12 @@ public class AssociationsGame extends AppCompatActivity {
 
                                         TextView field4312 = (TextView) findViewById(R.id.finalTxt);
                                         field4312.setText(documentSnapshot.getString("Konacno"));
+                                        mSocket.emit("Pobeda");
+                                        if(turn != 3)
+                                        {
+                                            mSocket.emit("Pobeda");
+
+                                        }
                                         Handler handler = new Handler();
                                         handler.postDelayed(new Runnable() {
                                             @Override
@@ -672,6 +1162,15 @@ public class AssociationsGame extends AppCompatActivity {
                                         }, 2000);
 
                                     }
+                                    else{
+
+                                        if(turn != 3 )
+                                        {
+                                            mSocket.emit("turn");
+                                            turn = 2;
+                                            opened = 0;
+                                        }
+                                    }
 
                                 }
 
@@ -687,15 +1186,18 @@ public class AssociationsGame extends AppCompatActivity {
             alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
                 public void onClick(DialogInterface dialog, int whichButton) {
-                    if(Aopen == 4 && Bopen==4 &&Copen==4 &&Dopen ==4)
+                    if(Aopen == 4 && Bopen==4 &&Copen==4 &&Dopen ==4 && turn ==3)
                     {
                         opened = 1;
                     }
-                    if(Bg == 1 && Ag==1 &&Cg==1 &&Dg ==1)
+                    if(Bg == 1 && Ag==1 &&Cg==1 &&Dg ==1 && turn ==3)
                     {
                         opened = 1;
                     }
-                    else {
+                    if(turn != 3 )
+                    {
+                        mSocket.emit("turn");
+                        turn = 2;
                         opened = 0;
                     }
                 }

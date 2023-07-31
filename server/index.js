@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
   res.send('<h1>Hello world</h1>');
 });
 
-server.listen(4001,'192.168.0.12', () => {
+server.listen(8081,'192.168.0.12', () => {
   console.log('listening on *:3000');
 });
 
@@ -57,8 +57,47 @@ io.on('connection', (socket) => {
      
     
   })
-  
-   
+    socket.on('open', (ab) => {
+
+        if(socket.id == a)
+        {
+            io.to(b).emit("opens",ab);
+        }
+        if(socket.id == b)
+        {
+            io.to(a).emit("opens",ab);
+        }
+
+
+    })
+    socket.on('openColumn', (ab) => {
+
+        if(socket.id == a)
+        {
+            io.to(b).emit("opencs",ab);
+        }
+        if(socket.id == b)
+        {
+            io.to(a).emit("opencs",ab);
+        }
+
+
+    })
+
+    socket.on('Pobeda', (ab) => {
+
+        if(socket.id == a)
+        {
+            console.log("a");
+            io.to(b).emit("ennemywin");
+        }
+        if(socket.id == b)
+        {
+            io.to(a).emit("ennemywin");
+        }
+
+
+    })
     socket.on('Ime', (zika) => {
        
       if(a != null && aime == 1)

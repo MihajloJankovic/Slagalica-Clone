@@ -105,7 +105,6 @@ public class BrainsterHome extends AppCompatActivity {
         mSocket.on("podaci",(a) -> {
 
 
-            Tost();
             Map<String,Object> mapa;
             try {
                 ObjectMapper mapper = new ObjectMapper();
