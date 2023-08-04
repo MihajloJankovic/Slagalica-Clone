@@ -98,6 +98,48 @@ io.on('connection', (socket) => {
 
 
     })
+    socket.on('enemyguess', (ab) => {
+
+        if(socket.id == a)
+        {
+            console.log("a");
+            io.to(b).emit("enemyguessc",ab);
+        }
+        if(socket.id == b)
+        {
+            io.to(a).emit("enemyguessc",ab);
+        }
+
+
+    })
+    socket.on('points', (ab) => {
+
+        if(socket.id == a)
+        {
+            console.log("a");
+            io.to(b).emit("pointsc");
+        }
+        if(socket.id == b)
+        {
+            io.to(a).emit("pointsc");
+        }
+
+
+    })
+    socket.on('nextgamec', (ab) => {
+
+        if(socket.id == a)
+        {
+            console.log("a");
+            io.to(b).emit("nextgamecc");
+        }
+        if(socket.id == b)
+        {
+            io.to(a).emit("nextgamecc");
+        }
+
+
+    })
     socket.on('Ime', (zika) => {
        
       if(a != null && aime == 1)

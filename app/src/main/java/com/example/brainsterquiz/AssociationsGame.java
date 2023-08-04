@@ -115,30 +115,34 @@ public class AssociationsGame extends AppCompatActivity {
             this.bName = extras.getString("bName");
             this.rScore = extras.getString("rScore");
             this.bScore = extras.getString("bScore");
-            this.turn = extras.getInt("turn");
-                con app = (con)AssociationsGame.this.getApplication();
-                this.mSocket = app.getSocket();
+           if(turn != 3)
+           {
+               this.turn = extras.getInt("turn");
+               con app = (con)AssociationsGame.this.getApplication();
+               this.mSocket = app.getSocket();
+               mSocket.on("changeturn",(a) -> {
+
+                   this.turn = 1;
+                   opened = 0;
+               });
+               mSocket.on("opens",(a) -> {
+
+                   openOne(a[0].toString());
+               });
+               mSocket.on("opencs",(a) -> {
+
+                   openCOlumn(a[0].toString());
+               });
+               mSocket.on("ennemywin",(a) -> {
+
+                   Pobeda();
+               });
+
+           }
         }
             //The key argument here must match that used in the other activity
         }
 
-        mSocket.on("changeturn",(a) -> {
-
-            this.turn = 1;
-            opened = 0;
-        });
-        mSocket.on("opens",(a) -> {
-
-           openOne(a[0].toString());
-        });
-        mSocket.on("opencs",(a) -> {
-
-            openCOlumn(a[0].toString());
-        });
-        mSocket.on("ennemywin",(a) -> {
-
-            Pobeda();
-        });
 
         this.A2Txt = (TextView) findViewById(R.id.A2Txt);
         this.A1Txt = (TextView) findViewById(R.id.A1Txt);
@@ -193,7 +197,8 @@ public class AssociationsGame extends AppCompatActivity {
                         intent.putExtra("solo", 0);
                     }
                     intent.putExtra("round", 0);
-
+                    intent.putExtra("round", 0);
+                    intent.putExtra("turn", turn);
                     startActivity(intent);
 
                 }if(round == 0 && ab == 0 && turn == 3)
@@ -210,6 +215,7 @@ public class AssociationsGame extends AppCompatActivity {
                         intent.putExtra("solo", 0);
                     }
                     intent.putExtra("round", 0);
+                    intent.putExtra("turn", 3);
 
                     startActivity(intent);
 
@@ -227,6 +233,7 @@ public class AssociationsGame extends AppCompatActivity {
                     }else{
                         intent.putExtra("solo", 0);
                     }
+                    intent.putExtra("turn", turn);
                     intent.putExtra("round", 1);
 
                     startActivity(intent);
@@ -619,7 +626,10 @@ public class AssociationsGame extends AppCompatActivity {
             }
 
             String finalIdd = idd;
-            mSocket.emit("open",finalIdd);
+          if(turn != 3)
+          {
+              mSocket.emit("open",finalIdd);
+          }
             db.collection("/games/asocijacije/1").document(round+"")
                     .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
@@ -905,7 +915,7 @@ public class AssociationsGame extends AppCompatActivity {
                                                 intent.putExtra("solo", 0);
                                             }
                                             intent.putExtra("round", 1);
-
+                                            intent.putExtra("turn", turn);
                                             startActivity(intent);
                                             finish();
                                         }
@@ -925,6 +935,7 @@ public class AssociationsGame extends AppCompatActivity {
                                                 intent.putExtra("solo", 0);
                                             }
                                             intent.putExtra("round", 0);
+                                            intent.putExtra("turn", 3);
 
                                             startActivity(intent);
 
@@ -1086,7 +1097,7 @@ public class AssociationsGame extends AppCompatActivity {
 
                                         TextView field4312 = (TextView) findViewById(R.id.finalTxt);
                                         field4312.setText(documentSnapshot.getString("Konacno"));
-                                        mSocket.emit("Pobeda");
+
                                         if(turn != 3)
                                         {
                                             mSocket.emit("Pobeda");
@@ -1112,7 +1123,7 @@ public class AssociationsGame extends AppCompatActivity {
                                                         intent.putExtra("solo", 0);
                                                     }
                                                     intent.putExtra("round", 0);
-
+                                                    intent.putExtra("turn", turn);
                                                     startActivity(intent);
                                                     finish();
                                                 }
@@ -1132,6 +1143,7 @@ public class AssociationsGame extends AppCompatActivity {
                                                         intent.putExtra("solo", 0);
                                                     }
                                                     intent.putExtra("round", 1);
+                                                    intent.putExtra("turn", turn);
 
                                                     startActivity(intent);
                                                     finish();
@@ -1152,7 +1164,7 @@ public class AssociationsGame extends AppCompatActivity {
                                                         intent.putExtra("solo", 0);
                                                     }
                                                     intent.putExtra("round", 0);
-
+                                                    intent.putExtra("turn", 3);
                                                     startActivity(intent);
 
                                                 }

@@ -1116,7 +1116,7 @@
                         android:orientation="horizontal"
                         android:padding="2dp">
 
-                        <LinearLayout
+                        <ImageView
                             android:id="@+id/guessingCard25"
                             android:layout_width="45dp"
                             android:layout_height="match_parent"
@@ -1124,9 +1124,9 @@
                             android:background="@drawable/input_field"
                             android:orientation="horizontal">
 
-                        </LinearLayout>
+                        </ImageView>
 
-                        <LinearLayout
+                        <ImageView
                             android:id="@+id/guessingCard26"
                             android:layout_width="45dp"
                             android:layout_height="match_parent"
@@ -1134,9 +1134,9 @@
                             android:background="@drawable/input_field"
                             android:orientation="horizontal">
 
-                        </LinearLayout>
+                        </ImageView>
 
-                        <LinearLayout
+                        <ImageView
                             android:id="@+id/guessingCard27"
                             android:layout_width="50dp"
                             android:layout_height="match_parent"
@@ -1144,16 +1144,16 @@
                             android:background="@drawable/input_field"
                             android:orientation="horizontal">
 
-                        </LinearLayout>
+                        </ImageView>
 
-                        <LinearLayout
+                        <ImageView
                             android:id="@+id/guessingCard28"
                             android:layout_width="45dp"
                             android:layout_height="match_parent"
                             android:background="@drawable/input_field"
                             android:orientation="horizontal">
 
-                        </LinearLayout>
+                        </ImageView>
 
                         <RelativeLayout
                             android:id="@+id/guessingStats7Layout"
@@ -1260,7 +1260,7 @@
                         android:orientation="horizontal"
                         android:padding="2dp">
 
-                        <LinearLayout
+                        <ImageView
                             android:id="@+id/guessingCard29"
                             android:layout_width="45dp"
                             android:layout_height="match_parent"
@@ -1268,9 +1268,9 @@
                             android:background="@drawable/input_field"
                             android:orientation="horizontal">
 
-                        </LinearLayout>
+                        </ImageView>
 
-                        <LinearLayout
+                        <ImageView
                             android:id="@+id/guessingCard30"
                             android:layout_width="45dp"
                             android:layout_height="match_parent"
@@ -1278,9 +1278,9 @@
                             android:background="@drawable/input_field"
                             android:orientation="horizontal">
 
-                        </LinearLayout>
+                        </ImageView>
 
-                        <LinearLayout
+                        <ImageView
                             android:id="@+id/guessingCard31"
                             android:layout_width="45dp"
                             android:layout_height="match_parent"
@@ -1288,16 +1288,16 @@
                             android:background="@drawable/input_field"
                             android:orientation="horizontal">
 
-                        </LinearLayout>
+                        </ImageView>
 
-                        <LinearLayout
+                        <ImageView
                             android:id="@+id/guessingCard32"
                             android:layout_width="45dp"
                             android:layout_height="match_parent"
                             android:background="@drawable/input_field"
                             android:orientation="horizontal">
 
-                        </LinearLayout>
+                        </ImageView>
 
                     </LinearLayout>
 
