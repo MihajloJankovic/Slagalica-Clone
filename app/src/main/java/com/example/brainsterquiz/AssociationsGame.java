@@ -115,15 +115,15 @@ public class AssociationsGame extends AppCompatActivity {
             this.bName = extras.getString("bName");
             this.rScore = extras.getString("rScore");
             this.bScore = extras.getString("bScore");
+            this.turn = extras.getInt("turn");
            if(turn != 3)
            {
-               this.turn = extras.getInt("turn");
                con app = (con)AssociationsGame.this.getApplication();
                this.mSocket = app.getSocket();
                mSocket.on("changeturn",(a) -> {
 
                    this.turn = 1;
-                   opened = 0;
+
                });
                mSocket.on("opens",(a) -> {
 
@@ -252,7 +252,7 @@ public class AssociationsGame extends AppCompatActivity {
         if( turn != 3)
         {
 
-                    opened=0;
+
                     String idd = "";
                     int res = 6 ;
                     int is = 0;
@@ -389,7 +389,13 @@ public class AssociationsGame extends AppCompatActivity {
               public void onClick(DialogInterface dialog, int whichButton) {
                   String value = String.valueOf(input.getText());
                   // Do something with value!
-                  opened=0;
+
+               if(turn != 3)
+               {
+                   mSocket.emit("turn");
+                   turn = 2;
+                   opened = 0;
+               }
                   String idd = "";
                   int res = 6 ;
                   switch (v.getId()) {
@@ -496,7 +502,7 @@ public class AssociationsGame extends AppCompatActivity {
 
                                               break;
                                       }
-                                      opened = 1;
+
                                       if(Aopen == 4 && Bopen==4 &&Copen==4 &&Dopen ==4)
                                       {
                                           opened = 1;
@@ -759,7 +765,7 @@ public class AssociationsGame extends AppCompatActivity {
                             String   value = documentSnapshot.getString(finalIdd);
                             TextView field = (TextView) findViewById(finalIs);
                             field.setText(value);
-                            opened = 1;
+
                         }
 
                         //db get string and set it to int
@@ -870,11 +876,7 @@ public class AssociationsGame extends AppCompatActivity {
 
                                 TextView field4312 = (TextView) findViewById(R.id.finalTxt);
                                 field4312.setText(documentSnapshot.getString("Konacno"));
-                                if(turn != 3)
-                                {
-                                    mSocket.emit("Pobeda");
 
-                                }
                                 Handler handler = new Handler();
                                 handler.postDelayed(new Runnable() {
                                     @Override
@@ -895,6 +897,7 @@ public class AssociationsGame extends AppCompatActivity {
                                                 intent.putExtra("solo", 0);
                                             }
                                             intent.putExtra("round", 0);
+                                            intent.putExtra("turn", turn);
 
                                             startActivity(intent);
                                             finish();
@@ -946,15 +949,7 @@ public class AssociationsGame extends AppCompatActivity {
                                 }, 2000);
 
                             }
-                            else{
 
-                                if(turn != 3 )
-                                {
-                                    mSocket.emit("turn");
-                                    turn = 2;
-                                    opened = 0;
-                                }
-                            }
 
                         }
 

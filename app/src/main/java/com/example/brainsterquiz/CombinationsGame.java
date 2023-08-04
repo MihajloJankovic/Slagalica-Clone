@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -92,9 +94,10 @@ public class CombinationsGame extends AppCompatActivity {
                 this.bName = extras.getString("bName");
                 this.rScore = extras.getString("rScore");
                 this.bScore = extras.getString("bScore");
+                this.turn = extras.getInt("turn");
                 if(turn != 3)
                 {
-                    this.turn = extras.getInt("turn");
+
                     con app = (con)CombinationsGame.this.getApplication();
                     this.mSocket = app.getSocket();
                     mSocket.on("changeturn",(a) -> {
@@ -108,10 +111,20 @@ public class CombinationsGame extends AppCompatActivity {
                     });
                     mSocket.on("enemyguessc",(a) -> {
 
-                        addToBall(25,Integer.valueOf(a[0].toString()));
-                        addToBall(26,Integer.valueOf(a[0].toString()));
-                        addToBall(27,Integer.valueOf(a[0].toString()));
-                        addToBall(28,Integer.valueOf(a[0].toString()));
+
+                        Map<String,Object> mapa;
+                        try {
+                            ObjectMapper mapper = new ObjectMapper();
+                            mapa = mapper.readValue(a[0].toString(), Map.class);
+
+                        } catch (JsonProcessingException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                         addToUIHelp(Integer.valueOf( mapa.get("a").toString()),25);
+                        addToUIHelp(Integer.valueOf(mapa.get("b").toString()),26);
+                        addToUIHelp(Integer.valueOf(mapa.get("c").toString()),27);
+                        addToUIHelp(Integer.valueOf(mapa.get("d").toString()),28);
 
                     });
                     mSocket.on("pointsc",(a) -> {
@@ -125,7 +138,7 @@ public class CombinationsGame extends AppCompatActivity {
 
 
                         if(true){
-                            guessedTrue=1;
+
                             for (int i =1;i<combination.values().size()+1;i++
                             ) {
                                 int id =0;
@@ -414,7 +427,7 @@ public class CombinationsGame extends AppCompatActivity {
 
     }
     public void open(View v) {
-        if(guessedTrue ==1)
+        if(guessedTrue ==1 || turn ==2 )
         {
             return;
         }
@@ -681,7 +694,11 @@ public class CombinationsGame extends AppCompatActivity {
                     a.set(i,0);
                    b.set(i,0);
                     ++status;
-                   addToBall(p+i,1);
+                    if(cardPosition < 25)
+                    {
+                        addToBall(p+i,1);
+                    }
+
                }
            }
 
@@ -689,6 +706,11 @@ public class CombinationsGame extends AppCompatActivity {
             if(status == 4)
             {
                 guessedTrue = 1;
+                if(turn != 3)
+                {
+                    // do when win
+                   // do sent points
+                }
                 switch (cardPosition/4)
                 {
                     case 1: case 2: rScore= String.valueOf(Integer.valueOf(rScore)+20);break;
@@ -799,7 +821,10 @@ public class CombinationsGame extends AppCompatActivity {
                         za.set(o,0);
                         zz.set(v,0);
 
-                        addToBall(p+v,2);
+                       if(p < 25)
+                       {
+                           addToBall(p+v,2);
+                       }
                         j=5;
 
                     }
@@ -922,97 +947,102 @@ public class CombinationsGame extends AppCompatActivity {
     }
 
     public void addToUI(int pos) {
-        String a = "guessingCard";
-        String temp = a + String.valueOf(cardPosition);
-        int id = 1;
-        switch (temp) {
-            case "guessingCard1":
-                id = R.id.guessingCard1;
-                break;
-            case "guessingCard2":
-                id = R.id.guessingCard2;
-                break;
-            case "guessingCard3":
-                id = R.id.guessingCard3;
-                break;
-            case "guessingCard4":
-                id = R.id.guessingCard4;
-                break;
-            case "guessingCard5":
-                id = R.id.guessingCard5;
-                break;
-            case "guessingCard6":
-                id = R.id.guessingCard6;
-                break;
-            case "guessingCard7":
-                id = R.id.guessingCard7;
-                break;
-            case "guessingCard8":
-                id = R.id.guessingCard8;
-                break;
-            case "guessingCard9":
-                id = R.id.guessingCard9;
-                break;
-            case "guessingCard10":
-                id = R.id.guessingCard10;
-                break;
-            case "guessingCard11":
-                id = R.id.guessingCard11;
-                break;
-            case "guessingCard12":
-                id = R.id.guessingCard12;
-                break;
-            case "guessingCard13":
-                id = R.id.guessingCard13;
-                break;
-            case "guessingCard14":
-                id = R.id.guessingCard14;
-                break;
-            case "guessingCard15":
-                id = R.id.guessingCard15;
-                break;
-            case "guessingCard16":
-                id = R.id.guessingCard16;
-                break;
-            case "guessingCard17":
-                id = R.id.guessingCard17;
-                break;
-            case "guessingCard18":
-                id = R.id.guessingCard18;
-                break;
-            case "guessingCard19":
-                id = R.id.guessingCard19;
-                break;
-            case "guessingCard20":
-                id = R.id.guessingCard20;
-                break;
-            case "guessingCard21":
-                id = R.id.guessingCard21;
-                break;
-            case "guessingCard22":
-                id = R.id.guessingCard22;
-                break;
-            case "guessingCard23":
-                id = R.id.guessingCard23;
-                break;
-            case "guessingCard24":
-                ab=1;
-                id = R.id.guessingCard24;
-                break;
-            case "guessingCard25":
-                id = R.id.guessingCard25;
-                break;
-            case "guessingCard26":
-                id = R.id.guessingCard26;
-                break;
-            case "guessingCard27":
-                id = R.id.guessingCard27;
-                break;
-            case "guessingCard28":
-                ab=1;
-                id = R.id.guessingCard28;
-                break;
-        }
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                String a = "guessingCard";
+                String temp = a + String.valueOf(cardPosition);
+                int id = 1;
+                switch (temp) {
+                    case "guessingCard1":
+                        id = R.id.guessingCard1;
+                        break;
+                    case "guessingCard2":
+                        id = R.id.guessingCard2;
+                        break;
+                    case "guessingCard3":
+                        id = R.id.guessingCard3;
+                        break;
+                    case "guessingCard4":
+                        id = R.id.guessingCard4;
+                        break;
+                    case "guessingCard5":
+                        id = R.id.guessingCard5;
+                        break;
+                    case "guessingCard6":
+                        id = R.id.guessingCard6;
+                        break;
+                    case "guessingCard7":
+                        id = R.id.guessingCard7;
+                        break;
+                    case "guessingCard8":
+                        id = R.id.guessingCard8;
+                        break;
+                    case "guessingCard9":
+                        id = R.id.guessingCard9;
+                        break;
+                    case "guessingCard10":
+                        id = R.id.guessingCard10;
+                        break;
+                    case "guessingCard11":
+                        id = R.id.guessingCard11;
+                        break;
+                    case "guessingCard12":
+                        id = R.id.guessingCard12;
+                        break;
+                    case "guessingCard13":
+                        id = R.id.guessingCard13;
+                        break;
+                    case "guessingCard14":
+                        id = R.id.guessingCard14;
+                        break;
+                    case "guessingCard15":
+                        id = R.id.guessingCard15;
+                        break;
+                    case "guessingCard16":
+                        id = R.id.guessingCard16;
+                        break;
+                    case "guessingCard17":
+                        id = R.id.guessingCard17;
+                        break;
+                    case "guessingCard18":
+                        id = R.id.guessingCard18;
+                        break;
+                    case "guessingCard19":
+                        id = R.id.guessingCard19;
+                        break;
+                    case "guessingCard20":
+                        id = R.id.guessingCard20;
+                        break;
+                    case "guessingCard21":
+                        id = R.id.guessingCard21;
+                        break;
+                    case "guessingCard22":
+                        id = R.id.guessingCard22;
+                        break;
+                    case "guessingCard23":
+                        id = R.id.guessingCard23;
+                        break;
+                    case "guessingCard24":
+                        ab=1;
+                        id = R.id.guessingCard24;
+                        break;
+                    case "guessingCard25":
+                        id = R.id.guessingCard25;
+                        break;
+                    case "guessingCard26":
+                        id = R.id.guessingCard26;
+                        break;
+                    case "guessingCard27":
+                        id = R.id.guessingCard27;
+                        break;
+                    case "guessingCard28":
+                        ab=1;
+                        id = R.id.guessingCard28;
+                        break;
+                }
                 ImageView im = (ImageView) findViewById(id);
                 int idd;
                 switch (pos) {
@@ -1030,7 +1060,130 @@ public class CombinationsGame extends AppCompatActivity {
                         im.setBackground(s6.getBackground());break;
                 }
 
+
+            }
+        });
+
         }
+    public void addToUIHelp(int pos,int cardb) {
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                String a = "guessingCard";
+                String temp = a + String.valueOf(cardb);
+                int id = 1;
+                switch (temp) {
+                    case "guessingCard1":
+                        id = R.id.guessingCard1;
+                        break;
+                    case "guessingCard2":
+                        id = R.id.guessingCard2;
+                        break;
+                    case "guessingCard3":
+                        id = R.id.guessingCard3;
+                        break;
+                    case "guessingCard4":
+                        id = R.id.guessingCard4;
+                        break;
+                    case "guessingCard5":
+                        id = R.id.guessingCard5;
+                        break;
+                    case "guessingCard6":
+                        id = R.id.guessingCard6;
+                        break;
+                    case "guessingCard7":
+                        id = R.id.guessingCard7;
+                        break;
+                    case "guessingCard8":
+                        id = R.id.guessingCard8;
+                        break;
+                    case "guessingCard9":
+                        id = R.id.guessingCard9;
+                        break;
+                    case "guessingCard10":
+                        id = R.id.guessingCard10;
+                        break;
+                    case "guessingCard11":
+                        id = R.id.guessingCard11;
+                        break;
+                    case "guessingCard12":
+                        id = R.id.guessingCard12;
+                        break;
+                    case "guessingCard13":
+                        id = R.id.guessingCard13;
+                        break;
+                    case "guessingCard14":
+                        id = R.id.guessingCard14;
+                        break;
+                    case "guessingCard15":
+                        id = R.id.guessingCard15;
+                        break;
+                    case "guessingCard16":
+                        id = R.id.guessingCard16;
+                        break;
+                    case "guessingCard17":
+                        id = R.id.guessingCard17;
+                        break;
+                    case "guessingCard18":
+                        id = R.id.guessingCard18;
+                        break;
+                    case "guessingCard19":
+                        id = R.id.guessingCard19;
+                        break;
+                    case "guessingCard20":
+                        id = R.id.guessingCard20;
+                        break;
+                    case "guessingCard21":
+                        id = R.id.guessingCard21;
+                        break;
+                    case "guessingCard22":
+                        id = R.id.guessingCard22;
+                        break;
+                    case "guessingCard23":
+                        id = R.id.guessingCard23;
+                        break;
+                    case "guessingCard24":
+                        ab=1;
+                        id = R.id.guessingCard24;
+                        break;
+                    case "guessingCard25":
+                        id = R.id.guessingCard25;
+                        break;
+                    case "guessingCard26":
+                        id = R.id.guessingCard26;
+                        break;
+                    case "guessingCard27":
+                        id = R.id.guessingCard27;
+                        break;
+                    case "guessingCard28":
+                        ab=1;
+                        id = R.id.guessingCard28;
+                        break;
+                }
+                ImageView im = (ImageView) findViewById(id);
+                int idd;
+                switch (pos) {
+                    case 1:
+                        im.setBackground(s1.getBackground());break;
+                    case 2:
+                        im.setBackground(s2.getBackground());break;
+                    case 3:
+                        im.setBackground(s3.getBackground());break;
+                    case 4:
+                        im.setBackground(s4.getBackground());break;
+                    case 5:
+                        im.setBackground(s5.getBackground());break;
+                    case 6:
+                        im.setBackground(s6.getBackground());break;
+                }
+
+
+            }
+        });
+
+    }
 
 
     }

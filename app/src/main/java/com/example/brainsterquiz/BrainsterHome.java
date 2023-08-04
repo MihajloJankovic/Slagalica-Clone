@@ -141,13 +141,13 @@ public class BrainsterHome extends AppCompatActivity {
     }
     public void Tost() {
         runOnUiThread(() -> Toast.makeText(bh, "weiting for other pleyer !", Toast.LENGTH_SHORT).show());
-        turn = 1;
+        this.turn = 1;
         mSocket.emit("Ime", "zika");
     }
 
     public void Tost2() throws InterruptedException {
         runOnUiThread(() -> Toast.makeText(bh, "Match will start soon !", Toast.LENGTH_SHORT).show());
-        turn = 2;
+        this.turn = 2;
         mSocket.emit("Ime", "pera");
         mSocket.emit("Imena");
         mSocket.emit("start");

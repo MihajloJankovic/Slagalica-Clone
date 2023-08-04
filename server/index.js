@@ -23,13 +23,13 @@ io.on('connection', (socket) => {
     {
         a = socket.id;
         io.to(socket.id).emit("pleyer1",true);
-        console.log("peyer1");
+       // console.log("peyer1");
     }
     else{
       if(b == null){
         b = socket.id;
         io.to(socket.id).emit("pleyer2",true);
-        console.log("peyer2");
+     //   console.log("peyer2");
        
       }
     }
@@ -88,7 +88,7 @@ io.on('connection', (socket) => {
 
         if(socket.id == a)
         {
-            console.log("a");
+         //  console.log("a");
             io.to(b).emit("ennemywin");
         }
         if(socket.id == b)
@@ -98,16 +98,20 @@ io.on('connection', (socket) => {
 
 
     })
-    socket.on('enemyguess', (ab) => {
+    socket.on('enemyguess', (av,bv,cv,dv) => {
 
         if(socket.id == a)
         {
-            console.log("a");
-            io.to(b).emit("enemyguessc",ab);
+
+            const person = {a:av, b:bv,c:cv,d:dv};
+            console.log(person.toString());
+            io.to(b).emit("enemyguessc",person);
         }
         if(socket.id == b)
         {
-            io.to(a).emit("enemyguessc",ab);
+            const person = {a:av, b:bv,c:cv,d:dv};
+            console.log(person.toString());
+            io.to(a).emit("enemyguessc",person);
         }
 
 
@@ -116,7 +120,7 @@ io.on('connection', (socket) => {
 
         if(socket.id == a)
         {
-           // console.log("a");
+        ////////////  console.log("a");
             io.to(b).emit("pointsc");
         }
         if(socket.id == b)
