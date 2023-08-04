@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
   res.send('<h1>Hello world</h1>');
 });
 
-server.listen(8081,'192.168.0.12', () => {
+server.listen(8081,'192.168.1.152', () => {
   console.log('listening on *:3000');
 });
 
@@ -116,7 +116,7 @@ io.on('connection', (socket) => {
 
         if(socket.id == a)
         {
-            console.log("a");
+           // console.log("a");
             io.to(b).emit("pointsc");
         }
         if(socket.id == b)
