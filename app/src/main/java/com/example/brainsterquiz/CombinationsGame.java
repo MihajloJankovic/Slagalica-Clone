@@ -51,6 +51,7 @@ public class CombinationsGame extends AppCompatActivity {
     private Socket mSocket;
     private int posetion =1;
     private int cardPosition =1;
+    private int switcha = 0;
     int ab=0;
     private int allSubmited= 0;
     private int guessedTrue = 0;
@@ -100,9 +101,10 @@ public class CombinationsGame extends AppCompatActivity {
 
                     con app = (con)CombinationsGame.this.getApplication();
                     this.mSocket = app.getSocket();
-                    mSocket.on("changeturn",(a) -> {
+                    mSocket.on("changeturna",(a) -> {
 
                         this.turn = 1;
+                        switcha = 1;
                         posetion = 1;
                         allSubmited = 0;
                         runOnUiThread(() -> Toast.makeText(CombinationsGame.this, "Your turn !", Toast.LENGTH_SHORT).show());
@@ -127,143 +129,285 @@ public class CombinationsGame extends AppCompatActivity {
                         addToUIHelp(Integer.valueOf(mapa.get("d").toString()),28);
 
                     });
+
+                    mSocket.on("loptac",(a) -> {
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Map<String,Object> mapa;
+                                try {
+                                    ObjectMapper mapper = new ObjectMapper();
+                                    mapa = mapper.readValue(a[0].toString(), Map.class);
+
+                                } catch (JsonProcessingException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                int bb = Integer.valueOf( mapa.get("a").toString());
+                                int cc = Integer.valueOf( mapa.get("b").toString());
+                                addToBall(bb,cc);
+
+                            }
+                        });
+
+                    });
+
+                    mSocket.on("guessc",(a) -> {
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                              
+                                Map<String,Object> mapa;
+                                try {
+                                    ObjectMapper mapper = new ObjectMapper();
+                                    mapa = mapper.readValue(a[0].toString(), Map.class);
+
+                                } catch (JsonProcessingException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                int aa = Integer.valueOf( mapa.get("a").toString());
+                                int bb = Integer.valueOf( mapa.get("b").toString());
+                                int cc = Integer.valueOf( mapa.get("c").toString());
+                                int dd = Integer.valueOf( mapa.get("d").toString());
+
+                                addToUI(aa);
+                                ++cardPosition;
+                                addToUI(bb);
+                                ++cardPosition;
+                                addToUI(cc);
+                                ++cardPosition;
+                                addToUI(dd);
+                                ++cardPosition;
+
+
+                            }
+                        });
+
+
+
+                    });
+                    mSocket.on("passcomc",(a) -> {
+
+                                Map<String,Object> mapa;
+                                try {
+                                    ObjectMapper mapper = new ObjectMapper();
+                                    mapa = mapper.readValue(a[0].toString(), Map.class);
+
+                                } catch (JsonProcessingException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                int aa = Integer.valueOf( mapa.get("a").toString());
+                                int bb = Integer.valueOf( mapa.get("b").toString());
+                                int cc = Integer.valueOf( mapa.get("c").toString());
+                                int dd = Integer.valueOf( mapa.get("d").toString());
+                                combination.put(1,aa);
+                                combination.put(2,bb);
+                                combination.put(3,cc);
+                                combination.put(4,dd);
+
+
+
+
+
+
+                    });
                     mSocket.on("pointsc",(a) -> {
 
                         bScore= String.valueOf(Integer.valueOf(bScore)+10);
 
 
                     });
+                    mSocket.on("pointscac",(a) -> {
+
+                        bScore= String.valueOf(Integer.valueOf(bScore)+Integer.valueOf(a[0].toString()));
+
+
+                    });
                     mSocket.on("nextgamecc",(a) -> {
 
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                if(true){
+
+                                    for (int i =1;i<combination.values().size()+1;i++
+                                    ) {
+                                        int id =0;
+                                        switch (i) {
+                                            case 1:
+                                                id = R.id.guessingCard29;
+                                                break;
+                                            case 2:
+                                                id = R.id.guessingCard30;
+                                                break;
+                                            case 3:
+                                                id = R.id.guessingCard31;
+                                                break;
+                                            case 4:
+                                                id = R.id.guessingCard32;
+                                                break;
+                                        }
+                                        ImageView im = (ImageView) findViewById(id);
+                                        int bas=0;
+                                        switch (i) {
+                                            case 1:
+                                                bas = combination.get(1);
+                                                break;
+                                            case 2:
+                                                bas = combination.get(2);
+                                                break;
+                                            case 3:
+                                                bas = combination.get(3);
+                                                break;
+                                            case 4:
+                                                bas = combination.get(4);
+                                                break;
+                                        }
+                                        switch (bas) {
+                                            case 1:
+                                                im.setBackground(s1.getBackground());break;
+                                            case 2:
+                                                im.setBackground(s2.getBackground());break;
+                                            case 3:
+                                                im.setBackground(s3.getBackground());break;
+                                            case 4:
+                                                im.setBackground(s4.getBackground());break;
+                                            case 5:
+                                                im.setBackground(s5.getBackground());break;
+                                            case 6:
+                                                im.setBackground(s6.getBackground());break;
+                                        }
 
 
-                        if(true){
+                                    }
+                                    Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            timera.cancel();
 
-                            for (int i =1;i<combination.values().size()+1;i++
-                            ) {
-                                int id =0;
-                                switch (i) {
-                                    case 1:
-                                        id = R.id.guessingCard29;
-                                        break;
-                                    case 2:
-                                        id = R.id.guessingCard30;
-                                        break;
-                                    case 3:
-                                        id = R.id.guessingCard31;
-                                        break;
-                                    case 4:
-                                        id = R.id.guessingCard32;
-                                        break;
+                                            if(round == 1  && turn != 3)
+                                            {
+                                                Intent intent = new Intent(getApplicationContext(), StepByStepGame.class);
+                                                intent.putExtra("rName", rName);
+                                                intent.putExtra("bName", bName);
+                                                intent.putExtra("rScore", rScore);
+                                                intent.putExtra("bScore",bScore);
+                                                if(turn == 3)
+                                                {
+                                                    intent.putExtra("turn", 3);
+                                                    intent.putExtra("solo", 1);
+                                                }else{
+                                                    intent.putExtra("solo", 0);
+                                                }
+                                                intent.putExtra("round", 0);
+                                                if(turn == 1){
+                                                    if(switcha == 0)
+                                                    {
+                                                        intent.putExtra("turn", 2);
+                                                    }
+                                                    else{
+                                                        intent.putExtra("turn", 1);
+                                                    }
+
+                                                }
+                                                if(turn == 2){
+                                                    if(switcha == 0)
+                                                    {
+                                                        intent.putExtra("turn", 1);
+                                                    }
+                                                    else{
+                                                        intent.putExtra("turn", 2);
+                                                    }
+                                                }
+
+                                                startActivity(intent);
+
+                                            }if(round == 0 && turn == 3)
+                                            {
+
+                                                Intent intent = new Intent(getApplicationContext(), StepByStepGame.class);
+                                                intent.putExtra("rName", rName);
+                                                intent.putExtra("bName", bName);
+                                                intent.putExtra("rScore", rScore);
+                                                intent.putExtra("bScore",bScore);
+                                                if(turn == 3)
+                                                {
+                                                    intent.putExtra("turn", 3);
+                                                    intent.putExtra("solo", 1);
+                                                }else{
+                                                    intent.putExtra("solo", 0);
+                                                }
+                                                intent.putExtra("round", 0);
+                                                if(turn == 1){
+                                                    if(switcha == 0)
+                                                    {
+                                                        intent.putExtra("turn", 2);
+                                                    }
+                                                    else{
+                                                        intent.putExtra("turn", 1);
+                                                    }
+
+                                                }
+                                                if(turn == 2){
+                                                    if(switcha == 0)
+                                                    {
+                                                        intent.putExtra("turn", 1);
+                                                    }
+                                                    else{
+                                                        intent.putExtra("turn", 2);
+                                                    }
+                                                }
+                                                startActivity(intent);
+
+                                            }
+                                            if(round == 0  && turn !=3)
+                                            {
+                                                Intent intent = new Intent(getApplicationContext(), CombinationsGame.class);
+                                                intent.putExtra("rName", rName);
+                                                intent.putExtra("bName", bName);
+                                                intent.putExtra("rScore", rScore);
+                                                intent.putExtra("bScore",bScore);
+                                                if(turn == 3)
+                                                {
+                                                    intent.putExtra("turn", 3);
+                                                    intent.putExtra("solo", 1);
+                                                }else{
+                                                    intent.putExtra("solo", 0);
+                                                }
+                                                intent.putExtra("round", 1);
+                                                if(turn == 1){
+                                                    if(switcha == 0)
+                                                    {
+                                                        intent.putExtra("turn", 2);
+                                                    }
+                                                    else{
+                                                        intent.putExtra("turn", 1);
+                                                    }
+
+                                                }
+                                                if(turn == 2){
+                                                    if(switcha == 0)
+                                                    {
+                                                        intent.putExtra("turn", 1);
+                                                    }
+                                                    else{
+                                                        intent.putExtra("turn", 2);
+                                                    }
+                                                }
+                                                startActivity(intent);
+
+                                            }
+                                            finish();
+                                        }
+                                    }, 5000);
                                 }
-                                ImageView im = (ImageView) findViewById(id);
-                                int bas=0;
-                                switch (i) {
-                                    case 1:
-                                        bas = combination.get(1);
-                                        break;
-                                    case 2:
-                                        bas = combination.get(2);
-                                        break;
-                                    case 3:
-                                        bas = combination.get(3);
-                                        break;
-                                    case 4:
-                                        bas = combination.get(4);
-                                        break;
-                                }
-                                switch (bas) {
-                                    case 1:
-                                        im.setBackground(s1.getBackground());break;
-                                    case 2:
-                                        im.setBackground(s2.getBackground());break;
-                                    case 3:
-                                        im.setBackground(s3.getBackground());break;
-                                    case 4:
-                                        im.setBackground(s4.getBackground());break;
-                                    case 5:
-                                        im.setBackground(s5.getBackground());break;
-                                    case 6:
-                                        im.setBackground(s6.getBackground());break;
-                                }
-
-
                             }
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    timera.cancel();
+                        });
 
-                                    if(round == 1  && turn != 3)
-                                    {
-                                        Intent intent = new Intent(getApplicationContext(), StepByStepGame.class);
-                                        intent.putExtra("rName", rName);
-                                        intent.putExtra("bName", bName);
-                                        intent.putExtra("rScore", rScore);
-                                        intent.putExtra("bScore",bScore);
-                                        if(turn == 3)
-                                        {
-                                            intent.putExtra("solo", 1);
-                                        }else{
-                                            intent.putExtra("solo", 0);
-                                        }
-                                        intent.putExtra("round", 0);
-                                        if(turn == 1){
-                                            intent.putExtra("round", 2);
-                                        }
-                                        if(turn == 2){
-                                            intent.putExtra("round", 1);
-                                        }
 
-                                        startActivity(intent);
-
-                                    }if(round == 0 && turn == 3)
-                                    {
-
-                                        Intent intent = new Intent(getApplicationContext(), StepByStepGame.class);
-                                        intent.putExtra("rName", rName);
-                                        intent.putExtra("bName", bName);
-                                        intent.putExtra("rScore", rScore);
-                                        intent.putExtra("bScore",bScore);
-                                        if(turn == 3)
-                                        {
-                                            intent.putExtra("solo", 1);
-                                        }else{
-                                            intent.putExtra("solo", 0);
-                                        }
-                                        intent.putExtra("round", 0);
-
-                                        startActivity(intent);
-
-                                    }
-                                    if(round == 0  && turn !=3)
-                                    {
-                                        Intent intent = new Intent(getApplicationContext(), CombinationsGame.class);
-                                        intent.putExtra("rName", rName);
-                                        intent.putExtra("bName", bName);
-                                        intent.putExtra("rScore", rScore);
-                                        intent.putExtra("bScore",bScore);
-                                        if(turn == 3)
-                                        {
-                                            intent.putExtra("solo", 1);
-                                        }else{
-                                            intent.putExtra("solo", 0);
-                                        }
-                                        intent.putExtra("round", 1);
-                                        if(turn == 1){
-                                            intent.putExtra("round", 2);
-                                        }
-                                        if(turn == 2){
-                                            intent.putExtra("round", 1);
-                                        }
-                                        startActivity(intent);
-
-                                    }
-                                    finish();
-                                }
-                            }, 5000);
-                        }
 
                     });
 
@@ -355,6 +499,8 @@ public class CombinationsGame extends AppCompatActivity {
 
 
                 }
+                timera.cancel();
+
                 if(round == 1  && turn != 3)
                 {
                     Intent intent = new Intent(getApplicationContext(), StepByStepGame.class);
@@ -364,16 +510,30 @@ public class CombinationsGame extends AppCompatActivity {
                     intent.putExtra("bScore",bScore);
                     if(turn == 3)
                     {
+                        intent.putExtra("turn", 3);
                         intent.putExtra("solo", 1);
                     }else{
                         intent.putExtra("solo", 0);
                     }
                     intent.putExtra("round", 0);
                     if(turn == 1){
-                        intent.putExtra("round", 2);
+                        if(switcha == 0)
+                        {
+                            intent.putExtra("turn", 2);
+                        }
+                        else{
+                            intent.putExtra("turn", 1);
+                        }
+
                     }
                     if(turn == 2){
-                        intent.putExtra("round", 1);
+                        if(switcha == 0)
+                        {
+                            intent.putExtra("turn", 1);
+                        }
+                        else{
+                            intent.putExtra("turn", 2);
+                        }
                     }
 
                     startActivity(intent);
@@ -388,12 +548,31 @@ public class CombinationsGame extends AppCompatActivity {
                     intent.putExtra("bScore",bScore);
                     if(turn == 3)
                     {
+                        intent.putExtra("turn", 3);
                         intent.putExtra("solo", 1);
                     }else{
                         intent.putExtra("solo", 0);
                     }
                     intent.putExtra("round", 0);
+                    if(turn == 1){
+                        if(switcha == 0)
+                        {
+                            intent.putExtra("turn", 2);
+                        }
+                        else{
+                            intent.putExtra("turn", 1);
+                        }
 
+                    }
+                    if(turn == 2){
+                        if(switcha == 0)
+                        {
+                            intent.putExtra("turn", 1);
+                        }
+                        else{
+                            intent.putExtra("turn", 2);
+                        }
+                    }
                     startActivity(intent);
 
                 }
@@ -406,20 +585,35 @@ public class CombinationsGame extends AppCompatActivity {
                     intent.putExtra("bScore",bScore);
                     if(turn == 3)
                     {
+                        intent.putExtra("turn", 3);
                         intent.putExtra("solo", 1);
                     }else{
                         intent.putExtra("solo", 0);
                     }
                     intent.putExtra("round", 1);
                     if(turn == 1){
-                        intent.putExtra("round", 2);
+                        if(switcha == 0)
+                        {
+                            intent.putExtra("turn", 2);
+                        }
+                        else{
+                            intent.putExtra("turn", 1);
+                        }
+
                     }
                     if(turn == 2){
-                        intent.putExtra("round", 1);
+                        if(switcha == 0)
+                        {
+                            intent.putExtra("turn", 1);
+                        }
+                        else{
+                            intent.putExtra("turn", 2);
+                        }
                     }
                     startActivity(intent);
 
                 }
+                finish();
             }
         }.start();
 
@@ -583,20 +777,28 @@ public class CombinationsGame extends AppCompatActivity {
                         bas = combination.get(4);
                         break;
                 }
-                switch (bas) {
-                    case 1:
-                        im.setBackground(s1.getBackground());break;
-                    case 2:
-                        im.setBackground(s2.getBackground());break;
-                    case 3:
-                        im.setBackground(s3.getBackground());break;
-                    case 4:
-                        im.setBackground(s4.getBackground());break;
-                    case 5:
-                        im.setBackground(s5.getBackground());break;
-                    case 6:
-                        im.setBackground(s6.getBackground());break;
-                }
+                int finalBas = bas;
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        switch (finalBas) {
+                            case 1:
+                                im.setBackground(s1.getBackground());break;
+                            case 2:
+                                im.setBackground(s2.getBackground());break;
+                            case 3:
+                                im.setBackground(s3.getBackground());break;
+                            case 4:
+                                im.setBackground(s4.getBackground());break;
+                            case 5:
+                                im.setBackground(s5.getBackground());break;
+                            case 6:
+                                im.setBackground(s6.getBackground());break;
+                        }
+                    }
+                });
+
 
 
             }
@@ -615,16 +817,30 @@ public class CombinationsGame extends AppCompatActivity {
                         intent.putExtra("bScore",bScore);
                         if(turn == 3)
                         {
+                            intent.putExtra("turn", 3);
                             intent.putExtra("solo", 1);
                         }else{
                             intent.putExtra("solo", 0);
                         }
                         intent.putExtra("round", 0);
                         if(turn == 1){
-                            intent.putExtra("round", 2);
+                            if(switcha == 0)
+                            {
+                                intent.putExtra("turn", 2);
+                            }
+                            else{
+                                intent.putExtra("turn", 1);
+                            }
+
                         }
                         if(turn == 2){
-                            intent.putExtra("round", 1);
+                            if(switcha == 0)
+                            {
+                                intent.putExtra("turn", 1);
+                            }
+                            else{
+                                intent.putExtra("turn", 2);
+                            }
                         }
 
                         startActivity(intent);
@@ -639,12 +855,31 @@ public class CombinationsGame extends AppCompatActivity {
                         intent.putExtra("bScore",bScore);
                         if(turn == 3)
                         {
+                            intent.putExtra("turn", 3);
                             intent.putExtra("solo", 1);
                         }else{
                             intent.putExtra("solo", 0);
                         }
                         intent.putExtra("round", 0);
+                        if(turn == 1){
+                            if(switcha == 0)
+                            {
+                                intent.putExtra("turn", 2);
+                            }
+                            else{
+                                intent.putExtra("turn", 1);
+                            }
 
+                        }
+                        if(turn == 2){
+                            if(switcha == 0)
+                            {
+                                intent.putExtra("turn", 1);
+                            }
+                            else{
+                                intent.putExtra("turn", 2);
+                            }
+                        }
                         startActivity(intent);
 
                     }
@@ -657,16 +892,30 @@ public class CombinationsGame extends AppCompatActivity {
                         intent.putExtra("bScore",bScore);
                         if(turn == 3)
                         {
+                            intent.putExtra("turn", 3);
                             intent.putExtra("solo", 1);
                         }else{
                             intent.putExtra("solo", 0);
                         }
                         intent.putExtra("round", 1);
                         if(turn == 1){
-                            intent.putExtra("round", 2);
+                            if(switcha == 0)
+                            {
+                                intent.putExtra("turn", 2);
+                            }
+                            else{
+                                intent.putExtra("turn", 1);
+                            }
+
                         }
                         if(turn == 2){
-                            intent.putExtra("round", 1);
+                            if(switcha == 0)
+                            {
+                                intent.putExtra("turn", 1);
+                            }
+                            else{
+                                intent.putExtra("turn", 2);
+                            }
                         }
                         startActivity(intent);
 
@@ -678,12 +927,16 @@ public class CombinationsGame extends AppCompatActivity {
 
     }
     public void check() {
+
         List<Integer> a = new ArrayList<>((Collection) guessedCombination.values());
         List<Integer> b = new ArrayList<>((Collection) combination.values());
         List<Integer> c= new ArrayList<>();
         Map<Integer,Integer> tempa= new HashMap<>(combination);
         int p = cardPosition -3;
         int status =0;
+        if(turn != 3) {
+            mSocket.emit("guess", a.get(0), a.get(1), a.get(2), a.get(3));
+        }
         if(guessedTrue == 0 &&(turn ==3 || turn ==1))
         {
 
@@ -696,6 +949,9 @@ public class CombinationsGame extends AppCompatActivity {
                     ++status;
                     if(cardPosition < 25)
                     {
+                        if(turn != 3) {
+                            mSocket.emit("lopta", p + i, 1);
+                        }
                         addToBall(p+i,1);
                     }
 
@@ -705,18 +961,21 @@ public class CombinationsGame extends AppCompatActivity {
 
             if(status == 4)
             {
+                int hh=0;
                 guessedTrue = 1;
-                if(turn != 3)
-                {
-                    // do when win
-                   // do sent points
-                }
+
                 switch (cardPosition/4)
                 {
-                    case 1: case 2: rScore= String.valueOf(Integer.valueOf(rScore)+20);break;
-                    case 3: case 4:rScore= String.valueOf(Integer.valueOf(rScore)+15);break;
-                    case 5: case 6:rScore= String.valueOf(Integer.valueOf(rScore)+10);break;
-                    case 7:rScore= String.valueOf(Integer.valueOf(rScore)+10);break;
+                    case 1: case 2: rScore= String.valueOf(Integer.valueOf(rScore)+20);if(turn != 3){mSocket.emit("pointsca",20);}break;
+                    case 3: case 4:rScore= String.valueOf(Integer.valueOf(rScore)+15);if(turn != 3){mSocket.emit("pointsca",15);}break;
+                    case 5: case 6:rScore= String.valueOf(Integer.valueOf(rScore)+10);if(turn != 3){mSocket.emit("pointsca",10);}break;
+                    case 7:rScore= String.valueOf(Integer.valueOf(rScore)+10);if(turn != 3){mSocket.emit("pointsca",10);} break;
+                }
+                if(turn != 3)
+                {
+                    hh= 1;
+                    mSocket.emit("nextgamec");
+
                 }
 
                 TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
@@ -771,9 +1030,10 @@ public class CombinationsGame extends AppCompatActivity {
 
 
                 }
-               if(p == 25)
+               if(p == 25 && hh == 0)
                {
                    List<Integer> coma = new ArrayList<>((Collection) guessedCombination.values());
+
                    mSocket.emit("enemyguess",coma.get(0),coma.get(1),coma.get(2),coma.get(3));
                    mSocket.emit("points");
                    mSocket.emit("nextgamec");
@@ -784,19 +1044,118 @@ public class CombinationsGame extends AppCompatActivity {
                     public void run() {
                         timera.cancel();
 
-                        Intent intent = new Intent(getApplicationContext(), StepByStepGame.class);
-                        intent.putExtra("rName", rName);
-                        intent.putExtra("bName", bName);
-                        intent.putExtra("rScore", rScore);
-                        intent.putExtra("bScore", bScore);
-                        if (turn == 3) {
-                            intent.putExtra("solo", 1);
-                        } else {
-                            intent.putExtra("solo", 0);
-                        }
-                        intent.putExtra("round", 0);
+                        if(round == 1  && turn != 3)
+                        {
+                            Intent intent = new Intent(getApplicationContext(), StepByStepGame.class);
+                            intent.putExtra("rName", rName);
+                            intent.putExtra("bName", bName);
+                            intent.putExtra("rScore", rScore);
+                            intent.putExtra("bScore",bScore);
+                            if(turn == 3)
+                            {
+                                intent.putExtra("turn", 3);
+                                intent.putExtra("solo", 1);
+                            }else{
+                                intent.putExtra("solo", 0);
+                            }
+                            intent.putExtra("round", 0);
+                            if(turn == 1){
+                                if(switcha == 0)
+                                {
+                                    intent.putExtra("turn", 2);
+                                }
+                                else{
+                                    intent.putExtra("turn", 1);
+                                }
 
-                        startActivity(intent);
+                            }
+                            if(turn == 2){
+                                if(switcha == 0)
+                                {
+                                    intent.putExtra("turn", 1);
+                                }
+                                else{
+                                    intent.putExtra("turn", 2);
+                                }
+                            }
+
+                            startActivity(intent);
+
+                        }if(round == 0 && turn == 3)
+                        {
+
+                            Intent intent = new Intent(getApplicationContext(), StepByStepGame.class);
+                            intent.putExtra("rName", rName);
+                            intent.putExtra("bName", bName);
+                            intent.putExtra("rScore", rScore);
+                            intent.putExtra("bScore",bScore);
+                            if(turn == 3)
+                            {
+                                intent.putExtra("turn", 3);
+                                intent.putExtra("solo", 1);
+                            }else{
+                                intent.putExtra("solo", 0);
+                            }
+                            intent.putExtra("round", 0);
+                            if(turn == 1){
+                                if(switcha == 0)
+                                {
+                                    intent.putExtra("turn", 2);
+                                }
+                                else{
+                                    intent.putExtra("turn", 1);
+                                }
+
+                            }
+                            if(turn == 2){
+                                if(switcha == 0)
+                                {
+                                    intent.putExtra("turn", 1);
+                                }
+                                else{
+                                    intent.putExtra("turn", 2);
+                                }
+                            }
+                            startActivity(intent);
+
+                        }
+                        if(round == 0  && turn !=3)
+                        {
+                            Intent intent = new Intent(getApplicationContext(), CombinationsGame.class);
+                            intent.putExtra("rName", rName);
+                            intent.putExtra("bName", bName);
+                            intent.putExtra("rScore", rScore);
+                            intent.putExtra("bScore",bScore);
+                            if(turn == 3)
+                            {
+                                intent.putExtra("turn", 3);
+                                intent.putExtra("solo", 1);
+                            }else{
+                                intent.putExtra("solo", 0);
+                            }
+                            intent.putExtra("round", 1);
+                            if(turn == 1){
+                                if(switcha == 0)
+                                {
+                                    intent.putExtra("turn", 2);
+                                }
+                                else{
+                                    intent.putExtra("turn", 1);
+                                }
+
+                            }
+                            if(turn == 2){
+                                if(switcha == 0)
+                                {
+                                    intent.putExtra("turn", 1);
+                                }
+                                else{
+                                    intent.putExtra("turn", 2);
+                                }
+                            }
+                            startActivity(intent);
+
+                        }
                         finish();
                     }
                 }, 5000);
@@ -824,6 +1183,10 @@ public class CombinationsGame extends AppCompatActivity {
                        if(p < 25)
                        {
                            addToBall(p+v,2);
+                          if(turn != 3)
+                          {
+                              mSocket.emit("lopta",p+v,2);
+                          }
                        }
                         j=5;
 
@@ -833,7 +1196,12 @@ public class CombinationsGame extends AppCompatActivity {
 
             if(p == 21 && turn != 3)
             {
-                mSocket.emit("turn");
+                List<Integer> bzz = new ArrayList<>((Collection) combination.values());
+                mSocket.emit("passcom",bzz.get(0),bzz.get(1),bzz.get(2),bzz.get(3));
+
+
+                mSocket.emit("turna");
+                switcha = 1;
                 return;
             }
             else{
@@ -842,6 +1210,133 @@ public class CombinationsGame extends AppCompatActivity {
                 {
                     List<Integer> coma = new ArrayList<>((Collection) guessedCombination.values());
                     mSocket.emit("enemyguess",coma.get(0),coma.get(1),coma.get(2),coma.get(3));
+                    mSocket.emit("nextgamec");
+                    timera.cancel();
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            timera.cancel();
+
+                            if(round == 1  && turn != 3)
+                            {
+                                Intent intent = new Intent(getApplicationContext(), StepByStepGame.class);
+                                intent.putExtra("rName", rName);
+                                intent.putExtra("bName", bName);
+                                intent.putExtra("rScore", rScore);
+                                intent.putExtra("bScore",bScore);
+                                if(turn == 3)
+                                {
+                                    intent.putExtra("turn", 3);
+                                    intent.putExtra("solo", 1);
+                                }else{
+                                    intent.putExtra("solo", 0);
+                                }
+                                intent.putExtra("round", 0);
+                                if(turn == 1){
+                                    if(switcha == 0)
+                                    {
+                                        intent.putExtra("turn", 2);
+                                    }
+                                    else{
+                                        intent.putExtra("turn", 1);
+                                    }
+
+                                }
+                                if(turn == 2){
+                                    if(switcha == 0)
+                                    {
+                                        intent.putExtra("turn", 1);
+                                    }
+                                    else{
+                                        intent.putExtra("turn", 2);
+                                    }
+                                }
+
+                                startActivity(intent);
+
+                            }if(round == 0 && turn == 3)
+                            {
+
+                                Intent intent = new Intent(getApplicationContext(), StepByStepGame.class);
+                                intent.putExtra("rName", rName);
+                                intent.putExtra("bName", bName);
+                                intent.putExtra("rScore", rScore);
+                                intent.putExtra("bScore",bScore);
+                                if(turn == 3)
+                                {
+                                    intent.putExtra("turn", 3);
+                                    intent.putExtra("solo", 1);
+                                }else{
+                                    intent.putExtra("solo", 0);
+                                }
+                                intent.putExtra("round", 0);
+                                if(turn == 1){
+                                    if(switcha == 0)
+                                    {
+                                        intent.putExtra("turn", 2);
+                                    }
+                                    else{
+                                        intent.putExtra("turn", 1);
+                                    }
+
+                                }
+                                if(turn == 2){
+                                    if(switcha == 0)
+                                    {
+                                        intent.putExtra("turn", 1);
+                                    }
+                                    else{
+                                        intent.putExtra("turn", 2);
+                                    }
+                                }
+                                startActivity(intent);
+
+                            }
+                            if(round == 0  && turn !=3)
+                            {
+                                Intent intent = new Intent(getApplicationContext(), CombinationsGame.class);
+                                intent.putExtra("rName", rName);
+                                intent.putExtra("bName", bName);
+                                intent.putExtra("rScore", rScore);
+                                intent.putExtra("bScore",bScore);
+                                if(turn == 3)
+                                {
+                                    intent.putExtra("turn", 3);
+                                    intent.putExtra("solo", 1);
+                                }else{
+                                    intent.putExtra("solo", 0);
+                                }
+                                intent.putExtra("round", 1);
+                                if(turn == 1){
+                                    if(switcha == 0)
+                                    {
+                                        intent.putExtra("turn", 2);
+                                    }
+                                    else{
+                                        intent.putExtra("turn", 1);
+                                    }
+
+                                }
+                                if(turn == 2){
+                                    if(switcha == 0)
+                                    {
+                                        intent.putExtra("turn", 1);
+                                    }
+                                    else{
+                                        intent.putExtra("turn", 2);
+                                    }
+                                }
+                                startActivity(intent);
+
+                            }
+                            finish();
+                        }
+                    }, 5000);
+
+
+
                 }
 
         }
@@ -952,6 +1447,7 @@ public class CombinationsGame extends AppCompatActivity {
             @Override
             public void run() {
 
+
                 String a = "guessingCard";
                 String temp = a + String.valueOf(cardPosition);
                 int id = 1;
@@ -1026,7 +1522,10 @@ public class CombinationsGame extends AppCompatActivity {
                         id = R.id.guessingCard23;
                         break;
                     case "guessingCard24":
-                        ab=1;
+                        if(turn == 3)
+                        {
+                            ab=1;
+                        }
                         id = R.id.guessingCard24;
                         break;
                     case "guessingCard25":
@@ -1041,6 +1540,19 @@ public class CombinationsGame extends AppCompatActivity {
                     case "guessingCard28":
                         ab=1;
                         id = R.id.guessingCard28;
+                        break;
+                    case "guessingCard29":
+                        id = R.id.guessingCard29;
+                        break;
+                    case "guessingCard30":
+                        id = R.id.guessingCard30;
+                        break;
+                    case "guessingCard31":
+                        id = R.id.guessingCard31;
+                        break;
+                    case "guessingCard32":
+
+                        id = R.id.guessingCard32;
                         break;
                 }
                 ImageView im = (ImageView) findViewById(id);

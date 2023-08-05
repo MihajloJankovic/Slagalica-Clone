@@ -44,19 +44,28 @@ io.on('connection', (socket) => {
      
     
   })
-   socket.on('turn', () => {
+   socket.on('turn', async () => {
 
-    if(socket.id == a)
-    {
-      io.to(b).emit("changeturn");
-    }
-    if(socket.id == b)
-    {
-      io.to(a).emit("changeturn");
-    }
-     
-    
-  })
+       if (socket.id == a) {
+           io.to(b).emit("changeturn");
+       }
+       if (socket.id == b) {
+           io.to(a).emit("changeturn");
+       }
+
+
+   })
+    socket.on('turna', async () => {
+        await new Promise(resolve => setTimeout(resolve, 1300));
+        if (socket.id == a) {
+            io.to(b).emit("changeturna");
+        }
+        if (socket.id == b) {
+            io.to(a).emit("changeturna");
+        }
+
+
+    })
     socket.on('open', (ab) => {
 
         if(socket.id == a)
@@ -116,6 +125,20 @@ io.on('connection', (socket) => {
 
 
     })
+    socket.on('pointsca', (ab) => {
+
+        if(socket.id == a)
+        {
+            ////////////  console.log("a");
+            io.to(b).emit("pointscac",ab);
+        }
+        if(socket.id == b)
+        {
+            io.to(a).emit("pointscac",ab);
+        }
+
+
+    })
     socket.on('points', (ab) => {
 
         if(socket.id == a)
@@ -132,14 +155,54 @@ io.on('connection', (socket) => {
     })
     socket.on('nextgamec', (ab) => {
 
+
+        if (socket.id == a) {
+            /// console.log("a");
+            io.to(b).emit("nextgamecc");
+        }
+        if (socket.id == b) {
+            io.to(a).emit("nextgamecc");
+        }
+
+
+    })
+    socket.on('lopta', (av,bv) => {
+        const person = {a:av, b:bv};
         if(socket.id == a)
         {
-            console.log("a");
-            io.to(b).emit("nextgamecc");
+
+            io.to(b).emit("loptac",person);
         }
         if(socket.id == b)
         {
-            io.to(a).emit("nextgamecc");
+            io.to(a).emit("loptac",person);
+        }
+
+
+    })
+    socket.on('guess', (av,bv,cv,dv) => {
+        const person = {a:av, b:bv,c:cv,d:dv};
+        if(socket.id == a)
+        {
+
+            io.to(b).emit("guessc",person);
+        }
+        if(socket.id == b)
+        {
+            io.to(a).emit("guessc",person);
+        }
+
+
+    })
+    socket.on('passcom', async (av, bv, cv, dv) => {
+        const person = {a: av, b: bv, c: cv, d: dv};
+
+        if (socket.id == a) {
+
+            io.to(b).emit("passcomc", person);
+        }
+        if (socket.id == b) {
+            io.to(a).emit("passcomc", person);
         }
 
 
