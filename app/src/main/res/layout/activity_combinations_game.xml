@@ -1,0 +1,1459 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CombinationsGame"
+    android:background="@drawable/main_gradient">
+
+    <LinearLayout
+        android:id="@+id/scoreLayout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/upper_75"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/scoreRelativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/bluePlayerLayout"
+                android:layout_width="190dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/blue_player_gradient"
+                android:layout_marginLeft="5dp"
+                android:layout_marginVertical="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/bluePlayerAvatarLayout"
+                    android:layout_width="60dp"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/blue_border">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/bluePlayerAvatarCard"
+                        android:layout_margin="2dp"
+                        android:layout_width="wrap_content"
+                        app:cardBackgroundColor="#00FFFFFF"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="0dp"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/bluePlayerAvatar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/random_person">
+                        </ImageView>
+
+                    </androidx.cardview.widget.CardView>
+                </RelativeLayout>
+                <LinearLayout
+                    android:id="@+id/bluePlayerScoreAndNameLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    android:gravity="start"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/bluePlayerScore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="18"
+                        android:textColor="#98E9EC"
+                        android:fontFamily="@font/quiz_font"
+                        android:textSize="20dp">
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/bluePlayerName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/quiz_font"
+                        android:text="Petar"
+                        android:textColor="#98D4EC"
+                        android:textSize="13dp"
+                        tools:ignore="TextSizeCheck"></TextView>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/redPlayerLayout"
+                android:layout_width="190dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:background="@drawable/red_player_gradient"
+                android:layout_marginRight="5dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginLeft="2dp"
+                android:layout_marginVertical="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/redPlayerRelativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/redPlayerScoreAndNameLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/redPlayerScore"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/quiz_font"
+                            android:text="18"
+                            android:gravity="end"
+                            android:textColor="#FF9189"
+                            android:textSize="20dp"></TextView>
+
+                        <TextView
+                            android:id="@+id/redPlayerName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/quiz_font"
+                            android:text="Petar"
+                            android:textColor="#FF9189"
+                            android:textSize="13dp"
+                            tools:ignore="TextSizeCheck"></TextView>
+                    </LinearLayout>
+                    <RelativeLayout
+                        android:id="@+id/redPlayerAvatarLayout"
+                        android:layout_width="60dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginVertical="5dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/red_border">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/redPlayerAvatarCard"
+                            android:layout_margin="2dp"
+                            android:layout_width="wrap_content"
+                            app:cardBackgroundColor="#00FFFFFF"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="0dp"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/redPlayerAvatar"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/random_person">
+                            </ImageView>
+
+                        </androidx.cardview.widget.CardView>
+                    </RelativeLayout>
+                </RelativeLayout>
+
+
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/timerLayout"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/timer_layout"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/timer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="12dp"
+                    android:fontFamily="@font/quiz_font"
+                    android:gravity="center"
+                    android:text="66"
+                    android:textAlignment="center"
+                    android:textColor="#011A40"
+                    android:textSize="25dp"></TextView>
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/combinationsGameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="80dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:fadeScrollbars="false">
+
+        <LinearLayout
+            android:id="@+id/gameExplainerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#24328E"
+            android:layout_marginBottom="15dp">
+
+            <TextView
+                android:id="@+id/gameExplainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/quiz_font"
+                android:text="GUESS THE CORRECT COMBINATION"
+                android:textAlignment="center"
+
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                tools:ignore="TextSizeCheck"></TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/wrapperMain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/guessingPartLayout"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/row1Main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="75dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/guessing_part_back"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/guessingCards1Layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/guessing_part_back"
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard1a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard2a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard3a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard3"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard4a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard4"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/guessingStatsLayout"
+                            android:layout_width="110dp"
+
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/guessingBallsLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_centerInParent="true"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="2dp">
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall1"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall2"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall3"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall4"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:orientation="horizontal"></LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/confirmCombination1Layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:visibility="gone"
+                                android:layout_centerInParent="true"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="2dp">
+
+                                <RelativeLayout
+                                    android:id="@+id/confirmCombination1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/confirm_clicked"
+                                    android:clickable="true"
+                                    tools:ignore="TouchTargetSizeCheck">
+
+                                    <TextView
+                                        android:id="@+id/confirmCombination1Txt"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/quiz_font"
+                                        android:gravity="center"
+                                        android:text="CONFIRM"
+                                        android:textColor="#011A40"
+                                        android:textSize="17dp"></TextView>
+                                </RelativeLayout>
+
+                            </LinearLayout>
+
+
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row2Main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="75dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/guessing_part_back"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/guessingCards2Layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/guessing_part_back"
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard5a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard5"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard6a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard6"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard7a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard7"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard8a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard8"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+
+
+                            <LinearLayout
+                                android:id="@+id/guessingBalls2Layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_centerInParent="true"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="2dp"
+                                >
+
+                            </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingBall5"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="1dp"
+                            android:background="@drawable/guessing_ball"
+                            android:backgroundTint="#FFFFFF"
+                            android:orientation="horizontal"></LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingBall6"
+                            android:layout_width="25dp"
+                            android:backgroundTint="#FFFFFF"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="1dp"
+                            android:background="@drawable/guessing_ball"
+                            android:orientation="horizontal"></LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingBall7"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:backgroundTint="#FFFFFF"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="1dp"
+                            android:background="@drawable/guessing_ball"
+                            android:orientation="horizontal"></LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingBall8"
+                            android:layout_width="25dp"
+                            android:backgroundTint="#FFFFFF"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="1dp"
+                            android:background="@drawable/guessing_ball"
+                            android:orientation="horizontal"></LinearLayout>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row3Main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="75dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/guessing_part_back"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/guessingCards3Layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/guessing_part_back"
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard9a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard9"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard10a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard10"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard11a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard11"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard12a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard12"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/guessingStats3Layout"
+                            android:layout_width="110dp"
+
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/guessingBalls3Layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_centerInParent="true"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="2dp"
+                                >
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall9"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall10"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall11"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall12"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+
+                                    android:orientation="horizontal"></LinearLayout>
+                            </LinearLayout>
+
+
+
+
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row4Main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="75dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/guessing_part_back"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/guessingCards4Layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/guessing_part_back"
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard13a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard13"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard14a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard14"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard15a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard15"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard16a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard16"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/guessingStats4Layout"
+                            android:layout_width="110dp"
+
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/guessingBalls4Layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_centerInParent="true"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="2dp"
+                                >
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall13"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall14"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall15"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall16"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+                            </LinearLayout>
+
+
+
+
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row5Main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="75dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/guessing_part_back"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/guessingCards5Layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/guessing_part_back"
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard17a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard17"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard18a"
+                            android:layout_width="45dp"
+                            android:layout_height="75dp"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard18"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard19a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard19"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard20a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard20"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/guessingStats5Layout"
+                            android:layout_width="110dp"
+
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/guessingBalls5Layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_centerInParent="true"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="2dp"
+                                >
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall17"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall18"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall19"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall20"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:orientation="horizontal"></LinearLayout>
+                            </LinearLayout>
+
+
+
+
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row6Main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="75dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/guessing_part_back"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/guessingCards6Layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/guessing_part_back"
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard21a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard21"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard22a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard22"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard23a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard23"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/guessingCard24a"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/guessingCard24"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                ></ImageView>
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/guessingStats6Layout"
+                            android:layout_width="110dp"
+
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/guessingBalls6Layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_centerInParent="true"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="2dp"
+                                >
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall21"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:backgroundTint="#FFFFFF"
+
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall22"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:backgroundTint="#FFFFFF"
+
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall23"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall24"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:orientation="horizontal"></LinearLayout>
+                            </LinearLayout>
+
+
+
+
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row7Main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="75dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/guessing_part_back"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/guessingCards7Layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/guessing_part_back"
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
+                        <ImageView
+                            android:id="@+id/guessingCard25"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+
+                        </ImageView>
+
+                        <ImageView
+                            android:id="@+id/guessingCard26"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+
+                        </ImageView>
+
+                        <ImageView
+                            android:id="@+id/guessingCard27"
+                            android:layout_width="50dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+
+                        </ImageView>
+
+                        <ImageView
+                            android:id="@+id/guessingCard28"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+
+                        </ImageView>
+
+                        <RelativeLayout
+                            android:id="@+id/guessingStats7Layout"
+                            android:layout_width="110dp"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:id="@+id/guessingBalls7Layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_centerInParent="true"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="2dp"
+                                android:visibility="gone">
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall25"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall26"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall27"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:orientation="horizontal"></LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/guessingBall28"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="1dp"
+                                    android:background="@drawable/guessing_ball"
+                                    android:backgroundTint="#FFC107"
+                                    android:orientation="horizontal"></LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/confirmCombination7Layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_centerInParent="true"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="2dp">
+
+                                <RelativeLayout
+                                    android:id="@+id/confirmCombination7"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/confirm_clicked"
+                                    android:clickable="true"
+                                    tools:ignore="TouchTargetSizeCheck">
+
+                                    <TextView
+                                        android:id="@+id/confirmCombination7Txt"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/quiz_font"
+                                        android:gravity="center"
+                                        android:text="CONFIRM"
+                                        android:textColor="#011A40"
+                                        android:textSize="17dp"></TextView>
+                                </RelativeLayout>
+
+                            </LinearLayout>
+
+
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row8Main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="75dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/guessing_part_back"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/guessingCards8Layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/guessing_part_back"
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
+                        <ImageView
+                            android:id="@+id/guessingCard29"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+
+                        </ImageView>
+
+                        <ImageView
+                            android:id="@+id/guessingCard30"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+
+                        </ImageView>
+
+                        <ImageView
+                            android:id="@+id/guessingCard31"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+
+                        </ImageView>
+
+                        <ImageView
+                            android:id="@+id/guessingCard32"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/input_field"
+                            android:orientation="horizontal">
+
+                        </ImageView>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/symbolsLayout"
+                android:layout_width="70dp"
+                android:layout_height="475dp"
+                android:orientation="horizontal"
+                android:background="@drawable/guessing_part_back"
+                android:fadeScrollbars="false">
+
+                <LinearLayout
+                    android:id="@+id/symbolsLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/symbol1Layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="71dp"
+                        android:layout_marginHorizontal="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="9dp"
+                        android:background="@drawable/numbers_clicked"
+                        android:clickable="true"
+                        android:orientation="horizontal"
+                        tools:ignore="SpeakableTextPresentCheck">
+
+                        <ImageView
+                            android:id="@+id/symbol1"
+                            android:clickable="true"
+                            android:onClick="open"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/brainster_logo"></ImageView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/symbol2Layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="71dp"
+                        android:layout_marginHorizontal="2dp"
+                        android:layout_marginBottom="9dp"
+                        android:background="@drawable/numbers_clicked"
+                        android:clickable="true"
+                        android:orientation="horizontal"
+                        tools:ignore="SpeakableTextPresentCheck"
+                        android:padding="4dp">
+
+                        <ImageView
+                            android:id="@+id/symbol2"
+                            android:clickable="true"
+                            android:onClick="open"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/club"></ImageView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/symbol3Layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="71dp"
+                        android:layout_marginHorizontal="2dp"
+                        android:layout_marginBottom="9dp"
+                        android:background="@drawable/numbers_clicked"
+                        android:clickable="true"
+                        android:orientation="horizontal"
+                        tools:ignore="SpeakableTextPresentCheck">
+
+                        <ImageView
+                            android:id="@+id/symbol3"
+                            android:clickable="true"
+                            android:onClick="open"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/spade"></ImageView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/symbol4Layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="71dp"
+                        android:layout_marginHorizontal="2dp"
+                        android:layout_marginBottom="9dp"
+                        android:background="@drawable/numbers_clicked"
+                        android:clickable="true"
+                        android:orientation="horizontal"
+                        tools:ignore="SpeakableTextPresentCheck">
+
+                        <ImageView
+                            android:id="@+id/symbol4"
+                            android:clickable="true"
+                            android:onClick="open"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginHorizontal="8dp"
+                            android:layout_marginVertical="10dp"
+                            android:background="@drawable/hearts"></ImageView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/symbol5Layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="71dp"
+                        android:layout_marginHorizontal="2dp"
+                        android:layout_marginBottom="9dp"
+                        android:background="@drawable/numbers_clicked"
+                        android:clickable="true"
+                        android:orientation="horizontal"
+                        tools:ignore="SpeakableTextPresentCheck">
+
+                        <ImageView
+                            android:id="@+id/symbol5"
+                            android:clickable="true"
+                            android:onClick="open"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="7dp"
+                            android:background="@drawable/diamonds"></ImageView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/symbol6Layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="71dp"
+                        android:layout_marginHorizontal="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/numbers_clicked"
+                        android:clickable="true"
+                        android:orientation="horizontal"
+                        tools:ignore="SpeakableTextPresentCheck">
+
+                        <ImageView
+                            android:id="@+id/symbol6"
+                            android:clickable="true"
+                            android:onClick="open"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+
+                            android:layout_margin="5dp"
+                            android:background="@drawable/star_borderless"></ImageView>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

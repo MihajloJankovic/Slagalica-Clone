@@ -1,0 +1,669 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StepByStepGame"
+    android:background="@drawable/main_gradient">
+
+    <LinearLayout
+        android:id="@+id/scoreLayout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/upper_75"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/scoreRelativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/bluePlayerLayout"
+                android:layout_width="190dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/blue_player_gradient"
+                android:layout_marginLeft="5dp"
+                android:layout_marginVertical="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/bluePlayerAvatarLayout"
+                    android:layout_width="60dp"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/blue_border">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/bluePlayerAvatarCard"
+                        android:layout_margin="2dp"
+                        android:layout_width="wrap_content"
+                        app:cardBackgroundColor="#00FFFFFF"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="0dp"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/bluePlayerAvatar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/random_person">
+                        </ImageView>
+
+                    </androidx.cardview.widget.CardView>
+                </RelativeLayout>
+                <LinearLayout
+                    android:id="@+id/bluePlayerScoreAndNameLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    android:gravity="start"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/bluePlayerScore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="18"
+                        android:textColor="#98E9EC"
+                        android:fontFamily="@font/quiz_font"
+                        android:textSize="20dp">
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/bluePlayerName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/quiz_font"
+                        android:text="Petar"
+                        android:textColor="#98D4EC"
+                        android:textSize="13dp"
+                        tools:ignore="TextSizeCheck"></TextView>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/redPlayerLayout"
+                android:layout_width="190dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:background="@drawable/red_player_gradient"
+                android:layout_marginRight="5dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginLeft="2dp"
+                android:layout_marginVertical="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/redPlayerRelativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/redPlayerScoreAndNameLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/redPlayerScore"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/quiz_font"
+                            android:text="18"
+                            android:gravity="end"
+                            android:textColor="#FF9189"
+                            android:textSize="20dp"></TextView>
+
+                        <TextView
+                            android:id="@+id/redPlayerName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/quiz_font"
+                            android:text="Petar"
+                            android:textColor="#FF9189"
+                            android:textSize="13dp"
+                            tools:ignore="TextSizeCheck"></TextView>
+                    </LinearLayout>
+                    <RelativeLayout
+                        android:id="@+id/redPlayerAvatarLayout"
+                        android:layout_width="60dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginVertical="5dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/red_border">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/redPlayerAvatarCard"
+                            android:layout_margin="2dp"
+                            android:layout_width="wrap_content"
+                            app:cardBackgroundColor="#00FFFFFF"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="0dp"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/redPlayerAvatar"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/random_person">
+                            </ImageView>
+
+                        </androidx.cardview.widget.CardView>
+                    </RelativeLayout>
+                </RelativeLayout>
+
+
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/timerLayout"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/timer_layout"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/timer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="12dp"
+                    android:fontFamily="@font/quiz_font"
+                    android:gravity="center"
+                    android:text="66"
+                    android:textAlignment="center"
+                    android:textColor="#011A40"
+                    android:textSize="25dp"></TextView>
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/stepByStepGameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="80dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/gameExplainerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#24328E"
+            android:layout_marginBottom="40dp">
+
+            <TextView
+                android:id="@+id/gameExplainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/quiz_font"
+                android:text="GUESS THE TERM BASED ON THE HINTS"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                tools:ignore="TextSizeCheck"></TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/step1MainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <RelativeLayout
+                android:id="@+id/step1Layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/sentence1Layout"
+                    android:layout_width="320dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/numbers_back_clicked"
+                    android:layout_alignParentStart="true">
+
+                    <TextView
+                        android:id="@+id/sentence1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/quiz_font"
+                        android:textColor="#011A40"
+                        android:text=""
+                        android:gravity="center"
+                        android:textSize="17dp">
+                    </TextView>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/step1PointsLayout"
+                    android:layout_width="55dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/numbers_back_clicked"
+                    android:layout_alignParentEnd="true">
+
+                    <TextView
+                        android:id="@+id/step1Points"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/quiz_font"
+                        android:text="20"
+                        android:textColor="#011A40"
+                        android:gravity="center"
+                        android:textSize="23dp">
+                    </TextView>
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/step2MainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <RelativeLayout
+                android:id="@+id/step2Layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/sentence2Layout"
+                    android:layout_width="320dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_field"
+                    android:layout_alignParentStart="true">
+
+                    <TextView
+                        android:id="@+id/sentence2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/quiz_font"
+                        android:textColor="#011A40"
+                        android:text="\???"
+                        android:gravity="center"
+                        android:textSize="17dp">
+                    </TextView>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/step2PointsLayout"
+                    android:layout_width="55dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_field"
+                    android:layout_alignParentEnd="true">
+
+                    <TextView
+                        android:id="@+id/step2Points"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/quiz_font"
+                        android:text="18"
+                        android:textColor="#011A40"
+                        android:gravity="center"
+                        android:textSize="23dp">
+                    </TextView>
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/step3MainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <RelativeLayout
+                android:id="@+id/step3Layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/sentence3Layout"
+                    android:layout_width="320dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_field"
+                    android:layout_alignParentStart="true">
+
+                    <TextView
+                        android:id="@+id/sentence3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/quiz_font"
+                        android:textColor="#011A40"
+                        android:text="\???"
+                        android:gravity="center"
+                        android:textSize="17dp">
+                    </TextView>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/step3PointsLayout"
+                    android:layout_width="55dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_field"
+                    android:layout_alignParentEnd="true">
+
+                    <TextView
+                        android:id="@+id/step3Points"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/quiz_font"
+                        android:text="16"
+                        android:textColor="#011A40"
+                        android:gravity="center"
+                        android:textSize="23dp">
+                    </TextView>
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/step4MainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <RelativeLayout
+                android:id="@+id/step4Layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/sentence4Layout"
+                    android:layout_width="320dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_field"
+                    android:layout_alignParentStart="true">
+
+                    <TextView
+                        android:id="@+id/sentence4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/quiz_font"
+                        android:textColor="#011A40"
+                        android:text="\???"
+                        android:gravity="center"
+                        android:textSize="17dp">
+                    </TextView>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/step4PointsLayout"
+                    android:layout_width="55dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_field"
+                    android:layout_alignParentEnd="true">
+
+                    <TextView
+                        android:id="@+id/step4Points"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/quiz_font"
+                        android:text="14"
+                        android:textColor="#011A40"
+                        android:gravity="center"
+                        android:textSize="23dp">
+                    </TextView>
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/step5MainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <RelativeLayout
+                android:id="@+id/step5Layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/sentence5Layout"
+                    android:layout_width="320dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_field"
+                    android:layout_alignParentStart="true">
+
+                    <TextView
+                        android:id="@+id/sentence5"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/quiz_font"
+                        android:textColor="#011A40"
+                        android:text="\???"
+                        android:gravity="center"
+                        android:textSize="17dp">
+                    </TextView>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/step5PointsLayout"
+                    android:layout_width="55dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_field"
+                    android:layout_alignParentEnd="true">
+
+                    <TextView
+                        android:id="@+id/step5Points"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/quiz_font"
+                        android:text="12"
+                        android:textColor="#011A40"
+                        android:gravity="center"
+                        android:textSize="23dp">
+                    </TextView>
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/step6MainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <RelativeLayout
+                android:id="@+id/step6Layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/sentence6Layout"
+                    android:layout_width="320dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_field"
+                    android:layout_alignParentStart="true">
+
+                    <TextView
+                        android:id="@+id/sentence6"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/quiz_font"
+                        android:textColor="#011A40"
+                        android:text="\???"
+                        android:gravity="center"
+                        android:textSize="17dp">
+                    </TextView>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/step6PointsLayout"
+                    android:layout_width="55dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_field"
+                    android:layout_alignParentEnd="true">
+
+                    <TextView
+                        android:id="@+id/step6Points"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/quiz_font"
+                        android:text="10"
+                        android:textColor="#011A40"
+                        android:gravity="center"
+                        android:textSize="23dp">
+                    </TextView>
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/step7MainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="60dp">
+
+            <RelativeLayout
+                android:id="@+id/step7Layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/sentence7Layout"
+                    android:layout_width="320dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_field"
+                    android:layout_alignParentStart="true">
+
+                    <TextView
+                        android:id="@+id/sentence7"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/quiz_font"
+                        android:textColor="#011A40"
+                        android:text="\???"
+                        android:gravity="center"
+                        android:textSize="17dp">
+                    </TextView>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/step7PointsLayout"
+                    android:layout_width="55dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_field"
+                    android:layout_alignParentEnd="true">
+
+                    <TextView
+                        android:id="@+id/step7Points"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/quiz_font"
+                        android:text="8"
+                        android:textColor="#011A40"
+                        android:gravity="center"
+                        android:textSize="23dp">
+                    </TextView>
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/answerMainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="30dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/answerLayout"
+                android:layout_width="350dp"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:background="@drawable/input_field"
+                android:clickable="true"
+                android:padding="5dp">
+
+                <EditText
+                    android:id="@+id/answerInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#00FFFFFF"
+                    android:hint="Input your guess here..."
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:lines="1"
+                    android:textColor="#011A40"
+                    android:fontFamily="@font/quiz_font"
+                    android:textColorHint="#757575"
+                    android:gravity="center">
+                </EditText>
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/confirmButtonMainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="180dp">
+
+            <LinearLayout
+                android:id="@+id/confirmButtonLayout"
+                android:layout_width="130dp"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/confirmButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/confirm_clicked"
+                    android:clickable="true"
+                    tools:ignore="TouchTargetSizeCheck">
+
+                    <TextView
+                        android:id="@+id/confirmTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/quiz_font"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:onClick="guessAnswer"
+                        android:text="CONFIRM"
+                        android:textColor="#011A40"
+                        android:textSize="17dp"></TextView>
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
