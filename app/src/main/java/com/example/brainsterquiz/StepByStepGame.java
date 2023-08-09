@@ -109,7 +109,7 @@ public class StepByStepGame extends AppCompatActivity {
                 if(turn != 3)
                 {
 
-                    Konekcija app = (Konekcija) StepByStepGame.this.getApplication();
+                    con app = (con) StepByStepGame.this.getApplication();
                     this.mSocket = app.getSocket();
                     mSocket.on("changeturn",(a) -> {
                             this.turn = 1;
@@ -127,15 +127,49 @@ public class StepByStepGame extends AppCompatActivity {
 
                     });
                     mSocket.on("nextgamecc",(a) -> {
-                        openStep(1);
-                        openStep(2);
-                        openStep(3);
-                        openStep(4);
-                        openStep(5);
-                        openStep(6);
-                        openStep(7);
 
 
+
+                        String finalID = "answer";
+                        db.collection("/games/Step by step/1").document(round + "").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if(true) {
+
+                                    Toast.makeText(getApplicationContext(),"Success Guess",Toast.LENGTH_SHORT).show();
+
+
+                                    TextView sent1 = (TextView) findViewById(R.id.sentence1);
+                                    sent1.setText(documentSnapshot.getString("sentence1"));
+
+                                    TextView sent2 = (TextView) findViewById(R.id.sentence2);
+                                    sent2.setText(documentSnapshot.getString("sentence2"));
+
+                                    TextView sent3 = (TextView) findViewById(R.id.sentence3);
+                                    sent3.setText(documentSnapshot.getString("sentence3"));
+
+                                    TextView sent4 = (TextView) findViewById(R.id.sentence4);
+                                    sent4.setText(documentSnapshot.getString("sentence4"));
+
+                                    TextView sent5 = (TextView) findViewById(R.id.sentence5);
+                                    sent5.setText(documentSnapshot.getString("sentence5"));
+
+                                    TextView sent6 = (TextView) findViewById(R.id.sentence6);
+                                    sent6.setText(documentSnapshot.getString("sentence6"));
+
+                                    TextView sent7 = (TextView) findViewById(R.id.sentence7);
+                                    sent7.setText(documentSnapshot.getString("sentence7"));
+
+                                    EditText answer = (EditText) findViewById(R.id.answerInput);
+                                    answer.setText(documentSnapshot.getString("answer"));
+
+
+
+
+                                }
+
+                            }
+                        });
 
                         runOnUiThread(new Runnable() {
 
@@ -481,7 +515,10 @@ public class StepByStepGame extends AppCompatActivity {
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     String value = documentSnapshot.getString(neededSentenceID);
                     TextView field = (TextView) findViewById(finalId);
-                    mSocket.emit("nextstep");
+                    if(turn !=3 )
+                    {
+                        mSocket.emit("nextstep");
+                    }
                     field.setText(value);
                     opened = 1;
                 }
@@ -506,7 +543,7 @@ public class StepByStepGame extends AppCompatActivity {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if(guess.equals(documentSnapshot.getString(finalID))) {
-                                mSocket.emit("nextgamec");
+
                                 Toast.makeText(getApplicationContext(),"Success Guess",Toast.LENGTH_SHORT).show();
                                 int result = 0;
                                 if (stepsRevealed == 1){
@@ -536,13 +573,19 @@ public class StepByStepGame extends AppCompatActivity {
                                 if(stepsRevealed == 7) {
                                     result = 8;
                                 }
+                                if(turn != 3)
+                                {
+
+                                    mSocket.emit("pointsca",result);
+
+                                }
                                 rScore = String.valueOf(Integer.valueOf(rScore)+result);
                                 TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
                                 field1.setText(rScore);
                                 if(turn != 3)
                                 {
 
-                                    mSocket.emit("pointsca",result);
+
                                     mSocket.emit("nextgamec");
                                 }
 
@@ -646,11 +689,19 @@ public class StepByStepGame extends AppCompatActivity {
                                 {
                                     stepsRevealed=stepsRevealed+1;
                                     openStep(stepsRevealed);
-                                    mSocket.emit("turn");
+                                   if(turn !=3)
+                                   {
+                                       mSocket.emit("turn");
+                                       turn = 2;
+                                   }
                                 }
                                 else{
                                     Toast.makeText(getApplicationContext(),"Wrong guess",Toast.LENGTH_SHORT).show();
-                                    mSocket.emit("turn");
+                                  if(turn !=3)
+                                  {
+                                      mSocket.emit("turn");
+                                      turn = 2;
+                                  }
                                 }
 
                             }

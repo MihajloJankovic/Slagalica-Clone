@@ -56,7 +56,7 @@ io.on('connection', (socket) => {
 
    })
     socket.on('turna', async () => {
-        await new Promise(resolve => setTimeout(resolve, 1300));
+        await new Promise(resolve => setTimeout(resolve, 1000));
         if (socket.id == a) {
             io.to(b).emit("changeturna");
         }

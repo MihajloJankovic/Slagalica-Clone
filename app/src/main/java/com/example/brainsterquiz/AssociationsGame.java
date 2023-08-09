@@ -199,10 +199,13 @@ public class AssociationsGame extends AppCompatActivity {
                     intent.putExtra("round", 0);
                     intent.putExtra("round", 0);
                     intent.putExtra("turn", turn);
+                    finish();
                     startActivity(intent);
+
 
                 }if(round == 0 && ab == 0 && turn == 3)
                 {
+
                     Intent intent = new Intent(getApplicationContext(), CombinationsGame.class);
                     intent.putExtra("rName", rName);
                     intent.putExtra("bName", bName);
@@ -216,8 +219,9 @@ public class AssociationsGame extends AppCompatActivity {
                     }
                     intent.putExtra("round", 0);
                     intent.putExtra("turn", 3);
-
+                    finish();
                     startActivity(intent);
+
 
                 }
                 if(round == 0 && ab== 0 && turn !=3)
@@ -235,12 +239,16 @@ public class AssociationsGame extends AppCompatActivity {
                     }
                     intent.putExtra("turn", turn);
                     intent.putExtra("round", 1);
-
+                    finish();
                     startActivity(intent);
 
+
+
                 }
+
             }
         }.start();
+
 
 
 
@@ -898,9 +906,10 @@ public class AssociationsGame extends AppCompatActivity {
                                             }
                                             intent.putExtra("round", 0);
                                             intent.putExtra("turn", turn);
-
-                                            startActivity(intent);
                                             finish();
+                                            startActivity(intent);
+
+
                                         }
                                         if(round == 0 && turn !=3)
                                         {
@@ -919,8 +928,9 @@ public class AssociationsGame extends AppCompatActivity {
                                             }
                                             intent.putExtra("round", 1);
                                             intent.putExtra("turn", turn);
-                                            startActivity(intent);
                                             finish();
+                                            startActivity(intent);
+
                                         }
                                         if(round == 0 && turn ==3)
                                         {
@@ -939,10 +949,12 @@ public class AssociationsGame extends AppCompatActivity {
                                             }
                                             intent.putExtra("round", 0);
                                             intent.putExtra("turn", 3);
-
+                                            finish();
                                             startActivity(intent);
 
+
                                         }
+
 
 
                                     }
@@ -1119,8 +1131,9 @@ public class AssociationsGame extends AppCompatActivity {
                                                     }
                                                     intent.putExtra("round", 0);
                                                     intent.putExtra("turn", turn);
-                                                    startActivity(intent);
                                                     finish();
+                                                    startActivity(intent);
+
                                                 }
                                                 if(round == 0 && turn !=3)
                                                 {
@@ -1139,9 +1152,10 @@ public class AssociationsGame extends AppCompatActivity {
                                                     }
                                                     intent.putExtra("round", 1);
                                                     intent.putExtra("turn", turn);
-
-                                                    startActivity(intent);
                                                     finish();
+                                                    startActivity(intent);
+
+
                                                 }
                                                 if(round == 0 && turn ==3)
                                                 {
@@ -1160,7 +1174,9 @@ public class AssociationsGame extends AppCompatActivity {
                                                     }
                                                     intent.putExtra("round", 0);
                                                     intent.putExtra("turn", 3);
+                                                    finish();
                                                     startActivity(intent);
+
 
                                                 }
 
