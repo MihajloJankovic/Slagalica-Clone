@@ -194,6 +194,19 @@ io.on('connection', (socket) => {
 
 
     })
+    socket.on('nextstep', () => {
+
+
+        if (socket.id == a) {
+
+            io.to(b).emit("nextstepc");
+        }
+        if (socket.id == b) {
+            io.to(a).emit("nextstepc");
+        }
+
+
+    })
     socket.on('passcom', async (av, bv, cv, dv) => {
         const person = {a: av, b: bv, c: cv, d: dv};
 
