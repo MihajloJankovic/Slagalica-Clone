@@ -56,7 +56,7 @@ io.on('connection', (socket) => {
 
    })
     socket.on('turna', async () => {
-        await new Promise(resolve => setTimeout(resolve, 1300));
+        await new Promise(resolve => setTimeout(resolve, 1000));
         if (socket.id == a) {
             io.to(b).emit("changeturna");
         }
@@ -190,6 +190,19 @@ io.on('connection', (socket) => {
         if(socket.id == b)
         {
             io.to(a).emit("guessc",person);
+        }
+
+
+    })
+    socket.on('nextstep', () => {
+
+
+        if (socket.id == a) {
+
+            io.to(b).emit("nextstepc");
+        }
+        if (socket.id == b) {
+            io.to(a).emit("nextstepc");
         }
 
 

@@ -99,7 +99,7 @@ public class CombinationsGame extends AppCompatActivity {
                 if(turn != 3)
                 {
 
-                    Konekcija app = (Konekcija) CombinationsGame.this.getApplication();
+                    con app = (con)CombinationsGame.this.getApplication();
                     this.mSocket = app.getSocket();
                     mSocket.on("changeturna",(a) -> {
 
@@ -153,36 +153,44 @@ public class CombinationsGame extends AppCompatActivity {
                     });
 
                     mSocket.on("guessc",(a) -> {
-                        runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                              
-                                Map<String,Object> mapa;
-                                try {
-                                    ObjectMapper mapper = new ObjectMapper();
-                                    mapa = mapper.readValue(a[0].toString(), Map.class);
-
-                                } catch (JsonProcessingException e) {
-                                    throw new RuntimeException(e);
-                                }
-                                int aa = Integer.valueOf( mapa.get("a").toString());
-                                int bb = Integer.valueOf( mapa.get("b").toString());
-                                int cc = Integer.valueOf( mapa.get("c").toString());
-                                int dd = Integer.valueOf( mapa.get("d").toString());
-
-                                addToUI(aa);
-                                ++cardPosition;
-                                addToUI(bb);
-                                ++cardPosition;
-                                addToUI(cc);
-                                ++cardPosition;
-                                addToUI(dd);
-                                ++cardPosition;
-
-
+                            if(cardPosition == 29 )
+                            {
+                               finish();
                             }
-                        });
+                            else {
+                                runOnUiThread(new Runnable() {
+
+
+                                    @Override
+                                    public void run() {
+
+                                        Map<String,Object> mapa;
+                                        try {
+                                            ObjectMapper mapper = new ObjectMapper();
+                                            mapa = mapper.readValue(a[0].toString(), Map.class);
+
+                                        } catch (JsonProcessingException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                        int aa = Integer.valueOf( mapa.get("a").toString());
+                                        int bb = Integer.valueOf( mapa.get("b").toString());
+                                        int cc = Integer.valueOf( mapa.get("c").toString());
+                                        int dd = Integer.valueOf( mapa.get("d").toString());
+
+                                        addToUI(aa);
+                                        ++cardPosition;
+                                        addToUI(bb);
+                                        ++cardPosition;
+                                        addToUI(cc);
+                                        ++cardPosition;
+                                        addToUI(dd);
+                                        ++cardPosition;
+
+
+                                    }
+                                });
+                            }
+
 
 
 
@@ -322,8 +330,9 @@ public class CombinationsGame extends AppCompatActivity {
                                                         intent.putExtra("turn", 2);
                                                     }
                                                 }
-
+                                                finish();
                                                 startActivity(intent);
+
 
                                             }if(round == 0 && turn == 3)
                                             {
@@ -360,7 +369,9 @@ public class CombinationsGame extends AppCompatActivity {
                                                         intent.putExtra("turn", 2);
                                                     }
                                                 }
+                                                finish();
                                                 startActivity(intent);
+
 
                                             }
                                             if(round == 0  && turn !=3)
@@ -397,10 +408,12 @@ public class CombinationsGame extends AppCompatActivity {
                                                         intent.putExtra("turn", 2);
                                                     }
                                                 }
+                                                finish();
                                                 startActivity(intent);
 
+
                                             }
-                                            finish();
+
                                         }
                                     }, 5000);
                                 }
@@ -535,8 +548,9 @@ public class CombinationsGame extends AppCompatActivity {
                             intent.putExtra("turn", 2);
                         }
                     }
-
+                    finish();
                     startActivity(intent);
+
 
                 }if(round == 0 && turn == 3)
                 {
@@ -573,7 +587,9 @@ public class CombinationsGame extends AppCompatActivity {
                             intent.putExtra("turn", 2);
                         }
                     }
+                    finish();
                     startActivity(intent);
+
 
                 }
                 if(round == 0  && turn !=3)
@@ -610,15 +626,17 @@ public class CombinationsGame extends AppCompatActivity {
                             intent.putExtra("turn", 2);
                         }
                     }
+                    finish();
                     startActivity(intent);
 
+
                 }
-                finish();
+
             }
         }.start();
 
 
-
+        this.cardPosition = 1;
     }
     public void open(View v) {
         if(guessedTrue ==1 || turn ==2 )
@@ -842,8 +860,9 @@ public class CombinationsGame extends AppCompatActivity {
                                 intent.putExtra("turn", 2);
                             }
                         }
-
+                        finish();
                         startActivity(intent);
+
 
                     }if(round == 0 && turn == 3)
                     {
@@ -880,7 +899,9 @@ public class CombinationsGame extends AppCompatActivity {
                                 intent.putExtra("turn", 2);
                             }
                         }
+                        finish();
                         startActivity(intent);
+
 
                     }
                     if(round == 0  && turn !=3)
@@ -917,10 +938,12 @@ public class CombinationsGame extends AppCompatActivity {
                                 intent.putExtra("turn", 2);
                             }
                         }
+                        finish();
                         startActivity(intent);
 
+
                     }
-                    finish();
+
                 }
             }, 5000);
         }
@@ -1078,8 +1101,9 @@ public class CombinationsGame extends AppCompatActivity {
                                     intent.putExtra("turn", 2);
                                 }
                             }
-
+                            finish();
                             startActivity(intent);
+
 
                         }if(round == 0 && turn == 3)
                         {
@@ -1116,7 +1140,9 @@ public class CombinationsGame extends AppCompatActivity {
                                     intent.putExtra("turn", 2);
                                 }
                             }
+                            finish();
                             startActivity(intent);
+
 
                         }
                         if(round == 0  && turn !=3)
@@ -1153,10 +1179,12 @@ public class CombinationsGame extends AppCompatActivity {
                                     intent.putExtra("turn", 2);
                                 }
                             }
+                            finish();
                             startActivity(intent);
 
+
                         }
-                        finish();
+
                     }
                 }, 5000);
 
@@ -1201,6 +1229,7 @@ public class CombinationsGame extends AppCompatActivity {
 
 
                 mSocket.emit("turna");
+                this.turn = 2;
                 switcha = 1;
                 return;
             }
@@ -1253,8 +1282,9 @@ public class CombinationsGame extends AppCompatActivity {
                                         intent.putExtra("turn", 2);
                                     }
                                 }
-
+                                finish();
                                 startActivity(intent);
+
 
                             }if(round == 0 && turn == 3)
                             {
@@ -1291,7 +1321,9 @@ public class CombinationsGame extends AppCompatActivity {
                                         intent.putExtra("turn", 2);
                                     }
                                 }
+                                finish();
                                 startActivity(intent);
+
 
                             }
                             if(round == 0  && turn !=3)
@@ -1328,10 +1360,12 @@ public class CombinationsGame extends AppCompatActivity {
                                         intent.putExtra("turn", 2);
                                     }
                                 }
+                                finish();
                                 startActivity(intent);
 
+
                             }
-                            finish();
+
                         }
                     }, 5000);
 
@@ -1449,7 +1483,7 @@ public class CombinationsGame extends AppCompatActivity {
 
 
                 String a = "guessingCard";
-                String temp = a + String.valueOf(cardPosition);
+               String temp = a + String.valueOf(cardPosition);
                 int id = 1;
                 switch (temp) {
                     case "guessingCard1":
