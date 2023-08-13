@@ -109,7 +109,7 @@ public class StepByStepGame extends AppCompatActivity {
                 if(turn != 3)
                 {
 
-                    con app = (con) StepByStepGame.this.getApplication();
+                    Konekcija app = (Konekcija ) StepByStepGame.this.getApplication();
                     this.mSocket = app.getSocket();
                     mSocket.on("changeturn",(a) -> {
                             this.turn = 1;

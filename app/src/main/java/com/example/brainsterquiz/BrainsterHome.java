@@ -86,7 +86,7 @@ public class BrainsterHome extends AppCompatActivity {
 
         app =new ChatApplication();
         mSocket = app.getSocket();
-        con app = (con)BrainsterHome.this.getApplication();
+        Konekcija app = (Konekcija)BrainsterHome.this.getApplication();
         Socket socket = app.setSocket(mSocket);
         mSocket.on("pleyer1",(a) -> {
             Tost();

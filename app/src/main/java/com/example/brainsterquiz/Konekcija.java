@@ -5,7 +5,7 @@ import android.app.Application;
 import io.socket.client.Socket;
 
 
-public class con  extends Application {
+public class Konekcija  extends Application {
     private Socket socket;
 
     public Socket getSocket(){
