@@ -99,7 +99,7 @@ public class CombinationsGame extends AppCompatActivity {
                 if(turn != 3)
                 {
 
-                    con app = (con)CombinationsGame.this.getApplication();
+                    Konekcija  app = (Konekcija )CombinationsGame.this.getApplication();
                     this.mSocket = app.getSocket();
                     mSocket.on("changeturna",(a) -> {
 

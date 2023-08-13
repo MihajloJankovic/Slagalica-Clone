@@ -118,7 +118,7 @@ public class AssociationsGame extends AppCompatActivity {
             this.turn = extras.getInt("turn");
            if(turn != 3)
            {
-               con app = (con)AssociationsGame.this.getApplication();
+               Konekcija  app = (Konekcija) AssociationsGame.this.getApplication();
                this.mSocket = app.getSocket();
                mSocket.on("changeturn",(a) -> {
 
