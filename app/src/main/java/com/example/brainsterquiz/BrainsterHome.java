@@ -1,11 +1,13 @@
 package com.example.brainsterquiz;
-
+import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -15,6 +17,15 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.checkerframework.common.returnsreceiver.qual.This;
+
+import java.util.Map;
+
+import io.socket.client.Socket;
 
 public class BrainsterHome extends AppCompatActivity {
 
@@ -48,6 +59,7 @@ public class BrainsterHome extends AppCompatActivity {
     private TextView row4Label;
     private TextView row5Label;
     private TextView row6Label;
+    private BrainsterHome bh = this;
     private TextView row7Label;
 
     private TextView row1Value;
@@ -57,7 +69,11 @@ public class BrainsterHome extends AppCompatActivity {
     private TextView row5Value;
     private TextView row6Value;
     private TextView row7Value;
-
+    private Socket mSocket;
+    private String bname;
+    private String rname;
+    private int turn;
+    private  ChatApplication app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +84,76 @@ public class BrainsterHome extends AppCompatActivity {
         userProfile = new Dialog(this);
         playerStatistics = new Dialog(this);
 
+        app =new ChatApplication();
+        mSocket = app.getSocket();
+        Konekcija app = (Konekcija)BrainsterHome.this.getApplication();
+        Socket socket = app.setSocket(mSocket);
+        mSocket.on("pleyer1",(a) -> {
+            Tost();
+        });
+        mSocket.on("pleyer2",(a) -> {
+            try {
+                Tost2();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        mSocket.on("startMatch",(a) -> {
+
+            StartMatch(a);
+        });
+        mSocket.on("podaci",(a) -> {
+
+
+            Map<String,Object> mapa;
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                mapa = mapper.readValue(a[0].toString(), Map.class);
+
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            bname=mapa.get("a").toString();
+            rname=mapa.get("b").toString();
+
+
+        });
+
+    }
+    public void StartMatch( Object a){
+        mSocket.emit("Imena");
+
+                Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
+
+
+                intent.putExtra("solo", 0);
+                intent.putExtra("round", 0);
+                intent.putExtra("bName", bname);
+                intent.putExtra("rName", rname);
+                intent.putExtra("rScore", "0");
+                intent.putExtra("bScore", "0");
+                intent.putExtra("turn", turn);
+
+                startActivity(intent);
+
+
+
+    }
+    public void Tost() {
+        runOnUiThread(() -> Toast.makeText(bh, "weiting for other pleyer !", Toast.LENGTH_SHORT).show());
+        this.turn = 1;
+        mSocket.emit("Ime", "zika");
+    }
+
+    public void Tost2() throws InterruptedException {
+        runOnUiThread(() -> Toast.makeText(bh, "Match will start soon !", Toast.LENGTH_SHORT).show());
+        this.turn = 2;
+        mSocket.emit("Ime", "pera");
+        mSocket.emit("Imena");
+        mSocket.emit("start");
+    }
+    public void onClickPlay(View v) {
+        app.getSocket().connect();
 
     }
 
