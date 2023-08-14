@@ -70,7 +70,7 @@ public class CombinationsGame extends AppCompatActivity {
         setContentView(R.layout.activity_combinations_game);
         getSupportActionBar().hide();
 
-
+//edrf
         this.turn = 3;
         this.rName = "Guest";
         this.bName = "";
