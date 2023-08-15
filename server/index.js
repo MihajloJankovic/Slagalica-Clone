@@ -98,7 +98,7 @@ io.on('connection', (socket) => {
     socket.on('finalNumberGame', () => {
 
 
-            io.emit("finalNumberGamea",);
+            io.emit("finalNumberGamea");
 
 
 

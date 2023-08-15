@@ -192,126 +192,74 @@ public class NumberGame extends AppCompatActivity {
 
                     mSocket.on("neededc",(a) -> {
 
-                        neededNumber.setText(String.valueOf(a[0]));
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                neededNumber.setText(String.valueOf(a[0]));
+                                Random random = new Random();
+
+                                List<Integer> neededNumbers = new ArrayList<Integer>();
+
+                                for (int i = 1; i<=1000; i++){
+                                    neededNumbers.add(i);
+                                }
+                                if(confirmTxt.getText().toString().equals("STOP")){
+                                    neededNumber.setText(neededNumbers.get(random.nextInt(neededNumbers.size())).toString());
+                                    number1.setText(digits.get(random.nextInt(digits.size())).toString());
+                                    number2.setText(digits.get(random.nextInt(digits.size())).toString());
+                                    number3.setText(digits.get(random.nextInt(digits.size())).toString());
+                                    number4.setText(digits.get(random.nextInt(digits.size())).toString());
+
+                                    number5.setText(doubleDigits.get(random.nextInt(doubleDigits.size())).toString());
+                                    number6.setText(lastDigits.get(random.nextInt(lastDigits.size())).toString());
+
+                                    confirmTxt.setText("CONFIRM");
+
+                                    number1.setClickable(true);
+                                    number2.setClickable(true);
+                                    number3.setClickable(true);
+                                    number4.setClickable(true);
+                                    number5.setClickable(true);
+                                    number6.setClickable(true);
+
+                                    addition.setClickable(false);
+                                    subtraction.setClickable(false);
+                                    multiplication.setClickable(false);
+                                    division.setClickable(false);
+                                    openBracket.setClickable(true);
+                                    closedBracket.setClickable(true);
+                                }
+                            }
+                        });
+
                     });
                     mSocket.on("myguessc",(a) -> {
+                        runOnUiThread(new Runnable() {
 
-                        bluePlayerNumber.setText(a[0].toString());
-                        if(bluePlayerNumber.getText().toString() != "" && bluePlayerNumber.getText().toString() != " ")
-                        {
-                            if(redPlayerNumber.getText().toString() != "" && redPlayerNumber.getText().toString() != " ")
-                            {
-                                   mSocket.emit("finalNumberGame");
+                            @Override
+                            public void run() {
+                                bluePlayerNumber.setText(a[0].toString());
+                                if(!bluePlayerNumber.getText().toString().equals("???") && bluePlayerNumber.getText().toString() != " ")
+                                {
+                                    if(!redPlayerNumber.getText().toString().equals("???") && redPlayerNumber.getText().toString() != " ")
+                                    {
+                                        mSocket.emit("finalNumberGame");
+                                    }
+                                }
                             }
-                        }
+                        });
+
                     });
 
                     mSocket.on("finalNumberGamea",(a) -> {
+                        runOnUiThread(new Runnable() {
 
-                            if(turn == 2)
-                            {
-                                if(bluePlayerNumber.getText() == neededNumber.getText())
+                            @Override
+                            public void run() {
+
+                                if(turn == 2)
                                 {
-                                    bScore =String.valueOf(Integer.valueOf(bScore) + 20);
-                                    TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
-                                    field1.setText(bScore);
-                                    if(redPlayerNumber.getText() == neededNumber.getText())
-                                    {
-                                        rScore =String.valueOf(Integer.valueOf(rScore) + 20);
-                                        TextView field2 = (TextView) findViewById(R.id.redPlayerScore);
-                                        field2.setText(rScore);
-
-                                    }
-                                }
-                                else{
-                                    if(redPlayerNumber.getText() == neededNumber.getText())
-                                    {
-                                        rScore =String.valueOf(Integer.valueOf(rScore) + 20);
-                                        TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
-                                        field1.setText(rScore);
-
-                                    }
-                                    else{
-                                       int nedeed =  Integer.valueOf((String) neededNumber.getText());
-                                       int closer=   MaxNumber(Integer.valueOf((String) redPlayerNumber.getText()),Integer.valueOf((String) bluePlayerNumber.getText()),Integer.valueOf((String) neededNumber.getText()));
-                                       if(closer == Integer.valueOf((String) redPlayerNumber.getText())){
-                                           rScore =String.valueOf(Integer.valueOf(rScore) + 5);
-                                           TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
-                                           field1.setText(rScore);
-                                       }
-                                        if(closer == Integer.valueOf((String) bluePlayerNumber.getText())){
-                                            bScore =String.valueOf(Integer.valueOf(bScore) + 5);
-                                            TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
-                                            field1.setText(bScore);
-                                        }
-                                    }
-                                }
-                                turn = 1;
-                                Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        timera.cancel();
-
-                                        if(round == 1  && turn != 3)
-                                        {
-                                            Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
-                                            finish();
-                                            startActivity(intent);
-
-
-                                        }if(round == 0 && turn == 3)
-                                        {
-
-                                            Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
-                                            finish();
-                                            startActivity(intent);
-
-
-                                        }
-                                        if(round == 0  && turn !=3)
-                                        {
-                                            Intent intent = new Intent(getApplicationContext(), NumberGame.class);
-                                            intent.putExtra("rName", rName);
-                                            intent.putExtra("bName", bName);
-                                            intent.putExtra("rScore", rScore);
-                                            intent.putExtra("bScore",bScore);
-                                            if(turn == 3)
-                                            {
-                                                intent.putExtra("turn", 3);
-                                                intent.putExtra("solo", 1);
-                                            }else{
-                                                intent.putExtra("solo", 0);
-                                            }
-                                            intent.putExtra("round", 1);
-
-                                            intent.putExtra("turn", turn);
-
-                                            finish();
-                                            startActivity(intent);
-
-
-                                        }
-
-                                    }
-                                }, 2000);
-                            }
-                            if(turn == 1)
-                            {
-                                if(redPlayerNumber.getText() == neededNumber.getText())
-                                {
-                                    rScore =String.valueOf(Integer.valueOf(rScore) + 20);
-                                    TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
-                                    field1.setText(rScore);
-                                    if(bluePlayerNumber.getText() == neededNumber.getText())
-                                    {
-                                        bScore =String.valueOf(Integer.valueOf(bScore) + 20);
-                                        TextView field2 = (TextView) findViewById(R.id.bluePlayerScore);
-                                        field2.setText(bScore);
-
-                                    }
-                                }
-                                else{
                                     if(bluePlayerNumber.getText() == neededNumber.getText())
                                     {
                                         bScore =String.valueOf(Integer.valueOf(bScore) + 20);
@@ -320,70 +268,162 @@ public class NumberGame extends AppCompatActivity {
 
                                     }
                                     else{
-                                        int nedeed =  Integer.valueOf((String) neededNumber.getText());
-                                        int closer=   MaxNumber(Integer.valueOf((String) redPlayerNumber.getText()),Integer.valueOf((String) bluePlayerNumber.getText()),Integer.valueOf((String) neededNumber.getText()));
-                                        if(closer == Integer.valueOf((String) redPlayerNumber.getText())){
-                                            rScore =String.valueOf(Integer.valueOf(rScore) + 5);
+                                        if(redPlayerNumber.getText() == neededNumber.getText())
+                                        {
+                                            rScore =String.valueOf(Integer.valueOf(rScore) + 20);
                                             TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
                                             field1.setText(rScore);
+
                                         }
-                                        if(closer == Integer.valueOf((String) bluePlayerNumber.getText())){
-                                            bScore =String.valueOf(Integer.valueOf(bScore) + 5);
+                                        else{
+                                            int nedeed =  Integer.valueOf((String) neededNumber.getText());
+                                            int closer=   MaxNumber(Integer.valueOf((String) redPlayerNumber.getText()),Integer.valueOf((String) bluePlayerNumber.getText()),Integer.valueOf((String) neededNumber.getText()));
+                                            if(closer == Integer.valueOf((String) redPlayerNumber.getText())){
+                                                rScore =String.valueOf(Integer.valueOf(rScore) + 5);
+                                                TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
+                                                field1.setText(rScore);
+                                            }
+                                            if(closer == Integer.valueOf((String) bluePlayerNumber.getText())){
+                                                bScore =String.valueOf(Integer.valueOf(bScore) + 5);
+                                                TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
+                                                field1.setText(bScore);
+                                            }
+                                        }
+                                    }
+                                    turn = 1;
+                                    Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            timera.cancel();
+
+                                            if(round == 1  && turn != 3)
+                                            {
+                                                Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
+                                                finish();
+                                                startActivity(intent);
+
+
+                                            }if(round == 0 && turn == 3)
+                                            {
+
+                                                Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
+                                                finish();
+                                                startActivity(intent);
+
+
+                                            }
+                                            if(round == 0  && turn !=3)
+                                            {
+                                                Intent intent = new Intent(getApplicationContext(), NumberGame.class);
+                                                intent.putExtra("rName", rName);
+                                                intent.putExtra("bName", bName);
+                                                intent.putExtra("rScore", rScore);
+                                                intent.putExtra("bScore",bScore);
+                                                if(turn == 3)
+                                                {
+                                                    intent.putExtra("turn", 3);
+                                                    intent.putExtra("solo", 1);
+                                                }else{
+                                                    intent.putExtra("solo", 0);
+                                                }
+                                                intent.putExtra("round", 1);
+
+                                                intent.putExtra("turn", turn);
+
+                                                finish();
+                                                startActivity(intent);
+
+
+                                            }
+
+                                        }
+                                    }, 6000);
+                                }
+                                if(turn == 1)
+                                {
+                                    if(redPlayerNumber.getText().equals(neededNumber.getText()))
+                                    {
+                                        rScore =String.valueOf(Integer.valueOf(rScore) + 20);
+                                        TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
+                                        field1.setText(rScore);
+                                    }
+                                    else{
+                                        if(bluePlayerNumber.getText().equals(neededNumber.getText()))
+                                        {
+                                            bScore =String.valueOf(Integer.valueOf(bScore) + 20);
                                             TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
                                             field1.setText(bScore);
-                                        }
-                                    }
-                                }
-                                turn = 2;
-                                Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        timera.cancel();
-
-                                        if(round == 1  && turn != 3)
-                                        {
-                                            Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
-                                            finish();
-                                            startActivity(intent);
-
-
-                                        }if(round == 0 && turn == 3)
-                                        {
-
-                                            Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
-                                            finish();
-                                            startActivity(intent);
-
 
                                         }
-                                        if(round == 0  && turn !=3)
-                                        {
-                                            Intent intent = new Intent(getApplicationContext(), NumberGame.class);
-                                            intent.putExtra("rName", rName);
-                                            intent.putExtra("bName", bName);
-                                            intent.putExtra("rScore", rScore);
-                                            intent.putExtra("bScore",bScore);
-                                            if(turn == 3)
-                                            {
-                                                intent.putExtra("turn", 3);
-                                                intent.putExtra("solo", 1);
-                                            }else{
-                                                intent.putExtra("solo", 0);
+                                        else{
+                                            int nedeed =  Integer.valueOf((String) neededNumber.getText());
+                                            int closer=   MaxNumber(Integer.valueOf((String) redPlayerNumber.getText()),Integer.valueOf((String) bluePlayerNumber.getText()),Integer.valueOf((String) neededNumber.getText()));
+                                            if(closer == Integer.valueOf((String) redPlayerNumber.getText())){
+                                                rScore =String.valueOf(Integer.valueOf(rScore) + 5);
+                                                TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
+                                                field1.setText(rScore);
                                             }
-                                            intent.putExtra("round", 1);
+                                            if(closer == Integer.valueOf((String) bluePlayerNumber.getText())){
+                                                bScore =String.valueOf(Integer.valueOf(bScore) + 5);
+                                                TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
+                                                field1.setText(bScore);
+                                            }
+                                        }
+                                    }
+                                    turn = 2;
+                                    Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            timera.cancel();
 
-                                            intent.putExtra("turn", turn);
+                                            if(round == 1  && turn != 3)
+                                            {
+                                                Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
+                                                finish();
+                                                startActivity(intent);
 
-                                            finish();
-                                            startActivity(intent);
 
+                                            }if(round == 0 && turn == 3)
+                                            {
+
+                                                Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
+                                                finish();
+                                                startActivity(intent);
+
+
+                                            }
+                                            if(round == 0  && turn !=3)
+                                            {
+                                                Intent intent = new Intent(getApplicationContext(), NumberGame.class);
+                                                intent.putExtra("rName", rName);
+                                                intent.putExtra("bName", bName);
+                                                intent.putExtra("rScore", rScore);
+                                                intent.putExtra("bScore",bScore);
+                                                if(turn == 3)
+                                                {
+                                                    intent.putExtra("turn", 3);
+                                                    intent.putExtra("solo", 1);
+                                                }else{
+                                                    intent.putExtra("solo", 0);
+                                                }
+                                                intent.putExtra("round", 1);
+
+                                                intent.putExtra("turn", turn);
+
+                                                finish();
+                                                startActivity(intent);
+
+
+                                            }
 
                                         }
-
-                                    }
-                                }, 2000);
+                                    }, 6000);
+                                }
                             }
+                        });
+
                     });
 
 
@@ -462,14 +502,22 @@ public class NumberGame extends AppCompatActivity {
             }
         }.start();
 
-        if(turn == 1)
-        {
-            mSocket.emit("needed",Integer.valueOf((String) neededNumber.getText()));
-        }
+
     }
 
 
     public void setupUI(){
+        if(turn == 2)
+        {
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    confirmTxt.setText(" ");
+                    confirmButton.setClickable(false);
+                }
+            });
+        }
         this.neededNumber = (TextView) findViewById(R.id.neededNumber);
         this.bluePlayerNumber = (TextView) findViewById(R.id.bluePlayerNumber);
         this.redPlayerNumber = (TextView) findViewById(R.id.redPlayerNumber);
@@ -548,6 +596,11 @@ public class NumberGame extends AppCompatActivity {
             openBracket.setClickable(true);
             closedBracket.setClickable(true);
         }
+        if(turn == 1)
+        {
+            mSocket.emit("needed",Integer.valueOf((String) neededNumber.getText()));
+        }
+
     }
 
     public void makeExpression(View view){
@@ -881,17 +934,17 @@ public class NumberGame extends AppCompatActivity {
                   finish();
                   startActivity(intent);
               }
-          }, 2000);
+          }, 3000);
 
       }
       if(turn == 1)
       {
-            mSocket.emit("myguess",redPlayerNumber);
+            mSocket.emit("myguess",redPlayerNumber.getText());
 
       }
         if(turn == 2)
         {
-            mSocket.emit("myguess",redPlayerNumber);
+            mSocket.emit("myguess",redPlayerNumber.getText());
         }
 
     }
