@@ -210,7 +210,7 @@ public class StepByStepGame extends AppCompatActivity {
                                                         intent.putExtra("turn", 1);
 
                                                 }
-
+                                                finish();
                                                 startActivity(intent);
 
                                             }if(round == 0 && turn == 3)
@@ -240,6 +240,7 @@ public class StepByStepGame extends AppCompatActivity {
                                                         intent.putExtra("turn", 1);
 
                                                 }
+                                                finish();
                                                 startActivity(intent);
 
                                             }
@@ -274,10 +275,11 @@ public class StepByStepGame extends AppCompatActivity {
 
 
                                                 }
+                                                finish();
                                                 startActivity(intent);
 
                                             }
-                                            finish();
+
                                         }
                                     }, 5000);
                                 }
@@ -334,7 +336,7 @@ public class StepByStepGame extends AppCompatActivity {
 
 
                     }
-
+                    finish();
                     startActivity(intent);
 
                 }
@@ -366,7 +368,7 @@ public class StepByStepGame extends AppCompatActivity {
 
 
                     }
-
+                    finish();
                     startActivity(intent);
 
                 }
@@ -398,7 +400,7 @@ public class StepByStepGame extends AppCompatActivity {
 
 
                     }
-
+                    finish();
                     startActivity(intent);
 
                 }
@@ -633,9 +635,9 @@ public class StepByStepGame extends AppCompatActivity {
                                                 intent.putExtra("solo", 0);
                                             }
                                             intent.putExtra("round", 0);
-
-                                            startActivity(intent);
                                             finish();
+                                            startActivity(intent);
+
                                         }
                                         if(round == 0 && turn !=3)
                                         {
@@ -653,9 +655,9 @@ public class StepByStepGame extends AppCompatActivity {
                                                 intent.putExtra("solo", 0);
                                             }
                                             intent.putExtra("round", 1);
-
-                                            startActivity(intent);
                                             finish();
+                                            startActivity(intent);
+
                                         }
                                         if(round == 0 && turn ==3)
                                         {
@@ -673,7 +675,7 @@ public class StepByStepGame extends AppCompatActivity {
                                                 intent.putExtra("solo", 0);
                                             }
                                             intent.putExtra("round", 0);
-
+                                            finish();
                                             startActivity(intent);
 
                                         }

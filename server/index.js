@@ -12,8 +12,8 @@ app.get('/', (req, res) => {
   res.send('<h1>Hello world</h1>');
 });
 
-server.listen(8081,'192.168.1.152', () => {
-  console.log('listening on *:3000');
+server.listen(4001,'192.168.0.18', () => {
+  console.log('listening on *:4001');
 });
 
 
@@ -66,6 +66,7 @@ io.on('connection', (socket) => {
 
 
     })
+
     socket.on('open', (ab) => {
 
         if(socket.id == a)
@@ -75,6 +76,42 @@ io.on('connection', (socket) => {
         if(socket.id == b)
         {
             io.to(a).emit("opens",ab);
+        }
+
+
+    })
+
+    socket.on('needed', (ab) => {
+
+        if(socket.id == a)
+        {
+            io.to(b).emit("neededc",ab);
+        }
+        if(socket.id == b)
+        {
+            io.to(a).emit("neededc",ab);
+        }
+
+
+    })
+
+    socket.on('finalNumberGame', () => {
+
+
+            io.emit("finalNumberGamea");
+
+
+
+    })
+    socket.on('myguess', (ab) => {
+
+        if(socket.id == a)
+        {
+            io.to(b).emit("myguessc",ab);
+        }
+        if(socket.id == b)
+        {
+            io.to(a).emit("myguessc",ab);
         }
 
 
@@ -170,7 +207,7 @@ io.on('connection', (socket) => {
         const person = {a:av, b:bv};
         if(socket.id == a)
         {
-
+//s
             io.to(b).emit("loptac",person);
         }
         if(socket.id == b)
