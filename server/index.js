@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
   res.send('<h1>Hello world</h1>');
 });
 
-server.listen(4001,'192.168.0.18', () => {
+server.listen(4001,'192.168.0.12', () => {
   console.log('listening on *:4001');
 });
 
