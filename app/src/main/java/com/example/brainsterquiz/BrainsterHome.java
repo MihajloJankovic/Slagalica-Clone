@@ -210,7 +210,6 @@ public class BrainsterHome extends AppCompatActivity {
 
     public void addNotification(View view){
         setUIViews();
-
         notificationsList.addView(notificationLayout);
 
     }
