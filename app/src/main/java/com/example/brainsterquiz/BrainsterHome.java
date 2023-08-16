@@ -254,6 +254,8 @@ public class BrainsterHome extends AppCompatActivity {
         newNotification.addView(newMessageIconLayout);
         newNotification.addView(newNotificationTextLayout);
 
+        notificationsList.addView(newNotification);
+
     }
 
     public void statisticsBoxListeners(View view) {
