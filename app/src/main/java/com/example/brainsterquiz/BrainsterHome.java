@@ -2,10 +2,12 @@ package com.example.brainsterquiz;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -41,6 +43,10 @@ public class BrainsterHome extends AppCompatActivity {
     private RelativeLayout editProfileButtonClick;
     private RelativeLayout closeButtonNotifications;
 
+    private LinearLayout messageIconLayout;
+    private LinearLayout messageIcon;
+    private RelativeLayout notificationTextLayout;
+    private TextView notificationText;
     private RelativeLayout saveProfileButton;
     private RelativeLayout closeButtonStatistics;
     private ProgressBar numberGameProgressBar;
@@ -210,7 +216,43 @@ public class BrainsterHome extends AppCompatActivity {
 
     public void addNotification(View view){
         setUIViews();
-        notificationsList.addView(notificationLayout);
+        LinearLayout newNotification = new LinearLayout(BrainsterHome.this);
+        newNotification.setId(Integer.parseInt(notificationLayout.getId() + String.valueOf(Math.random())));
+        newNotification.setLayoutParams(notificationLayout.getLayoutParams());
+        newNotification.setBackground(notificationLayout.getBackground());
+        newNotification.setOrientation(notificationLayout.getOrientation());
+
+        LinearLayout newMessageIconLayout = new LinearLayout(BrainsterHome.this);
+        newMessageIconLayout.setId(Integer.parseInt(messageIconLayout.getId() + String.valueOf(Math.random())));
+        newMessageIconLayout.setLayoutParams(messageIconLayout.getLayoutParams());
+        newMessageIconLayout.setBackground(messageIconLayout.getBackground());
+        newMessageIconLayout.setPadding(messageIconLayout.getPaddingLeft(), messageIconLayout.getPaddingTop(), messageIconLayout.getPaddingRight(), messageIconLayout.getPaddingBottom());
+
+        LinearLayout newMessageIcon = new LinearLayout(BrainsterHome.this);
+        newMessageIcon.setId(Integer.parseInt(messageIcon.getId() + String.valueOf(Math.random())));
+        newMessageIcon.setLayoutParams(messageIcon.getLayoutParams());
+        newMessageIcon.setBackground(messageIcon.getBackground());
+        newMessageIcon.setOrientation(messageIcon.getOrientation());
+
+        RelativeLayout newNotificationTextLayout = new RelativeLayout(BrainsterHome.this);
+        newNotificationTextLayout.setId(Integer.parseInt(notificationTextLayout.getId() + String.valueOf(Math.random())));
+        newNotificationTextLayout.setLayoutParams(notificationTextLayout.getLayoutParams());
+        newNotificationTextLayout.setGravity(notificationTextLayout.getGravity());
+
+        TextView newNotificationText = new TextView(BrainsterHome.this);
+        newNotificationText.setId(Integer.parseInt(notificationText.getId() + String.valueOf(Math.random())));
+        newNotificationText.setLayoutParams(notificationText.getLayoutParams());
+        newNotificationText.setText("Example notification");
+        newNotificationText.setGravity(notificationText.getGravity());
+        newNotificationText.setTextColor(notificationText.getTextColors());
+        newNotificationText.setTextSize(notificationText.getTextSize());
+        Typeface typeface = ResourcesCompat.getFont(BrainsterHome.this, R.font.quiz_font);
+        newNotificationText.setTypeface(typeface);
+
+        newNotificationTextLayout.addView(newNotificationText);
+        newMessageIconLayout.addView(newMessageIcon);
+        newNotification.addView(newMessageIconLayout);
+        newNotification.addView(newNotificationTextLayout);
 
     }
 
@@ -423,6 +465,10 @@ public class BrainsterHome extends AppCompatActivity {
         fifthBoxPointer = (TextView) playerStatistics.findViewById(R.id.fifthBoxPointer);
         sixthBoxPointer = (TextView) playerStatistics.findViewById(R.id.sixthBoxPointer);
 
+        messageIconLayout = (LinearLayout) notifications.findViewById(R.id.messageIconLayout);
+        messageIcon = (LinearLayout) notifications.findViewById(R.id.messageIcon);
+        notificationTextLayout = (RelativeLayout) notifications.findViewById(R.id.notificationTextLayout);
+        notificationText = (TextView) notifications.findViewById(R.id.notificationText);
 
         boxHeader = (TextView) playerStatistics.findViewById(R.id.boxHeader);
 

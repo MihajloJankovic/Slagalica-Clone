@@ -110,19 +110,22 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
+                            android:id="@+id/messageIconLayout"
                             android:layout_width="70dp"
                             android:layout_height="70dp"
                             android:background="#3F51B5"
                             android:padding="8dp">
 
                             <LinearLayout
+                                android:id="@+id/messageIcon"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:background="@drawable/letter">
-
+                                android:background="@drawable/letter"
+                                android:orientation="horizontal">
                             </LinearLayout>
                         </LinearLayout>
                         <RelativeLayout
+                            android:id="@+id/notificationTextLayout"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center">
@@ -131,8 +134,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/quiz_font"
-                                android:text="Notification example"
-                                android:textAlignment="center"
+                                android:text="Welcome to the Brainster!"
+                                android:gravity="center"
                                 android:textColor="#046AB8"
                                 android:textSize="16dp"></TextView>
                         </RelativeLayout>
