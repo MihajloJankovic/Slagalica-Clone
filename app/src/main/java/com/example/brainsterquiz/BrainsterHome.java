@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class BrainsterHome extends AppCompatActivity {
     private ImageButton logoutButton;
     private Dialog userProfile;
     private Dialog playerStatistics;
+    private ScrollView scrollView;
     private ImageButton myProfileButton;
     private RelativeLayout closeButtonProfile;
     private RelativeLayout statisticsButton;
@@ -72,6 +74,7 @@ public class BrainsterHome extends AppCompatActivity {
     private TextView row5Value;
     private TextView row6Value;
     private TextView row7Value;
+    private LinearLayout notificationLayout;
     private Socket mSocket;
     private QueryDocumentSnapshot user;
     private String bname;
@@ -203,6 +206,13 @@ public class BrainsterHome extends AppCompatActivity {
                 notifications.dismiss();
             }
         });
+    }
+
+    public void addNotification(View view){
+        setUIViews();
+
+        scrollView.addView(notificationLayout);
+
     }
 
     public void statisticsBoxListeners(View view) {
@@ -399,14 +409,14 @@ public class BrainsterHome extends AppCompatActivity {
         notificationsBelly = (RelativeLayout) this.findViewById(R.id.notification_belly);
         editProfileButtonClick = (RelativeLayout) userProfile.findViewById(R.id.editProfilePictureLayout);
         saveProfileButton = (RelativeLayout) userProfile.findViewById(R.id.saveProfileButton);
-
+        scrollView = (ScrollView) notifications.findViewById(R.id.scrollContainer);
         numberGameProgressBar = (ProgressBar) playerStatistics.findViewById(R.id.progress_bar_number_game);
         stepByStepGameProgressBar = (ProgressBar) playerStatistics.findViewById(R.id.progress_bar_step_by_step_game);
         matchingGameProgressBar = (ProgressBar) playerStatistics.findViewById(R.id.progress_bar_matching_game);
         combinationsGameProgressBar = (ProgressBar) playerStatistics.findViewById(R.id.progress_bar_combinations_game);
         questionsGameProgressBar = (ProgressBar) playerStatistics.findViewById(R.id.progress_bar_questions_game);
         associationsGameProgressBar = (ProgressBar) playerStatistics.findViewById(R.id.progress_bar_associations_game);
-
+        notificationLayout = (LinearLayout) notifications.findViewById(R.id.notificationLayout);
         firstBoxPointer = (TextView) playerStatistics.findViewById(R.id.firstBoxPointer);
         secondBoxPointer = (TextView) playerStatistics.findViewById(R.id.secondBoxPointer);
         thirdBoxPointer = (TextView) playerStatistics.findViewById(R.id.thirdBoxPointer);
