@@ -32,6 +32,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,6 +83,14 @@ public class BrainsterHomeUnregistered extends AppCompatActivity {
             public void onClick(View view) {
                 registerDialog.dismiss();
                 loginDialog.show();
+            }
+        });
+
+        signUpLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                registerDialog.show();
+                loginDialog.dismiss();
             }
         });
 
@@ -172,10 +181,10 @@ public class BrainsterHomeUnregistered extends AppCompatActivity {
 
     }
     public void register(View v) {
-        EditText usernameTxt = (EditText) loginDialog.findViewById(R.id.usernameTxt);
-        EditText passwordTxt = (EditText) loginDialog.findViewById(R.id.passwordTxt);
-        EditText passwordRepeatTxt = (EditText) loginDialog.findViewById(R.id.passwordTxt);
-        EditText emailTxt = (EditText) loginDialog.findViewById(R.id.emailTxt);
+        EditText usernameTxt = (EditText) registerDialog.findViewById(R.id.usernameTxt);
+        EditText passwordTxt = (EditText) registerDialog.findViewById(R.id.passwordTxt);
+        EditText passwordRepeatTxt = (EditText) registerDialog.findViewById(R.id.confirmPasswordTxt);
+        EditText emailTxt = (EditText) registerDialog.findViewById(R.id.emailTxt);
 
         if(passwordTxt.getText().equals(passwordRepeatTxt.getText()))
         {

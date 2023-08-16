@@ -37,6 +37,7 @@ public class BrainsterHome extends AppCompatActivity {
     private RelativeLayout closeButtonProfile;
     private RelativeLayout statisticsButton;
     private RelativeLayout editProfileButtonClick;
+    private RelativeLayout closeButtonNotifications;
 
     private RelativeLayout saveProfileButton;
     private RelativeLayout closeButtonStatistics;
@@ -62,7 +63,8 @@ public class BrainsterHome extends AppCompatActivity {
     private TextView row6Label;
     private BrainsterHome bh = this;
     private TextView row7Label;
-
+    private Dialog notifications;
+    private RelativeLayout notificationsBelly;
     private TextView row1Value;
     private TextView row2Value;
     private TextView row3Value;
@@ -85,6 +87,7 @@ public class BrainsterHome extends AppCompatActivity {
 
         userProfile = new Dialog(this);
         playerStatistics = new Dialog(this);
+        notifications = new Dialog(this);
 
         Konekcija  app = (Konekcija) BrainsterHome.this.getApplication();
         this.mSocket = app.getSocket();
@@ -188,6 +191,11 @@ public class BrainsterHome extends AppCompatActivity {
                 //function for changing profile picture...
             }
         });
+    }
+
+    public void notificationsListeners(View view) {
+        setUIViews();
+        notifications.show();
     }
 
     public void statisticsBoxListeners(View view) {
@@ -376,9 +384,11 @@ public class BrainsterHome extends AppCompatActivity {
         userProfile.setContentView(R.layout.my_profile_layout);
         playerStatistics.setContentView(R.layout.statistics_layout);
         closeButtonProfile = (RelativeLayout) userProfile.findViewById(R.id.closeButton);
+        closeButtonNotifications = (RelativeLayout) notifications.findViewById(R.id.closeButton);
         closeButtonStatistics = (RelativeLayout) playerStatistics.findViewById(R.id.closeButton);
         myProfileButton = (ImageButton) this.findViewById(R.id.myProfileButton);
         statisticsButton = (RelativeLayout) this.findViewById(R.id.statistics);
+        notificationsBelly = (RelativeLayout) this.findViewById(R.id.notification_belly);
         editProfileButtonClick = (RelativeLayout) userProfile.findViewById(R.id.editProfilePictureLayout);
         saveProfileButton = (RelativeLayout) userProfile.findViewById(R.id.saveProfileButton);
 
