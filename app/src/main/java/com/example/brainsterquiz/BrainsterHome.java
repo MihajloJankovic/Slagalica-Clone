@@ -196,6 +196,13 @@ public class BrainsterHome extends AppCompatActivity {
     public void notificationsListeners(View view) {
         setUIViews();
         notifications.show();
+
+        closeButtonNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                notifications.dismiss();
+            }
+        });
     }
 
     public void statisticsBoxListeners(View view) {
@@ -383,6 +390,7 @@ public class BrainsterHome extends AppCompatActivity {
         logoutButton = (ImageButton) this.findViewById(R.id.logoutButton);
         userProfile.setContentView(R.layout.my_profile_layout);
         playerStatistics.setContentView(R.layout.statistics_layout);
+        notifications.setContentView(R.layout.notifications);
         closeButtonProfile = (RelativeLayout) userProfile.findViewById(R.id.closeButton);
         closeButtonNotifications = (RelativeLayout) notifications.findViewById(R.id.closeButton);
         closeButtonStatistics = (RelativeLayout) playerStatistics.findViewById(R.id.closeButton);

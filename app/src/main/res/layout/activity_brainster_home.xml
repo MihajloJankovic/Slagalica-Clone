@@ -134,7 +134,7 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/click_bell"
                         android:clickable="true"
-                        android:onClick="open"
+                        android:onClick="notificationsListeners"
                         android:gravity="right">
 
                         <RelativeLayout
