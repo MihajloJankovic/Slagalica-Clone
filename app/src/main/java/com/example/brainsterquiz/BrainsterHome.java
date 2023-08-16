@@ -34,7 +34,7 @@ public class BrainsterHome extends AppCompatActivity {
     private ImageButton logoutButton;
     private Dialog userProfile;
     private Dialog playerStatistics;
-    private ScrollView scrollView;
+    private LinearLayout notificationsList;
     private ImageButton myProfileButton;
     private RelativeLayout closeButtonProfile;
     private RelativeLayout statisticsButton;
@@ -211,7 +211,7 @@ public class BrainsterHome extends AppCompatActivity {
     public void addNotification(View view){
         setUIViews();
 
-        scrollView.addView(notificationLayout);
+        notificationsList.addView(notificationLayout);
 
     }
 
@@ -409,7 +409,7 @@ public class BrainsterHome extends AppCompatActivity {
         notificationsBelly = (RelativeLayout) this.findViewById(R.id.notification_belly);
         editProfileButtonClick = (RelativeLayout) userProfile.findViewById(R.id.editProfilePictureLayout);
         saveProfileButton = (RelativeLayout) userProfile.findViewById(R.id.saveProfileButton);
-        scrollView = (ScrollView) notifications.findViewById(R.id.scrollContainer);
+        notificationsList = (LinearLayout) notifications.findViewById(R.id.notificationsList);
         numberGameProgressBar = (ProgressBar) playerStatistics.findViewById(R.id.progress_bar_number_game);
         stepByStepGameProgressBar = (ProgressBar) playerStatistics.findViewById(R.id.progress_bar_step_by_step_game);
         matchingGameProgressBar = (ProgressBar) playerStatistics.findViewById(R.id.progress_bar_matching_game);
