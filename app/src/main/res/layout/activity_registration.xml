@@ -213,12 +213,13 @@
                     android:id="@+id/signUpButton"
                     android:clickable="true"
                     android:onClick="register">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fontFamily="@font/quiz_font"
-                        android:text="Sign Up"
                         android:gravity="center"
+                        android:text="Sign Up"
                         android:textColor="@color/white"
                         android:textSize="25dp">
 

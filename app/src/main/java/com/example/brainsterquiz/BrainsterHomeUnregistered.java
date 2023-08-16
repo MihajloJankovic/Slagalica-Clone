@@ -36,7 +36,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.socket.client.Socket;
+
 
 public class BrainsterHomeUnregistered extends AppCompatActivity {
     Dialog loginDialog;
@@ -49,7 +49,7 @@ public class BrainsterHomeUnregistered extends AppCompatActivity {
     RelativeLayout signUpButton;
     FirebaseFirestore db;
     private  ChatApplication app;
-    private Socket mSocket;
+    private io.socket.client.Socket mSocket;
     TextView play;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +152,7 @@ public class BrainsterHomeUnregistered extends AppCompatActivity {
                             app =new ChatApplication();
                             mSocket = app.getSocket();
                             Konekcija appb = (Konekcija)BrainsterHomeUnregistered.this.getApplication();
-                            Socket socket = appb.setSocket(mSocket);
+                            appb.setSocket(mSocket);
                             appb.setUser(document);
                             Intent intent = new Intent(BrainsterHomeUnregistered.this, BrainsterHome.class);
                             startActivity(intent);
@@ -186,7 +186,7 @@ public class BrainsterHomeUnregistered extends AppCompatActivity {
         EditText passwordRepeatTxt = (EditText) registerDialog.findViewById(R.id.confirmPasswordTxt);
         EditText emailTxt = (EditText) registerDialog.findViewById(R.id.emailTxt);
 
-        if(passwordTxt.getText().equals(passwordRepeatTxt.getText()))
+        if(passwordTxt.getText().toString().equals(passwordRepeatTxt.getText().toString()))
         {
             if(emailTxt.getText().toString().length() > 3)
             {
@@ -201,6 +201,8 @@ public class BrainsterHomeUnregistered extends AppCompatActivity {
                     docData.put("password",passwordTxt.getText().toString() );
                     docData.put("email", emailTxt.getText().toString());
                     db.collection("users").document(String.valueOf(Math.random())).set(docData);
+                    Toast.makeText(BrainsterHomeUnregistered.this, "Register successful !!!", Toast.LENGTH_SHORT).show();
+                    registerDialog.dismiss();
 
                 }
             }
