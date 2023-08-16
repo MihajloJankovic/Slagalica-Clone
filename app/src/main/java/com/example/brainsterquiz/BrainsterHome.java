@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.checkerframework.common.returnsreceiver.qual.This;
 
@@ -70,6 +71,7 @@ public class BrainsterHome extends AppCompatActivity {
     private TextView row6Value;
     private TextView row7Value;
     private Socket mSocket;
+    private QueryDocumentSnapshot user;
     private String bname;
     private String rname;
     private int turn;
@@ -84,10 +86,12 @@ public class BrainsterHome extends AppCompatActivity {
         userProfile = new Dialog(this);
         playerStatistics = new Dialog(this);
 
-        app =new ChatApplication();
-        mSocket = app.getSocket();
-        Konekcija app = (Konekcija)BrainsterHome.this.getApplication();
-        Socket socket = app.setSocket(mSocket);
+        Konekcija  app = (Konekcija) BrainsterHome.this.getApplication();
+        this.mSocket = app.getSocket();
+        this.user =app.getUser();
+
+        this.rname = user.getString("name");
+
         mSocket.on("pleyer1",(a) -> {
             Tost();
         });
@@ -142,18 +146,19 @@ public class BrainsterHome extends AppCompatActivity {
     public void Tost() {
         runOnUiThread(() -> Toast.makeText(bh, "weiting for other pleyer !", Toast.LENGTH_SHORT).show());
         this.turn = 1;
-        mSocket.emit("Ime", "zika");
+        mSocket.emit("Ime", rname);
     }
 
     public void Tost2() throws InterruptedException {
         runOnUiThread(() -> Toast.makeText(bh, "Match will start soon !", Toast.LENGTH_SHORT).show());
         this.turn = 2;
-        mSocket.emit("Ime", "pera");
+        mSocket.emit("Ime", rname);
         mSocket.emit("Imena");
         mSocket.emit("start");
     }
     public void onClickPlay(View v) {
-        app.getSocket().connect();
+
+        mSocket.connect();
 
     }
 

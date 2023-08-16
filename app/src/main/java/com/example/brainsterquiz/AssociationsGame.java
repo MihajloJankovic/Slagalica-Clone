@@ -915,7 +915,7 @@ public class AssociationsGame extends AppCompatActivity {
                                         {
                                             ab=1;
                                             timera.cancel();
-                                            Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
+                                            Intent intent = new Intent(getApplicationContext(), NumberGame.class);
                                             intent.putExtra("rName", rName);
                                             intent.putExtra("bName", bName);
                                             intent.putExtra("rScore", rScore);
@@ -1139,7 +1139,7 @@ public class AssociationsGame extends AppCompatActivity {
                                                 {
                                                     ab=1;
                                                     timera.cancel();
-                                                    Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
+                                                    Intent intent = new Intent(getApplicationContext(), NumberGame.class);
                                                     intent.putExtra("rName", rName);
                                                     intent.putExtra("bName", bName);
                                                     intent.putExtra("rScore", rScore);

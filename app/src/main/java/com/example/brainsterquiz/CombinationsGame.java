@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Random;
 
 import io.socket.client.Socket;
-
+//sasf
 public class CombinationsGame extends AppCompatActivity {
     private TextView timer;
     private int turn;
@@ -70,7 +70,7 @@ public class CombinationsGame extends AppCompatActivity {
         setContentView(R.layout.activity_combinations_game);
         getSupportActionBar().hide();
 
-
+//edrfR
         this.turn = 3;
         this.rName = "Guest";
         this.bName = "";
