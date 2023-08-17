@@ -1,4 +1,5 @@
 package com.example.brainsterquiz;
+import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,10 +24,17 @@ import android.widget.Toast;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.Filter;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.common.returnsreceiver.qual.This;
 
+import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.Random;
 
@@ -81,12 +89,14 @@ public class BrainsterHome extends AppCompatActivity {
     private TextView row5Value;
     private TextView row6Value;
     private TextView row7Value;
+    int totalnum =0;
     private LinearLayout notificationLayout;
     private Socket mSocket;
     private QueryDocumentSnapshot user;
     private String bname;
     private String rname;
     private int turn;
+    FirebaseFirestore db;
     private  ChatApplication app;
 
     @Override
@@ -94,7 +104,7 @@ public class BrainsterHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_brainster_home);
         getSupportActionBar().hide();
-
+        db = FirebaseFirestore.getInstance();
         userProfile = new Dialog(this);
         playerStatistics = new Dialog(this);
         notifications = new Dialog(this);
@@ -179,6 +189,10 @@ public class BrainsterHome extends AppCompatActivity {
     public void myProfileDialogListeners(View view) {
         setUIViews();
         userProfile.show();
+        TextView name =(TextView) userProfile.findViewById(R.id.usernameInfo);
+        TextView email =(TextView) userProfile.findViewById(R.id.emailInfo);
+        name.setText(user.getString("name"));
+        email.setText(user.getString("email"));
 
         saveProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -266,7 +280,69 @@ public class BrainsterHome extends AppCompatActivity {
 
     public void statisticsBoxListeners(View view) {
         setUIViews();
+
         playerStatistics.show();
+        Query query =  db.collection("matches").where(Filter.or(
+                Filter.equalTo("user2",user.getId().toString()),
+                Filter.equalTo("user1",user.getId().toString())));
+
+
+
+         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if (document != null) {
+
+                            TextView total = playerStatistics.findViewById(R.id.totalQuantity);
+                            total.setText(String.valueOf(task.getResult().size()));
+                            BrainsterHome.this.totalnum = Integer.valueOf(task.getResult().size());
+
+
+
+
+                            // dependable on last action
+                            Query query1 =  db.collection("matches").whereEqualTo("winner",user.getId().toString());
+                            query1.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            if (document != null) {
+
+                                                TextView totalw = playerStatistics.findViewById(R.id.winsQuantity);
+                                                TextView totall = playerStatistics.findViewById(R.id.losesQuantity);
+                                                totalw.setText(String.valueOf(task.getResult().size()));
+                                                totall.setText(String.valueOf(totalnum-Integer.valueOf(task.getResult().size())));
+                                                TextView winsp = playerStatistics.findViewById(R.id.winsPercentage);
+
+                                                Float pera1 =Float.valueOf(Float.valueOf(task.getResult().size())/totalnum);
+                                                double example = Math.round((pera1) * 10.00) / 10.00;
+                                                winsp.setText(String.valueOf(example*100)+"%");
+                                            }
+
+
+                                        }
+                                        if(task.getResult().size() == 0){
+                                            TextView totall = playerStatistics.findViewById(R.id.losesQuantity);
+                                            totall.setText(String.valueOf(totalnum));
+                                        }
+                                    }
+
+
+                                }
+
+                            });
+                        }
+
+                    }
+                }
+            }
+
+        });
+
+
 
         closeButtonStatistics.setOnClickListener(new View.OnClickListener() {
             @Override
