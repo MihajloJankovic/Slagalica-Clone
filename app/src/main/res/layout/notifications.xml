@@ -65,23 +65,7 @@
                 android:textAlignment="center"
                 android:textColor="#046AB8"
                 android:textSize="25dp"></TextView>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/click_start_button"
-                android:id="@+id/loginButton"
-                android:clickable="true"
-                android:onClick="addNotification">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Log in"
-                    android:textColor="@color/white"
-                    android:textSize="25dp"
-                    android:fontFamily="@font/quiz_font"
-                    android:gravity="center">
-                </TextView>
-            </RelativeLayout>
+
 
         </RelativeLayout>
 
@@ -106,6 +90,7 @@
                         android:id="@+id/notificationLayout"
                         android:layout_width="match_parent"
                         android:layout_height="70dp"
+                        android:visibility="gone"
                         android:background="@drawable/upper_bar_gradient"
                         android:orientation="horizontal">
 

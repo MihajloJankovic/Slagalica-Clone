@@ -28,6 +28,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import org.checkerframework.common.returnsreceiver.qual.This;
 
 import java.util.Map;
+import java.util.Random;
 
 import io.socket.client.Socket;
 
@@ -134,6 +135,7 @@ public class BrainsterHome extends AppCompatActivity {
 
 
         });
+        setUIViews();
 
     }
     public void StartMatch( Object a){
@@ -205,6 +207,9 @@ public class BrainsterHome extends AppCompatActivity {
     public void notificationsListeners(View view) {
         setUIViews();
         notifications.show();
+        addNotification("notifikacija broj 1");
+        addNotification("notifikacija broj 2");
+        addNotification("notifikacija broj 3");
 
         closeButtonNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,38 +219,39 @@ public class BrainsterHome extends AppCompatActivity {
         });
     }
 
-    public void addNotification(View view){
-        setUIViews();
+    public void addNotification(String text){
+
+        Random random = new Random();
         LinearLayout newNotification = new LinearLayout(BrainsterHome.this);
-        newNotification.setId(Integer.parseInt(notificationLayout.getId() + String.valueOf(Math.random())));
+        newNotification.setId(random.nextInt());
         newNotification.setLayoutParams(notificationLayout.getLayoutParams());
         newNotification.setBackground(notificationLayout.getBackground());
         newNotification.setOrientation(notificationLayout.getOrientation());
 
         LinearLayout newMessageIconLayout = new LinearLayout(BrainsterHome.this);
-        newMessageIconLayout.setId(Integer.parseInt(messageIconLayout.getId() + String.valueOf(Math.random())));
+        newMessageIconLayout.setId(random.nextInt());
         newMessageIconLayout.setLayoutParams(messageIconLayout.getLayoutParams());
         newMessageIconLayout.setBackground(messageIconLayout.getBackground());
         newMessageIconLayout.setPadding(messageIconLayout.getPaddingLeft(), messageIconLayout.getPaddingTop(), messageIconLayout.getPaddingRight(), messageIconLayout.getPaddingBottom());
 
         LinearLayout newMessageIcon = new LinearLayout(BrainsterHome.this);
-        newMessageIcon.setId(Integer.parseInt(messageIcon.getId() + String.valueOf(Math.random())));
+        newMessageIcon.setId(random.nextInt());
         newMessageIcon.setLayoutParams(messageIcon.getLayoutParams());
         newMessageIcon.setBackground(messageIcon.getBackground());
         newMessageIcon.setOrientation(messageIcon.getOrientation());
 
         RelativeLayout newNotificationTextLayout = new RelativeLayout(BrainsterHome.this);
-        newNotificationTextLayout.setId(Integer.parseInt(notificationTextLayout.getId() + String.valueOf(Math.random())));
+        newNotificationTextLayout.setId(random.nextInt());
         newNotificationTextLayout.setLayoutParams(notificationTextLayout.getLayoutParams());
         newNotificationTextLayout.setGravity(notificationTextLayout.getGravity());
 
         TextView newNotificationText = new TextView(BrainsterHome.this);
-        newNotificationText.setId(Integer.parseInt(notificationText.getId() + String.valueOf(Math.random())));
+        newNotificationText.setId(random.nextInt());
         newNotificationText.setLayoutParams(notificationText.getLayoutParams());
-        newNotificationText.setText("Example notification");
+        newNotificationText.setText(text);
         newNotificationText.setGravity(notificationText.getGravity());
         newNotificationText.setTextColor(notificationText.getTextColors());
-        newNotificationText.setTextSize(notificationText.getTextSize());
+        newNotificationText.setTextSize(12);
         Typeface typeface = ResourcesCompat.getFont(BrainsterHome.this, R.font.quiz_font);
         newNotificationText.setTypeface(typeface);
 
