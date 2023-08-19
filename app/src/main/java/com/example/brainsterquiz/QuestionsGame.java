@@ -144,7 +144,15 @@ public class QuestionsGame extends AppCompatActivity {
         this.question = (TextView) findViewById(R.id.question);
 
         this.dontknow = (TextView) findViewById(R.id.arrowText);
-
+        this.timer = (TextView) findViewById(R.id.timer);
+        this.rScore1 = (TextView) findViewById(R.id.redPlayerScore);
+        this.bScore1 = (TextView) findViewById(R.id.bluePlayerScore);
+        this.rName1 = (TextView) findViewById(R.id.redPlayerName);
+        this.bName1 = (TextView) findViewById(R.id.bluePlayerName);
+        this.rScore1.setText(rScore);
+        this.bScore1.setText(bScore);
+        this.rName1.setText(rName);
+        this.bName1.setText(bName);
 
 
         timera= new CountDownTimer(120000, 1000) {
