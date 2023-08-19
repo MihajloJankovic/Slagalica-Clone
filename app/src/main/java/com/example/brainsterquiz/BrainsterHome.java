@@ -124,7 +124,7 @@ public class BrainsterHome extends AppCompatActivity {
             Map<String, Object> docData = new HashMap<>();
             docData.put("user1", user.getId());
             this.gameid =(String) a[0];
-            db.collection("matches").document(String.valueOf(Double.valueOf((String) a[0]))).set(docData);
+            db.collection("matches").document(String.valueOf(Double.valueOf((String) a[0]))).update(docData);
         });
         mSocket.on("pleyer2",(a) -> {
             try {
@@ -193,12 +193,12 @@ public class BrainsterHome extends AppCompatActivity {
 
         double te = Math.random();
 
-        mSocket.emit("user1upis",String.valueOf(te));
+
         this.gameid =String.valueOf(te);
         Map<String, Object> docData = new HashMap<>();
         docData.put("user2", user.getId());
         db.collection("matches").document(String.valueOf(te)).set(docData);
-
+        mSocket.emit("user1upis",String.valueOf(te));
         mSocket.emit("Ime", rname);
         mSocket.emit("Imena");
         mSocket.emit("start");
