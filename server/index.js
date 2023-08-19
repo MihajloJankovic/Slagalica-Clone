@@ -80,6 +80,19 @@ io.on('connection', (socket) => {
 
 
     })
+    socket.on('user1upis', (ab) => {
+
+        if(socket.id == a)
+        {
+            io.to(b).emit("user1upisa",ab);
+        }
+        if(socket.id == b)
+        {
+            io.to(a).emit("user1upisa",ab);
+        }
+
+
+    })
 
     socket.on('needed', (ab) => {
 
@@ -162,7 +175,7 @@ io.on('connection', (socket) => {
 
 
     })
-    socket.on('pointsca', (ab) => {
+        socket.on('pointsca', (ab) => {
 
         if(socket.id == a)
         {

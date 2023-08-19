@@ -35,6 +35,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.checkerframework.common.returnsreceiver.qual.This;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -90,6 +91,7 @@ public class BrainsterHome extends AppCompatActivity {
     private TextView row6Value;
     private TextView row7Value;
     int totalnum =0;
+    String gameid;
     private LinearLayout notificationLayout;
     private Socket mSocket;
     private QueryDocumentSnapshot user;
@@ -117,6 +119,12 @@ public class BrainsterHome extends AppCompatActivity {
 
         mSocket.on("pleyer1",(a) -> {
             Tost();
+        });
+        mSocket.on("user1upisa",(a) -> {
+            Map<String, Object> docData = new HashMap<>();
+            docData.put("user1", user.getId());
+            this.gameid =(String) a[0];
+            db.collection("matches").document(String.valueOf(Double.valueOf((String) a[0]))).set(docData);
         });
         mSocket.on("pleyer2",(a) -> {
             try {
@@ -149,9 +157,13 @@ public class BrainsterHome extends AppCompatActivity {
 
     }
     public void StartMatch( Object a){
+
+
+
+
         mSocket.emit("Imena");
 
-                Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
+                Intent intent = new Intent(getApplicationContext(), QuestionsGame.class);
 
 
                 intent.putExtra("solo", 0);
@@ -160,7 +172,8 @@ public class BrainsterHome extends AppCompatActivity {
                 intent.putExtra("rName", rname);
                 intent.putExtra("rScore", "0");
                 intent.putExtra("bScore", "0");
-                intent.putExtra("turn", turn);
+                intent.putExtra("gameid",gameid );
+                intent.putExtra("turn", 1);
 
                 startActivity(intent);
 
@@ -176,6 +189,16 @@ public class BrainsterHome extends AppCompatActivity {
     public void Tost2() throws InterruptedException {
         runOnUiThread(() -> Toast.makeText(bh, "Match will start soon !", Toast.LENGTH_SHORT).show());
         this.turn = 2;
+
+
+        double te = Math.random();
+
+        mSocket.emit("user1upis",String.valueOf(te));
+        this.gameid =String.valueOf(te);
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("user2", user.getId());
+        db.collection("matches").document(String.valueOf(te)).set(docData);
+
         mSocket.emit("Ime", rname);
         mSocket.emit("Imena");
         mSocket.emit("start");
