@@ -7,6 +7,8 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -53,6 +55,7 @@ public class QuestionsGame extends AppCompatActivity {
     private TextView question5;
     private TextView dontknow;
     private int questionnum = 1;
+    private int eg = 0;
 
 
     FirebaseFirestore db;
@@ -113,7 +116,7 @@ public class QuestionsGame extends AppCompatActivity {
                     });
                     mSocket.on("enemyrightguess",(a) -> {
 
-
+                        eg=1;
                     });
 
                     mSocket.on("ennemywrongguess",(a) -> {
@@ -121,8 +124,6 @@ public class QuestionsGame extends AppCompatActivity {
 
                     });
                     mSocket.on("pointscac",(a) -> {
-
-                        bScore= String.valueOf(Integer.valueOf(bScore)+Integer.valueOf(a[0].toString()));
 
                     });
 
@@ -221,7 +222,7 @@ public class QuestionsGame extends AppCompatActivity {
                     }else{
                         intent.putExtra("solo", 0);
                     }
-                    db.collection("/matches").document(gameid)
+                    db.collection("/questionsgame").document(gameid)
                             .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -255,4 +256,92 @@ public class QuestionsGame extends AppCompatActivity {
 
 
     }
+
+
+    public void OpenAsnwer(View v) {
+    String idd = null;
+    int ida = 0;
+        switch (v.getId()) {
+            case R.id.answer1Layout:
+                // do something
+                ida = R.id.answer1;
+                idd = "answer1";
+
+
+                break;
+            case R.id.answer2Layout:
+                // do something else
+                idd = "answer2";
+                ida = R.id.answer2;
+
+                break;
+            case R.id.answer3Layout:
+                // i'm lazy, do nothing
+                idd = "answer3";
+                ida = R.id.answer3;
+                break;
+            case R.id.answer4Layout:
+                // i'm lazy, do nothing
+                idd = "answer4";
+                ida = R.id.answer4;
+                break;
+            case R.id.arrowLayout:
+                // i'm lazy, do nothing
+                idd = "arrowText";
+                ida = R.id.arrowText;
+
+                break;
+        }
+
+        TextView field51 = (TextView) findViewById(ida);
+       if(opened == 0 n)
+       {
+           LinearLayout field52 = (LinearLayout) findViewById(v.getId());
+           field52.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+       }
+
+        String finalIdd = idd;
+        db.collection("/games/asocijacije/1").document(round+"")
+                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if((field51.getText()).equals(documentSnapshot.getString("correct")))
+                        {
+                            opened = 1;
+                            if(eg == 0)
+                            {
+
+                                if(turn != 3)
+                                {
+                                    mSocket.emit("enemyrightguess");
+
+                                }
+
+                                rScore =String.valueOf(Integer.valueOf(rScore) + 10);
+                                TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
+                                field1.setText(rScore);
+
+
+
+
+
+                            }
+                            else {
+
+                            }
+                        }
+                        else{
+                            opened = 1;
+
+                        }
+
+                    }
+
+                    //db get string and set it to int
+                });
+
+
+    }
+
+
 }

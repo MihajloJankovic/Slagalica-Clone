@@ -66,7 +66,7 @@ public class BrainsterHomeUnregistered extends AppCompatActivity {
     }
 
     public void onClick(View v) {
-        Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
+        Intent intent = new Intent(getApplicationContext(), QuestionsGame.class);
 
 
             intent.putExtra("solo", 1);
