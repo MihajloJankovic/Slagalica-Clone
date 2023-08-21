@@ -7,6 +7,8 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,7 +41,7 @@ public class QuestionsGame extends AppCompatActivity {
     int trScore=0;
     String myid;
     String gameid;
-    private int opened;
+    private int opened =0;
     private Socket mSocket;
     CountDownTimer timera;
 
@@ -55,6 +57,7 @@ public class QuestionsGame extends AppCompatActivity {
     private TextView question5;
     private TextView dontknow;
     private int questionnum = 1;
+    private int counter =0;
     private int eg = 0;
 
 
@@ -114,16 +117,55 @@ public class QuestionsGame extends AppCompatActivity {
                         this.turn = 1;
 
                     });
-                    mSocket.on("enemyrightguess",(a) -> {
+                    mSocket.on("enemyrightguessa",(a) -> {
 
-                        eg=1;
+                        final Handler handler = new Handler(Looper.getMainLooper());
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                eg=1;
+                                bScore =String.valueOf(Integer.valueOf(bScore) + 10);
+                                TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
+                                field1.setText(bScore);
+                                nextquestion();
+                                //Do something after 100ms
+                            }
+                        }, 500);
+
+
+
                     });
 
-                    mSocket.on("ennemywrongguess",(a) -> {
-
+                    mSocket.on("ennemywrongguessa",(a) -> {
+                        final Handler handler = new Handler(Looper.getMainLooper());
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                eg=2;
+                                bScore =String.valueOf(Integer.valueOf(bScore) -5);
+                                TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
+                                field1.setText(bScore);
+                                //Do something after 100ms
+                            }
+                        }, 500);
 
                     });
                     mSocket.on("pointscac",(a) -> {
+
+                    });
+                    mSocket.on("nextquestiona",(a) -> {
+                        final Handler handler = new Handler(Looper.getMainLooper());
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                nextquestion();
+                                eg=0;
+                                opened = 0;
+
+                                //Do something after 100ms
+                            }
+                        }, 100);
+
 
                     });
 
@@ -156,10 +198,37 @@ public class QuestionsGame extends AppCompatActivity {
         this.bName1.setText(bName);
 
 
+        db.collection("/games").document("questiongame")
+                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        answer1.setText(documentSnapshot.getString("a"+String.valueOf(questionnum)));
+                        answer2.setText(documentSnapshot.getString("b"+String.valueOf(questionnum)));
+                        answer3.setText(documentSnapshot.getString("c"+String.valueOf(questionnum)));
+                        answer4.setText(documentSnapshot.getString("d"+String.valueOf(questionnum)));
+                        question.setText(documentSnapshot.getString("q"+String.valueOf(questionnum)));
+
+                    }
+
+                    //db get string and set it to int
+                });
+
+
         timera= new CountDownTimer(120000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 timer.setText("" + millisUntilFinished / 1000);
+                if(counter == 5)
+                {
+                    counter =0;
+                    nextquestion();
+                }
+                else
+                {
+
+                    ++counter;
+                }
+
             }
 
             public void onFinish() {
@@ -257,7 +326,132 @@ public class QuestionsGame extends AppCompatActivity {
 
     }
 
+    public void nextgame(){
 
+        if(round ==0 && turn != 3)
+        {
+            Map<String, Object> userForOrgs = new HashMap<>();
+
+            db.collection("/matches").document(gameid)
+                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if(documentSnapshot.getString("user1").equals(myid))
+                            {
+                                userForOrgs.put("q1",Integer.valueOf(rScore)-trScore );
+                            }
+                            if(documentSnapshot.getString("user2").equals(myid))
+                            {
+                                userForOrgs.put("q2",Integer.valueOf(rScore)-trScore );
+                            }
+                            documentSnapshot.getReference().set(userForOrgs);
+                        }
+
+                        //db get string and set it to int
+                    });
+        }
+        timer.setText("done!");
+        if(round == 0 &&turn == 3)
+        {
+
+            Intent intent = new Intent(getApplicationContext(), MatchingGameActivity.class);
+            intent.putExtra("rName", rName);
+            intent.putExtra("bName", bName);
+            intent.putExtra("rScore", rScore);
+            intent.putExtra("bScore",bScore);
+
+            if(turn == 3)
+            {
+                intent.putExtra("solo", 1);
+            }else{
+                intent.putExtra("solo", 0);
+            }
+            intent.putExtra("round", 0);
+            intent.putExtra("turn", 3);
+            finish();
+            startActivity(intent);
+
+
+        }
+        if(round == 0 && turn !=3)
+        {
+            Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
+            intent.putExtra("rName", rName);
+            intent.putExtra("bName", bName);
+            intent.putExtra("rScore", rScore);
+            intent.putExtra("gameid",String.valueOf(gameid));
+            intent.putExtra("bScore",bScore);
+            if(turn == 3)
+            {
+                intent.putExtra("solo", 1);
+            }else{
+                intent.putExtra("solo", 0);
+            }
+            db.collection("/questionsgame").document(gameid)
+                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if(documentSnapshot.getString("user1").equals(myid))
+                            {
+                                intent.putExtra("turn", 1);
+                            }
+                            if(documentSnapshot.getString("user2").equals(myid))
+                            {
+                                intent.putExtra("turn", 2);
+                            }
+                        }
+
+                        //db get string and set it to int
+                    });
+            intent.putExtra("round", 1);
+            finish();
+            startActivity(intent);
+
+
+
+        }
+    }
+    public void nextquestion()
+    {
+        opened = 0;
+        eg = 0;
+        counter =0;
+        LinearLayout field52 = (LinearLayout) findViewById(R.id.answer1Layout);
+        field52.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+       field52 = (LinearLayout) findViewById(R.id.answer2Layout);
+        field52.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+        field52 = (LinearLayout) findViewById(R.id.answer3Layout);
+        field52.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+    field52 = (LinearLayout) findViewById(R.id.answer3Layout);
+        field52.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+        field52 = (LinearLayout) findViewById(R.id.arrowLayout);
+        field52.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+            switch (questionnum)
+            {
+                case 1:   questionnum=2;   break;
+                case 2:   questionnum=3;     break;
+                case 3:    questionnum=4;    break;
+                case 4:   questionnum=5;     break;
+                case 5:   nextgame();   break;
+            }
+
+        db.collection("/games").document("questiongame")
+                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        answer1.setText(documentSnapshot.getString("a"+String.valueOf(questionnum)));
+                        answer2.setText(documentSnapshot.getString("b"+String.valueOf(questionnum)));
+                        answer3.setText(documentSnapshot.getString("c"+String.valueOf(questionnum)));
+                        answer4.setText(documentSnapshot.getString("d"+String.valueOf(questionnum)));
+                        question.setText(documentSnapshot.getString("q"+String.valueOf(questionnum)));
+
+                    }
+
+                    //db get string and set it to int
+                });
+
+
+    }
     public void OpenAsnwer(View v) {
     String idd = null;
     int ida = 0;
@@ -294,22 +488,77 @@ public class QuestionsGame extends AppCompatActivity {
         }
 
         TextView field51 = (TextView) findViewById(ida);
-       if(opened == 0 n)
+       if(opened == 0)
        {
            LinearLayout field52 = (LinearLayout) findViewById(v.getId());
            field52.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
        }
 
         String finalIdd = idd;
-        db.collection("/games/asocijacije/1").document(round+"")
+        int finalIda = ida;
+        db.collection("/games").document("questiongame")
                 .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if((field51.getText()).equals(documentSnapshot.getString("correct")))
+                        if(eg ==0 && opened == 0)
                         {
-                            opened = 1;
-                            if(eg == 0)
+                            if((field51.getText()).equals(documentSnapshot.getString("correct"+String.valueOf(questionnum))))
                             {
+                                opened = 1;
+
+
+                                    if(turn != 3)
+                                    {
+                                        mSocket.emit("enemyrightguess");
+
+                                    }
+
+                                    rScore =String.valueOf(Integer.valueOf(rScore) + 10);
+                                    TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
+                                    field1.setText(rScore);
+                                    nextquestion();
+
+
+
+
+
+
+
+                            }
+                            else{
+                                if(turn == 3)
+                                {
+                                    if( finalIda != R.id.arrowText)
+                                    {
+                                        rScore =String.valueOf(Integer.valueOf(rScore) -5);
+                                        TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
+                                        field1.setText(rScore);
+                                    }
+
+                                    nextquestion();
+                                }
+                                else {
+                                    opened = 1;
+                                    if( finalIda != R.id.arrowText)
+                                    {
+                                        rScore =String.valueOf(Integer.valueOf(rScore) -5);
+                                        TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
+                                        field1.setText(rScore);
+                                        mSocket.emit("ennemywrongguess");
+                                    }
+
+                                }
+
+                            }
+
+                        }
+                        if(eg ==2 && opened == 0)
+                        {
+
+                            if((field51.getText()).equals(documentSnapshot.getString("correct")))
+                            {
+                                opened = 1;
+
 
                                 if(turn != 3)
                                 {
@@ -325,14 +574,25 @@ public class QuestionsGame extends AppCompatActivity {
 
 
 
-                            }
-                            else {
+
 
                             }
-                        }
-                        else{
-                            opened = 1;
+                            else{
+                                if(turn != 3 && opened == 0)
+                                {
+                                    opened = 1;
+                                    if( finalIda != R.id.arrowText)
+                                    {
+                                        rScore =String.valueOf(Integer.valueOf(rScore) -5);
+                                        TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
+                                        field1.setText(rScore);
+                                    }
+                                    mSocket.emit("nextquestion");
+                                    nextquestion();
 
+                                }
+
+                            }
                         }
 
                     }

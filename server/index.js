@@ -157,25 +157,76 @@ io.on('connection', (socket) => {
 
 
     })
-    socket.on('enemyguess', (av,bv,cv,dv) => {
+
+    socket.on('nextquestion', (av,bv,cv,dv) => {
 
         if(socket.id == a)
         {
 
             const person = {a:av, b:bv,c:cv,d:dv};
             console.log(person.toString());
-            io.to(b).emit("enemyguessc",person);
+            io.to(b).emit("nextquestiona",person);
         }
         if(socket.id == b)
         {
             const person = {a:av, b:bv,c:cv,d:dv};
             console.log(person.toString());
-            io.to(a).emit("enemyguessc",person);
+            io.to(a).emit("nextquestiona",person);
+        }
+
+
+    })
+    socket.on('enemyrightguess', (av,bv,cv,dv) => {
+
+        if(socket.id == a)
+        {
+
+            const person = {a:av, b:bv,c:cv,d:dv};
+            console.log(person.toString());
+            io.to(b).emit("enemyrightguessa",person);
+        }
+        if(socket.id == b)
+        {
+            const person = {a:av, b:bv,c:cv,d:dv};
+            console.log(person.toString());
+            io.to(a).emit("enemyrightguessa",person);
+        }
+
+
+    })
+    socket.on('ennemywrongguess', (av,bv,cv,dv) => {
+
+        if(socket.id == a)
+        {
+
+            const person = {a:av, b:bv,c:cv,d:dv};
+            console.log(person.toString());
+            io.to(b).emit("ennemywrongguessa",person);
+        }
+        if(socket.id == b)
+        {
+            const person = {a:av, b:bv,c:cv,d:dv};
+            console.log(person.toString());
+            io.to(a).emit("ennemywrongguessa",person);
         }
 
 
     })
         socket.on('pointsca', (ab) => {
+
+        if(socket.id == a)
+        {
+            ////////////  console.log("a");
+            io.to(b).emit("pointscac",ab);
+        }
+        if(socket.id == b)
+        {
+            io.to(a).emit("pointscac",ab);
+        }
+
+
+    })
+    socket.on('enemyguess', (ab) => {
 
         if(socket.id == a)
         {
