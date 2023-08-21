@@ -240,6 +240,8 @@ public class QuestionsGame extends AppCompatActivity {
                             .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    Map<String, Object> map = new HashMap<>();
+                                    map.put("yourProperty", "yourValue");
                                     if(documentSnapshot.getString("user1").equals(myid))
                                     {
                                         userForOrgs.put("q1",Integer.valueOf(rScore)-trScore );
@@ -248,7 +250,7 @@ public class QuestionsGame extends AppCompatActivity {
                                     {
                                         userForOrgs.put("q2",Integer.valueOf(rScore)-trScore );
                                     }
-                                    documentSnapshot.getReference().set(userForOrgs);
+                                    db.collection("/matches").document(gameid).update(userForOrgs);
                                 }
 
                                 //db get string and set it to int
@@ -307,7 +309,7 @@ public class QuestionsGame extends AppCompatActivity {
 
                                 //db get string and set it to int
                             });
-                    intent.putExtra("round", 1);
+                    intent.putExtra("round", 0);
                     finish();
                     startActivity(intent);
 
@@ -344,7 +346,7 @@ public class QuestionsGame extends AppCompatActivity {
                             {
                                 userForOrgs.put("q2",Integer.valueOf(rScore)-trScore );
                             }
-                            documentSnapshot.getReference().set(userForOrgs);
+                            db.collection("/matches").document(gameid).update(userForOrgs);
                         }
 
                         //db get string and set it to int
@@ -387,7 +389,7 @@ public class QuestionsGame extends AppCompatActivity {
             }else{
                 intent.putExtra("solo", 0);
             }
-            db.collection("/questionsgame").document(gameid)
+            db.collection("/matches").document(gameid)
                     .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -403,7 +405,7 @@ public class QuestionsGame extends AppCompatActivity {
 
                         //db get string and set it to int
                     });
-            intent.putExtra("round", 1);
+            intent.putExtra("round", 0);
             finish();
             startActivity(intent);
 
@@ -586,6 +588,7 @@ public class QuestionsGame extends AppCompatActivity {
                                         rScore =String.valueOf(Integer.valueOf(rScore) -5);
                                         TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
                                         field1.setText(rScore);
+                                        mSocket.emit("ennemywrongguess");
                                     }
                                     mSocket.emit("nextquestion");
                                     nextquestion();
