@@ -83,7 +83,14 @@ public class AssociationsGame extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-         db = FirebaseFirestore.getInstance();
+
+
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_associations_game);
+        getSupportActionBar().hide();
+
+        db = FirebaseFirestore.getInstance();
         ab = 0;
         Aopen = 0;
         Bopen = 0;
@@ -94,11 +101,6 @@ public class AssociationsGame extends AppCompatActivity {
         Cg= 0;
         Dg= 0;
         this.opened = 0;
-
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_associations_game);
-        getSupportActionBar().hide();
         this.turn = 3;
         this.rName = "Guest";
         this.bName = "";
@@ -231,7 +233,7 @@ public class AssociationsGame extends AppCompatActivity {
                     intent.putExtra("bName", bName);
                     intent.putExtra("rScore", rScore);
                     intent.putExtra("bScore",bScore);
-                    intent.putExtra("tscore",String.valueOf(trScore));
+
                     intent.putExtra("gameid",String.valueOf(gameid));
                     if(turn == 3)
                     {
@@ -239,7 +241,7 @@ public class AssociationsGame extends AppCompatActivity {
                     }else{
                         intent.putExtra("solo", 0);
                     }
-                    intent.putExtra("gameid",String.valueOf(gameid));
+
                     intent.putExtra("round", 0);
                     intent.putExtra("round", 0);
                     intent.putExtra("turn", turn);
@@ -275,6 +277,7 @@ public class AssociationsGame extends AppCompatActivity {
                     intent.putExtra("rName", rName);
                     intent.putExtra("bName", bName);
                     intent.putExtra("rScore", rScore);
+                    intent.putExtra("tscore",String.valueOf(trScore));
                     intent.putExtra("gameid",String.valueOf(gameid));
                     intent.putExtra("bScore",bScore);
                     if(turn == 3)
@@ -966,7 +969,7 @@ public class AssociationsGame extends AppCompatActivity {
                                             intent.putExtra("bName", bName);
                                             intent.putExtra("rScore", rScore);
                                             intent.putExtra("bScore",bScore);
-                                            intent.putExtra("tscore",String.valueOf(trScore));
+
                                             if(turn == 3)
                                             {
                                                 intent.putExtra("solo", 1);
@@ -989,6 +992,7 @@ public class AssociationsGame extends AppCompatActivity {
                                             intent.putExtra("rName", rName);
                                             intent.putExtra("bName", bName);
                                             intent.putExtra("rScore", rScore);
+                                            intent.putExtra("tscore",String.valueOf(trScore));
                                             intent.putExtra("gameid",String.valueOf(gameid));
                                             intent.putExtra("bScore",bScore);
                                             if(turn == 3)
@@ -1217,7 +1221,7 @@ public class AssociationsGame extends AppCompatActivity {
                                                     intent.putExtra("rScore", rScore);
                                                     intent.putExtra("gameid",String.valueOf(gameid));
                                                     intent.putExtra("bScore",bScore);
-                                                    intent.putExtra("tscore",String.valueOf(trScore));
+
                                                     if(turn == 3)
                                                     {
                                                         intent.putExtra("solo", 1);
@@ -1238,6 +1242,7 @@ public class AssociationsGame extends AppCompatActivity {
                                                     intent.putExtra("rName", rName);
                                                     intent.putExtra("bName", bName);
                                                     intent.putExtra("rScore", rScore);
+                                                    intent.putExtra("tscore",String.valueOf(trScore));
                                                     intent.putExtra("gameid",String.valueOf(gameid));
                                                     intent.putExtra("bScore",bScore);
                                                     if(turn == 3)

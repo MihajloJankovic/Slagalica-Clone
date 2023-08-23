@@ -232,6 +232,7 @@ public class QuestionsGame extends AppCompatActivity {
             }
 
             public void onFinish() {
+                timera.cancel();
                 if(round ==0 && turn != 3)
                 {
                     Map<String, Object> userForOrgs = new HashMap<>();
@@ -329,6 +330,7 @@ public class QuestionsGame extends AppCompatActivity {
     }
 
     public void nextgame(){
+        timera.cancel();
 
         if(round ==0 && turn != 3)
         {
