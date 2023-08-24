@@ -141,7 +141,7 @@ public class BrainsterHomeUnregistered extends AppCompatActivity {
         EditText passwordTxt = (EditText) loginDialog.findViewById(R.id.passwordTxt);
 
         String finalIdd = "Konacno";
-        DownloadManager.Query query = db.collection("users").whereEqualTo("name", usernameTxt.getText().toString()).whereEqualTo("password", passwordTxt.getText().toString());
+        Query query = db.collection("users").whereEqualTo("name", usernameTxt.getText().toString()).whereEqualTo("password", passwordTxt.getText().toString());
 
 
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

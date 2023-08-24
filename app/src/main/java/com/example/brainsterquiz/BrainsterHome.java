@@ -29,7 +29,9 @@ import org.checkerframework.common.returnsreceiver.qual.This;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Map;
@@ -61,6 +63,7 @@ public class BrainsterHome extends AppCompatActivity {
     private ProgressBar combinationsGameProgressBar;
     private ProgressBar questionsGameProgressBar;
     private ProgressBar associationsGameProgressBar;
+    private RelativeLayout rankingButton;
     private TextView firstBoxPointer;
     private TextView secondBoxPointer;
     private TextView thirdBoxPointer;
@@ -68,6 +71,8 @@ public class BrainsterHome extends AppCompatActivity {
     private TextView fifthBoxPointer;
     private TextView sixthBoxPointer;
 
+    private RelativeLayout rankingWeeklyLayout;
+    private RelativeLayout rankingMonthlyLayout;
     private TextView boxHeader;
     private TextView row1Label;
     private TextView row2Label;
@@ -87,8 +92,10 @@ public class BrainsterHome extends AppCompatActivity {
     private TextView row5Value;
     private TextView row6Value;
     private TextView row7Value;
+    private String timeLeft;
     private LinearLayout notificationLayout;
     private Socket mSocket;
+    private TextView timeLeftTextView;
     private QueryDocumentSnapshot user;
     private String bname;
     private String rname;
@@ -100,22 +107,39 @@ public class BrainsterHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_brainster_home);
         getSupportActionBar().hide();
-
         userProfile = new Dialog(this);
         playerStatistics = new Dialog(this);
         notifications = new Dialog(this);
+        ranking = new Dialog(this);
 
+        ranking.setContentView(R.layout.ranking);
         LocalDateTime startTime = LocalDateTime.now();
-        LocalDateTime expirationTime = startTime.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        LocalDateTime endOfWeek = startTime.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        endOfWeek = endOfWeek.withHour(0).withMinute(0);
+        Duration duration = Duration.between(startTime, endOfWeek);
+        long totalMinutes = duration.toMinutes();
+        long days = totalMinutes / (60 * 24);
+        long hours = (totalMinutes % (60 * 24)) / 60;
+        long minutes = totalMinutes % 60;
 
-        Duration duration = Duration.between(startTime, expirationTime);
-        long days = duration.toDays();
-        long hours = duration.minusDays(days).toHours();
 
-        String timeLeft = days + " d " + hours + " h";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM. dd. yyyy HH:mm");
 
-        TextView timeLeftTextView = (TextView) ranking.findViewById(R.id.timeLeftTextView);
+        timeLeft = days + " d " + hours + " h " + minutes + " m";
+
+        timeLeftTextView = (TextView) ranking.findViewById(R.id.timeLeftTextView);
         timeLeftTextView.setText("Ends in: " + timeLeft);
+
+        TextView weekDatesTextView = ranking.findViewById(R.id.seasonDate);
+
+        LocalDate now = LocalDate.now();
+        LocalDate startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate endOfTheWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+
+        DateTimeFormatter formattered = DateTimeFormatter.ofPattern("dd. MM. yyyy.");
+        String formattedDates = startOfWeek.format(formattered) + " - " + endOfTheWeek.format(formattered);
+
+        weekDatesTextView.setText(formattedDates);
 
         Konekcija  app = (Konekcija) BrainsterHome.this.getApplication();
         this.mSocket = app.getSocket();
@@ -154,7 +178,6 @@ public class BrainsterHome extends AppCompatActivity {
 
         });
         setUIViews();
-
     }
     public void StartMatch( Object a){
         mSocket.emit("Imena");
@@ -281,7 +304,10 @@ public class BrainsterHome extends AppCompatActivity {
         notificationsList.addView(newNotification);
 
     }
-
+    public void rankingBoxListeners(View view) {
+        setUIViews();
+        ranking.show();
+    }
     public void statisticsBoxListeners(View view) {
         setUIViews();
         playerStatistics.show();
@@ -348,6 +374,8 @@ public class BrainsterHome extends AppCompatActivity {
                 row7Value.setText("9%");
             }
         });
+
+
 
         matchingGameProgressBar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -434,6 +462,7 @@ public class BrainsterHome extends AppCompatActivity {
             }
         });
 
+
         associationsGameProgressBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -463,6 +492,7 @@ public class BrainsterHome extends AppCompatActivity {
         });
 
     }
+
     public void setUIViews(){
         logoutButton = (ImageButton) this.findViewById(R.id.logoutButton);
         userProfile.setContentView(R.layout.my_profile_layout);
@@ -490,6 +520,8 @@ public class BrainsterHome extends AppCompatActivity {
         fourthBoxPointer = (TextView) playerStatistics.findViewById(R.id.fourthBoxPointer);
         fifthBoxPointer = (TextView) playerStatistics.findViewById(R.id.fifthBoxPointer);
         sixthBoxPointer = (TextView) playerStatistics.findViewById(R.id.sixthBoxPointer);
+        rankingButton = (RelativeLayout) this.findViewById(R.id.rang_list);
+
 
         messageIconLayout = (LinearLayout) notifications.findViewById(R.id.messageIconLayout);
         messageIcon = (LinearLayout) notifications.findViewById(R.id.messageIcon);
