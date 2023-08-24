@@ -642,14 +642,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/timeLeftTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:fontFamily="@font/quiz_font"
-                android:textSize="25dp"
-                android:textColor="@color/white" />
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="25dp" />
         </LinearLayout>
 
 

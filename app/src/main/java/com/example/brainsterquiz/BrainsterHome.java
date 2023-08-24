@@ -27,8 +27,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.checkerframework.common.returnsreceiver.qual.This;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Map;
 import java.util.Random;
 
@@ -103,7 +106,7 @@ public class BrainsterHome extends AppCompatActivity {
         notifications = new Dialog(this);
 
         LocalDateTime startTime = LocalDateTime.now();
-        LocalDateTime expirationTime = startTime.plusDays(7).plusHours(3);
+        LocalDateTime expirationTime = startTime.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
 
         Duration duration = Duration.between(startTime, expirationTime);
         long days = duration.toDays();
