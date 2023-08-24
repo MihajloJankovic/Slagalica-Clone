@@ -3,13 +3,17 @@ import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.ViewCompat;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -34,6 +38,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -67,9 +75,13 @@ public class BrainsterHome extends AppCompatActivity {
     private TextView firstBoxPointer;
     private TextView secondBoxPointer;
     private TextView thirdBoxPointer;
+    private RelativeLayout closeButtonRanking;
     private TextView fourthBoxPointer;
     private TextView fifthBoxPointer;
     private TextView sixthBoxPointer;
+
+    private LinearLayout peopleLayout;
+    private LinearLayout peopleList;
 
     private RelativeLayout rankingWeeklyLayout;
     private RelativeLayout rankingMonthlyLayout;
@@ -80,6 +92,8 @@ public class BrainsterHome extends AppCompatActivity {
     private TextView row4Label;
     private TextView row5Label;
     private TextView row6Label;
+    private TextView rankingWeekly;
+    private TextView rankingMonthly;
     private BrainsterHome bh = this;
     private TextView row7Label;
     private Dialog notifications;
@@ -92,6 +106,12 @@ public class BrainsterHome extends AppCompatActivity {
     private TextView row5Value;
     private TextView row6Value;
     private TextView row7Value;
+    private ArrayList<LinearLayout> peopleListClone;
+
+    private TextView peopleNumber;
+    private TextView peopleName;
+    private TextView peopleStarsQuantity;
+    private TextView peopleTokensQuantity;
     private String timeLeft;
     private LinearLayout notificationLayout;
     private Socket mSocket;
@@ -99,6 +119,7 @@ public class BrainsterHome extends AppCompatActivity {
     private QueryDocumentSnapshot user;
     private String bname;
     private String rname;
+    private LinearLayout peoplePointsLayout;
     private int turn;
     private  ChatApplication app;
 
@@ -111,6 +132,8 @@ public class BrainsterHome extends AppCompatActivity {
         playerStatistics = new Dialog(this);
         notifications = new Dialog(this);
         ranking = new Dialog(this);
+
+        peopleListClone = new ArrayList<>(10);
 
         ranking.setContentView(R.layout.ranking);
         LocalDateTime startTime = LocalDateTime.now();
@@ -307,6 +330,32 @@ public class BrainsterHome extends AppCompatActivity {
     public void rankingBoxListeners(View view) {
         setUIViews();
         ranking.show();
+
+        closeButtonRanking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ranking.dismiss();
+            }
+        });
+
+        rankingWeeklyLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String colorCode = "#FF9800";
+                int color = Color.parseColor(colorCode);
+                rankingWeeklyLayout.setBackgroundColor(color);
+                rankingWeekly.setTextColor(Color.BLACK);
+
+            }
+        });
+
+        rankingMonthlyLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int color = Color.parseColor("#FF9800");
+                ViewCompat.setBackgroundTintList(rankingMonthlyLayout, ColorStateList.valueOf(color));
+            }
+        });
     }
     public void statisticsBoxListeners(View view) {
         setUIViews();
@@ -493,6 +542,94 @@ public class BrainsterHome extends AppCompatActivity {
 
     }
 
+
+    public void placeBasedOnStars(){
+        setUIViews();
+        ArrayList<String> peopleStarsString = new ArrayList<>(10);
+        ArrayList<Integer> peopleStars = new ArrayList<>(10);
+
+        for (int i = 0; i <= peopleList.getChildCount() - 1; i++) {
+            peopleLayout = (LinearLayout) peopleList.getChildAt(i);
+            peoplePointsLayout = (LinearLayout) peopleLayout.getChildAt(2);
+            LinearLayout peopleStarsLayout = (LinearLayout) peoplePointsLayout.getChildAt(0);
+            LinearLayout peopleStarsQuantityLayout = (LinearLayout) peopleStarsLayout.getChildAt(1);
+            TextView starsQuantity = (TextView) peopleStarsQuantityLayout.getChildAt(0);
+
+            String starsQuantityString = starsQuantity.getText().toString();
+            peopleStarsString.add(starsQuantityString);
+
+        }
+
+        for(String ps : peopleStarsString) {
+            try{
+                int stars = Integer.parseInt(ps);
+                peopleStars.add(stars);
+            } catch (NumberFormatException e){
+                Log.e("Parsing Error", "Error parsing text to int: " + e.getMessage());
+            }
+        }
+        peopleStars.sort(Comparator.reverseOrder());
+        int p = 0;
+        for (int i : peopleStars) {
+            p += 1;
+            LinearLayout newPeopleLayout = (LinearLayout) peopleList.getChildAt(p-1);
+            TextView newPeopleNumber = (TextView) newPeopleLayout.getChildAt(0);
+            newPeopleNumber.setText(p + ".");
+            starsQuantity.setText(i);
+            peopleStars.remove(0);
+
+
+        }
+
+    }
+
+
+
+
+    public void ladderMovingFunctionWeekly() {
+        setUIViews();
+
+        if(peopleNumber.getText() == "1."){
+            peopleTokensQuantity.setText("7");
+        }
+
+        else if(peopleNumber.getText() == "2."){
+            peopleTokensQuantity.setText("5");
+        }
+
+        else if(peopleNumber.getText() == "3.") {
+            peopleTokensQuantity.setText("3");
+        }
+        else if((Integer.valueOf(peopleNumber.getText().charAt(0)) >= 4 && Integer.valueOf(peopleNumber.getText().charAt(0)) <= 9) || peopleNumber.getText() == "10."){
+            peopleTokensQuantity.setText("1");
+        }
+        else {
+            peopleTokensQuantity.setText("0");
+        }
+    }
+
+    public void ladderMovingFunctionMonthly() {
+        setUIViews();
+
+        if(peopleNumber.getText() == "1."){
+            peopleTokensQuantity.setText("17");
+        }
+
+        else if(peopleNumber.getText() == "2."){
+            peopleTokensQuantity.setText("13");
+        }
+
+        else if(peopleNumber.getText() == "3.") {
+            peopleTokensQuantity.setText("9");
+        }
+        else if((Integer.valueOf(peopleNumber.getText().charAt(0)) >= 4 && Integer.valueOf(peopleNumber.getText().charAt(0)) <= 9) || peopleNumber.getText() == "10."){
+            peopleTokensQuantity.setText("4");
+        }
+        else {
+            peopleTokensQuantity.setText("0");
+        }
+    }
+
     public void setUIViews(){
         logoutButton = (ImageButton) this.findViewById(R.id.logoutButton);
         userProfile.setContentView(R.layout.my_profile_layout);
@@ -501,6 +638,7 @@ public class BrainsterHome extends AppCompatActivity {
         closeButtonProfile = (RelativeLayout) userProfile.findViewById(R.id.closeButton);
         closeButtonNotifications = (RelativeLayout) notifications.findViewById(R.id.closeButton);
         closeButtonStatistics = (RelativeLayout) playerStatistics.findViewById(R.id.closeButton);
+        closeButtonRanking = (RelativeLayout) ranking.findViewById(R.id.closeButton);
         myProfileButton = (ImageButton) this.findViewById(R.id.myProfileButton);
         statisticsButton = (RelativeLayout) this.findViewById(R.id.statistics);
         notificationsBelly = (RelativeLayout) this.findViewById(R.id.notification_belly);
@@ -521,7 +659,18 @@ public class BrainsterHome extends AppCompatActivity {
         fifthBoxPointer = (TextView) playerStatistics.findViewById(R.id.fifthBoxPointer);
         sixthBoxPointer = (TextView) playerStatistics.findViewById(R.id.sixthBoxPointer);
         rankingButton = (RelativeLayout) this.findViewById(R.id.rang_list);
+        rankingWeeklyLayout = (RelativeLayout) ranking.findViewById(R.id.rankingWeeklyLayout);
+        rankingMonthlyLayout = (RelativeLayout) ranking.findViewById(R.id.rankingMonthlyLayout);
+        rankingWeekly = (TextView) ranking.findViewById(R.id.weeklyRank);
+        rankingMonthly = (TextView) ranking.findViewById(R.id.monthlyRank);
 
+        peopleList = (LinearLayout) ranking.findViewById(R.id.peopleList);
+        peopleLayout = (LinearLayout) ranking.findViewById(R.id.peopleLayout);
+        peoplePointsLayout = (LinearLayout) ranking.findViewById(R.id.peoplePointsLayout);
+        peopleNumber = (TextView) ranking.findViewById(R.id.peopleNumber);
+        peopleName = (TextView) ranking.findViewById(R.id.peopleName);
+        peopleStarsQuantity = (TextView) ranking.findViewById(R.id.peopleStarsQuantity);
+        peopleTokensQuantity = (TextView) ranking.findViewById(R.id.peopleTokensQuantity);
 
         messageIconLayout = (LinearLayout) notifications.findViewById(R.id.messageIconLayout);
         messageIcon = (LinearLayout) notifications.findViewById(R.id.messageIcon);
