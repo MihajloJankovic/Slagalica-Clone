@@ -27,6 +27,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.checkerframework.common.returnsreceiver.qual.This;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Random;
 
@@ -73,6 +75,7 @@ public class BrainsterHome extends AppCompatActivity {
     private BrainsterHome bh = this;
     private TextView row7Label;
     private Dialog notifications;
+    private Dialog ranking;
     private RelativeLayout notificationsBelly;
     private TextView row1Value;
     private TextView row2Value;
@@ -98,6 +101,18 @@ public class BrainsterHome extends AppCompatActivity {
         userProfile = new Dialog(this);
         playerStatistics = new Dialog(this);
         notifications = new Dialog(this);
+
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime expirationTime = startTime.plusDays(7).plusHours(3);
+
+        Duration duration = Duration.between(startTime, expirationTime);
+        long days = duration.toDays();
+        long hours = duration.minusDays(days).toHours();
+
+        String timeLeft = days + " d " + hours + " h";
+
+        TextView timeLeftTextView = (TextView) ranking.findViewById(R.id.timeLeftTextView);
+        timeLeftTextView.setText("Ends in: " + timeLeft);
 
         Konekcija  app = (Konekcija) BrainsterHome.this.getApplication();
         this.mSocket = app.getSocket();

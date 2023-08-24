@@ -633,8 +633,23 @@
                 android:text="04. 09. 2023. - 09. 09. 2023."
                 android:fontFamily="@font/quiz_font"
                 android:gravity="center"
+                android:textColor="@color/white"
                 android:textSize="25dp">
             </TextView>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/expirationTimeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/timeLeftTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:fontFamily="@font/quiz_font"
+                android:textSize="25dp"
+                android:textColor="@color/white" />
         </LinearLayout>
 
 
