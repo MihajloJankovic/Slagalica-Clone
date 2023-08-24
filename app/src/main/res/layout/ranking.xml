@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+2<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -80,12 +80,14 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/operations_clicked"
+                android:backgroundTint="#FF9800"
                 android:layout_gravity="start">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/quiz_font"
                     android:text="Weekly ranking"
+                    android:textColor="@color/black"
                     android:gravity="center"
                     android:textSize="20dp">
                 </TextView>
@@ -110,14 +112,14 @@
         <LinearLayout
             android:id="@+id/scrollContainerLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="300dp"
             android:orientation="vertical"
             android:background="#60A5DA">
 
             <ScrollView
                 android:id="@+id/scrollContainer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="300dp">
 
                 <LinearLayout
                     android:id="@+id/peopleList"
@@ -150,26 +152,490 @@
                             android:gravity="center_vertical"
                             android:textSize="20dp">
                         </TextView>
+                        <LinearLayout
+                            android:id="@+id/peoplePointsLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/peopleStarsLayout"
+                                android:layout_width="70dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:id="@+id/peopleStars"
+                                    android:layout_width="32dp"
+                                    android:layout_height="28dp"
+                                    android:layout_marginVertical="18dp"
+                                    android:background="@drawable/star"
+                                    android:orientation="horizontal"></LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/peopleStarsQuantityLayout"
+                                    android:layout_width="30dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:id="@+id/peopleStarsQuantity"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/quiz_font"
+                                        android:text="45"
+                                        android:textSize="20dp"
+                                        android:textColor="#FF9800"
+                                        android:gravity="center">
+                                    </TextView>
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/peopleTokensLayout"
+                                android:layout_width="70dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="5dp"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:id="@+id/peopleTokens"
+                                    android:layout_width="32dp"
+                                    android:layout_height="28dp"
+                                    android:layout_marginVertical="18dp"
+                                    android:background="@drawable/token"
+                                    android:orientation="horizontal"></LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/peopleTokensQuantityLayout"
+                                    android:layout_width="40dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:id="@+id/peopleTokensQuantity"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/quiz_font"
+                                        android:text="7"
+                                        android:textSize="20dp"
+                                        android:textColor="#FF9800"
+                                        android:gravity="center">
+                                    </TextView>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/peopleLayout2"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:background="@drawable/rating_border_gradient"
+                        android:orientation="horizontal">
                         <TextView
-                            android:id="@+id/peopleStars"
+                            android:id="@+id/peopleNumber2"
                             android:layout_width="70dp"
                             android:layout_height="match_parent"
                             android:fontFamily="@font/quiz_font"
-                            android:background=""
+                            android:text="2."
+                            android:textColor="@color/purple_700"
+                            android:gravity="center"
+                            android:textSize="20dp">
+                        </TextView>
+                        <TextView
+                            android:id="@+id/peopleName2"
+                            android:layout_width="120dp"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/quiz_font"
+                            android:text="Milojica"
                             android:textColor="@color/purple_700"
                             android:gravity="center_vertical"
                             android:textSize="20dp">
                         </TextView>
+                        <LinearLayout
+                            android:id="@+id/peoplePointsLayout2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
 
+                            <LinearLayout
+                                android:id="@+id/peopleStarsLayout2"
+                                android:layout_width="70dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:id="@+id/peopleStars2"
+                                    android:layout_width="32dp"
+                                    android:layout_height="28dp"
+                                    android:layout_marginVertical="18dp"
+                                    android:background="@drawable/star"
+                                    android:orientation="horizontal"></LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/peopleStarsQuantityLayout2"
+                                    android:layout_width="30dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:id="@+id/peopleStarsQuantity2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/quiz_font"
+                                        android:text="39"
+                                        android:textSize="20dp"
+                                        android:textColor="#FF9800"
+                                        android:gravity="center">
+                                    </TextView>
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/peopleTokensLayout2"
+                                android:layout_width="70dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="5dp"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:id="@+id/peopleTokens2"
+                                    android:layout_width="32dp"
+                                    android:layout_height="28dp"
+                                    android:layout_marginVertical="18dp"
+                                    android:background="@drawable/token"
+                                    android:orientation="horizontal"></LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/peopleTokensQuantityLayout2"
+                                    android:layout_width="40dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:id="@+id/peopleTokensQuantity2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/quiz_font"
+                                        android:text="5"
+                                        android:textSize="20dp"
+                                        android:textColor="#FF9800"
+                                        android:gravity="center">
+                                    </TextView>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
                     </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/peopleLayout3"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:background="@drawable/rating_border_gradient"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/peopleNumber3"
+                            android:layout_width="70dp"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/quiz_font"
+                            android:text="3."
+                            android:textColor="@color/purple_700"
+                            android:gravity="center"
+                            android:textSize="20dp">
+                        </TextView>
+                        <TextView
+                            android:id="@+id/peopleName3"
+                            android:layout_width="120dp"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/quiz_font"
+                            android:text="Pera"
+                            android:textColor="@color/purple_700"
+                            android:gravity="center_vertical"
+                            android:textSize="20dp">
+                        </TextView>
+                        <LinearLayout
+                            android:id="@+id/peoplePointsLayout3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
 
+                            <LinearLayout
+                                android:id="@+id/peopleStarsLayout3"
+                                android:layout_width="70dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
 
+                                <LinearLayout
+                                    android:id="@+id/peopleStars3"
+                                    android:layout_width="32dp"
+                                    android:layout_height="28dp"
+                                    android:layout_marginVertical="18dp"
+                                    android:background="@drawable/star"
+                                    android:orientation="horizontal"></LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/peopleStarsQuantityLayout3"
+                                    android:layout_width="30dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:id="@+id/peopleStarsQuantity3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/quiz_font"
+                                        android:text="34"
+                                        android:textSize="20dp"
+                                        android:textColor="#FF9800"
+                                        android:gravity="center">
+                                    </TextView>
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/peopleTokensLayout3"
+                                android:layout_width="70dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="5dp"
+                                android:orientation="horizontal">
 
+                                <LinearLayout
+                                    android:id="@+id/peopleTokens3"
+                                    android:layout_width="32dp"
+                                    android:layout_height="28dp"
+                                    android:layout_marginVertical="18dp"
+                                    android:background="@drawable/token"
+                                    android:orientation="horizontal"></LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/peopleTokensQuantityLayout3"
+                                    android:layout_width="40dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:id="@+id/peopleTokensQuantity3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/quiz_font"
+                                        android:text="3"
+                                        android:textSize="20dp"
+                                        android:textColor="#FF9800"
+                                        android:gravity="center">
+                                    </TextView>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/peopleLayout4"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:background="@drawable/rating_border_gradient"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/peopleNumber4"
+                            android:layout_width="70dp"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/quiz_font"
+                            android:text="4."
+                            android:textColor="@color/purple_700"
+                            android:gravity="center"
+                            android:textSize="20dp">
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/peopleName4"
+                            android:layout_width="120dp"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/quiz_font"
+                            android:gravity="center_vertical"
+                            android:text="Dusan"
+                            android:textColor="@color/purple_700"
+                            android:textSize="20dp"></TextView>
+
+                        <LinearLayout
+                            android:id="@+id/peoplePointsLayout4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/peopleStarsLayout4"
+                                android:layout_width="70dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:id="@+id/peopleStars4"
+                                    android:layout_width="32dp"
+                                    android:layout_height="28dp"
+                                    android:layout_marginVertical="18dp"
+                                    android:background="@drawable/star"
+                                    android:orientation="horizontal"></LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/peopleStarsQuantityLayout4"
+                                    android:layout_width="30dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:id="@+id/peopleStarsQuantity4"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/quiz_font"
+                                        android:text="15"
+                                        android:textSize="20dp"
+                                        android:textColor="#FF9800"
+                                        android:gravity="center">
+                                    </TextView>
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/peopleTokensLayout4"
+                                android:layout_width="70dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="5dp"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:id="@+id/peopleTokens4"
+                                    android:layout_width="32dp"
+                                    android:layout_height="28dp"
+                                    android:layout_marginVertical="18dp"
+                                    android:background="@drawable/token"
+                                    android:orientation="horizontal"></LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/peopleTokensQuantityLayout4"
+                                    android:layout_width="40dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:id="@+id/peopleTokensQuantity4"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/quiz_font"
+                                        android:text="1"
+                                        android:textSize="20dp"
+                                        android:textColor="#FF9800"
+                                        android:gravity="center">
+                                    </TextView>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/peopleLayout5"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:background="@drawable/rating_border_gradient"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/peopleNumber5"
+                            android:layout_width="70dp"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/quiz_font"
+                            android:text="5."
+                            android:textColor="@color/purple_700"
+                            android:gravity="center"
+                            android:textSize="20dp">
+                        </TextView>
+                        <TextView
+                            android:id="@+id/peopleName5"
+                            android:layout_width="120dp"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/quiz_font"
+                            android:text="Milan"
+                            android:textColor="@color/purple_700"
+                            android:gravity="center_vertical"
+                            android:textSize="20dp">
+                        </TextView>
+                        <LinearLayout
+                            android:id="@+id/peoplePointsLayout5"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/peopleStarsLayout5"
+                                android:layout_width="70dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:id="@+id/peopleStars5"
+                                    android:layout_width="32dp"
+                                    android:layout_height="28dp"
+                                    android:layout_marginVertical="18dp"
+                                    android:background="@drawable/star"
+                                    android:orientation="horizontal"></LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/peopleStarsQuantityLayout5"
+                                    android:layout_width="30dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:id="@+id/peopleStarsQuantity5"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/quiz_font"
+                                        android:text="9"
+                                        android:textSize="20dp"
+                                        android:textColor="#FF9800"
+                                        android:gravity="center">
+                                    </TextView>
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/peopleTokensLayout5"
+                                android:layout_width="70dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="5dp"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:id="@+id/peopleTokens5"
+                                    android:layout_width="32dp"
+                                    android:layout_height="28dp"
+                                    android:layout_marginVertical="18dp"
+                                    android:background="@drawable/token"
+                                    android:orientation="horizontal"></LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/peopleTokensQuantityLayout5"
+                                    android:layout_width="40dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:id="@+id/peopleTokensQuantity5"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/quiz_font"
+                                        android:text="1"
+                                        android:textSize="20dp"
+                                        android:textColor="#FF9800"
+                                        android:gravity="center">
+                                    </TextView>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
-
             </ScrollView>
         </LinearLayout>
-
+        <LinearLayout
+            android:id="@+id/seasonInfoLayout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/seasonLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/quiz_font"
+                android:text="Weekly Season"
+                android:textSize="30dp"
+                android:gravity="center">
+            </TextView>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/seasonDateLayout"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/blue_player_gradient"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/seasonDate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="04. 09. 2023. - 09. 09. 2023."
+                android:fontFamily="@font/quiz_font"
+                android:gravity="center"
+                android:textSize="25dp">
+            </TextView>
+        </LinearLayout>
 
 
 

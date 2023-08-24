@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -140,7 +141,7 @@ public class BrainsterHomeUnregistered extends AppCompatActivity {
         EditText passwordTxt = (EditText) loginDialog.findViewById(R.id.passwordTxt);
 
         String finalIdd = "Konacno";
-        Query query = db.collection("users").whereEqualTo("name", usernameTxt.getText().toString()).whereEqualTo("password", passwordTxt.getText().toString());
+        DownloadManager.Query query = db.collection("users").whereEqualTo("name", usernameTxt.getText().toString()).whereEqualTo("password", passwordTxt.getText().toString());
 
 
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
