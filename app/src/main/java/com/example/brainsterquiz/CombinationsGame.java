@@ -311,6 +311,7 @@ public class CombinationsGame extends AppCompatActivity {
                                                     intent.putExtra("solo", 0);
                                                 }
                                                 intent.putExtra("round", 0);
+
                                                 if(turn == 1){
                                                     if(switcha == 0)
                                                     {

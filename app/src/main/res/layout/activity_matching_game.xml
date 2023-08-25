@@ -261,7 +261,8 @@
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
                         android:background="@drawable/numbers_clicked"
-                        android:clickable="true">
+                        android:clickable="true"
+                        android:onClick="match">
 
                         <TextView
                             android:id="@+id/matchingPair1LeftTxt"
@@ -280,6 +281,8 @@
                         android:id="@+id/matchingPair1Right"
                         android:layout_width="175dp"
                         android:layout_height="match_parent"
+
+                        android:onClick="match"
                         android:orientation="horizontal"
                         android:layout_alignParentEnd="true"
                         android:background="@drawable/numbers_clicked"
@@ -317,6 +320,7 @@
                         android:id="@+id/matchingPair2Left"
                         android:layout_width="175dp"
                         android:layout_height="match_parent"
+                        android:onClick="match"
                         android:orientation="horizontal"
                         android:background="@drawable/numbers_clicked"
                         android:clickable="true">
@@ -338,6 +342,7 @@
                         android:id="@+id/matchingPair2Right"
                         android:layout_width="175dp"
                         android:layout_height="match_parent"
+                        android:onClick="match"
                         android:orientation="horizontal"
                         android:layout_alignParentEnd="true"
                         android:background="@drawable/numbers_clicked"
@@ -378,6 +383,7 @@
                         android:layout_width="175dp"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
+                        android:onClick="match"
                         android:background="@drawable/numbers_clicked"
                         android:clickable="true">
 
@@ -398,6 +404,7 @@
                         android:id="@+id/matchingPair3Right"
                         android:layout_width="175dp"
                         android:layout_height="match_parent"
+                        android:onClick="match"
                         android:orientation="horizontal"
                         android:layout_alignParentEnd="true"
                         android:background="@drawable/numbers_clicked"
@@ -435,6 +442,7 @@
                         android:id="@+id/matchingPair4Left"
                         android:layout_width="175dp"
                         android:layout_height="match_parent"
+                        android:onClick="match"
                         android:orientation="horizontal"
                         android:background="@drawable/numbers_clicked"
                         android:clickable="true">
@@ -457,6 +465,7 @@
                         android:layout_width="175dp"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
+                        android:onClick="match"
                         android:layout_alignParentEnd="true"
                         android:background="@drawable/numbers_clicked"
                         android:clickable="true">
@@ -492,6 +501,7 @@
                         android:id="@+id/matchingPair5Left"
                         android:layout_width="175dp"
                         android:layout_height="match_parent"
+                        android:onClick="match"
                         android:orientation="horizontal"
                         android:background="@drawable/numbers_clicked"
                         android:clickable="true">
@@ -513,6 +523,7 @@
                         android:id="@+id/matchingPair5Right"
                         android:layout_width="175dp"
                         android:layout_height="match_parent"
+                        android:onClick="match"
                         android:orientation="horizontal"
                         android:layout_alignParentEnd="true"
                         android:background="@drawable/numbers_clicked"

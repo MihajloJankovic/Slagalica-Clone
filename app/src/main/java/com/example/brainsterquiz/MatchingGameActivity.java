@@ -3,8 +3,13 @@ package com.example.brainsterquiz;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,6 +38,7 @@ public class MatchingGameActivity extends AppCompatActivity {
     private int turn;
     private int round;
     private String rName;
+    private int switcha = 0;
     private String bName;
     private String rScore;
     private String bScore;
@@ -40,6 +46,10 @@ public class MatchingGameActivity extends AppCompatActivity {
     private TextView bName1;
     private TextView rScore1;
     private TextView bScore1;
+    private int tempa = 0;
+    private int tempb = 0;
+    private int counter = 0;
+    private int matchcounter = 0;
     private int hint = 0;
     private QueryDocumentSnapshot user;
     int trScore=0;
@@ -136,6 +146,30 @@ public class MatchingGameActivity extends AppCompatActivity {
         this.a3 = (TextView) findViewById(R.id.matchingPair3RightTxt);
         this.a4 = (TextView) findViewById(R.id.matchingPair4RightTxt);
         this.a5 = (TextView) findViewById(R.id.matchingPair5RightTxt);
+        LinearLayout l1a = (LinearLayout) findViewById(R.id.matchingPair1Left);
+        LinearLayout l2a = (LinearLayout) findViewById(R.id.matchingPair2Left);
+        LinearLayout l3a = (LinearLayout) findViewById(R.id.matchingPair3Left);
+        LinearLayout l4a = (LinearLayout) findViewById(R.id.matchingPair4Left);
+        LinearLayout l5a = (LinearLayout) findViewById(R.id.matchingPair5Left);
+        LinearLayout a1a = (LinearLayout) findViewById(R.id.matchingPair1Right);
+        LinearLayout a2a = (LinearLayout) findViewById(R.id.matchingPair2Right);
+        LinearLayout a3a = (LinearLayout) findViewById(R.id.matchingPair3Right);
+        LinearLayout a4a = (LinearLayout) findViewById(R.id.matchingPair4Right);
+        LinearLayout a5a = (LinearLayout) findViewById(R.id.matchingPair5Right);
+        if(turn ==2)
+        {
+            l1a.setClickable(false);
+            l2a.setClickable(false);
+            l3a.setClickable(false);
+            l4a.setClickable(false);
+            l5a.setClickable(false);
+            a1a.setClickable(false);
+            a2a.setClickable(false);
+            a3a.setClickable(false);
+            a4a.setClickable(false);
+            a5a.setClickable(false);
+
+        }
 
         this.timer = (TextView) findViewById(R.id.timer);
         this.rScore1 = (TextView) findViewById(R.id.redPlayerScore);
@@ -196,7 +230,25 @@ public class MatchingGameActivity extends AppCompatActivity {
                     }
                     intent.putExtra("round", 0);
                     intent.putExtra("round", 0);
-                    intent.putExtra("turn", turn);
+                    if(turn == 1){
+                        if(switcha == 0)
+                        {
+                            intent.putExtra("turn", 2);
+                        }
+                        else{
+                            intent.putExtra("turn", 1);
+                        }
+
+                    }
+                    if(turn == 2){
+                        if(switcha == 0)
+                        {
+                            intent.putExtra("turn", 1);
+                        }
+                        else{
+                            intent.putExtra("turn", 2);
+                        }
+                    }
                     finish();
                     startActivity(intent);
 
@@ -238,7 +290,25 @@ public class MatchingGameActivity extends AppCompatActivity {
                     }else{
                         intent.putExtra("solo", 0);
                     }
-                    intent.putExtra("turn", turn);
+                    if(turn == 1){
+                        if(switcha == 0)
+                        {
+                            intent.putExtra("turn", 2);
+                        }
+                        else{
+                            intent.putExtra("turn", 1);
+                        }
+
+                    }
+                    if(turn == 2){
+                        if(switcha == 0)
+                        {
+                            intent.putExtra("turn", 1);
+                        }
+                        else{
+                            intent.putExtra("turn", 2);
+                        }
+                    }
                     intent.putExtra("round", 1);
                     finish();
                     startActivity(intent);
@@ -329,7 +399,26 @@ public class MatchingGameActivity extends AppCompatActivity {
             }
             intent.putExtra("round", 0);
             intent.putExtra("round", 0);
-            intent.putExtra("turn", turn);
+
+            if(turn == 1){
+                if(switcha == 0)
+                {
+                    intent.putExtra("turn", 2);
+                }
+                else{
+                    intent.putExtra("turn", 1);
+                }
+
+            }
+            if(turn == 2){
+                if(switcha == 0)
+                {
+                    intent.putExtra("turn", 1);
+                }
+                else{
+                    intent.putExtra("turn", 2);
+                }
+            }
             finish();
             startActivity(intent);
 
@@ -371,7 +460,25 @@ public class MatchingGameActivity extends AppCompatActivity {
             }else{
                 intent.putExtra("solo", 0);
             }
-            intent.putExtra("turn", turn);
+            if(turn == 1){
+                if(switcha == 0)
+                {
+                    intent.putExtra("turn", 2);
+                }
+                else{
+                    intent.putExtra("turn", 1);
+                }
+
+            }
+            if(turn == 2){
+                if(switcha == 0)
+                {
+                    intent.putExtra("turn", 1);
+                }
+                else{
+                    intent.putExtra("turn", 2);
+                }
+            }
             intent.putExtra("round", 1);
             finish();
             startActivity(intent);
@@ -382,8 +489,157 @@ public class MatchingGameActivity extends AppCompatActivity {
 
 
     }
+    public void  matchpair( ) {
+
+        db.collection("/games/matchinggame/round").document(round+"")
+                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        String texttemp1 = null;
+                        int aa = 0;
+                        switch (tempa) {
+                            case R.id.matchingPair1Left: aa=R.id.matchingPair1LeftTxt;texttemp1 ="l1c" ;  break;
+                            case R.id.matchingPair2Left: aa=R.id.matchingPair2LeftTxt;texttemp1 ="l2c" ; break;
+                            case R.id.matchingPair3Left: aa=R.id.matchingPair3LeftTxt;texttemp1 ="l3c"; break;
+                            case R.id.matchingPair4Left: aa=R.id.matchingPair4LeftTxt; texttemp1 ="l4c"; break;
+                            case R.id.matchingPair5Left: aa=R.id.matchingPair5LeftTxt; texttemp1 ="l5c"; break;
+                        }
+                        int bb=0;
+                        switch (tempb) {
+                            case R.id.matchingPair1Right: bb=R.id.matchingPair1RightTxt;   break;
+                            case R.id.matchingPair2Right: bb=R.id.matchingPair2RightTxt; break;
+                            case R.id.matchingPair3Right: bb=R.id.matchingPair3RightTxt;  break;
+                            case R.id.matchingPair4Right:  bb=R.id.matchingPair4RightTxt; break;
+                            case R.id.matchingPair5Right:  bb=R.id.matchingPair5RightTxt; break;
+                        }
+                        LinearLayout ta = MatchingGameActivity.this.findViewById(tempa);
+                        LinearLayout tb = MatchingGameActivity.this.findViewById(tempb);
+                        TextView tbb = MatchingGameActivity.this.findViewById(bb);
+                        TextView taa = MatchingGameActivity.this.findViewById(aa);
+                        if(tbb.getText().toString().equals(documentSnapshot.getString(texttemp1))) {
+                            ++matchcounter;
+
+                            if(turn == 1)
+                            {
+                                mSocket.emit("matchsend",texttemp1);
+                            }
+                            ++counter;
+                            rScore =String.valueOf(Integer.valueOf(rScore) + 5);
+                            TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
+                            field1.setText(rScore);
+                            tempa = 0;
+                            tempb = 0;
+                            ta.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+                            tb.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+                            ta.setClickable(false);
+                            tb.setClickable(false);
+                            if(counter == 5 && turn ==3)
+                            {
+                                Pobeda();
+                            }
+                            if(counter == 5 && turn ==1)
+                            {
+                                if(matchcounter <5 )
+                                {
+                                    mSocket.emit("turn");
+                                    switcha = 1;
+                                    turn = 2;
+                                }
 
 
+                            }
+
+
+                        }
+                        else {
+                            if(turn ==1)
+                            {
+                                mSocket.emit("matchsend",taa.getText().toString(),tbb.getText().toString());
+                            }
+                            if(counter == 5 && turn ==3)
+                            {
+                                Pobeda();
+                            }
+                            if(counter == 5 && turn ==1)
+                            {
+                                if(matchcounter <5 )
+                                {
+                                    mSocket.emit("turn");
+                                    switcha = 1;
+                                    turn = 2;
+                                }
+
+
+                            }
+                            ta.setClickable(false);
+                           ++counter;
+                            tempa = 0;
+                            tempb = 0;
+                            ta.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
+                            tb.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+                        }
+                    }
+
+                    //db get string and set it to int
+                });
+
+
+    }
+
+
+
+        public void  match(View a)
+        {
+          if(turn != 2)
+          {
+              int procced = 0;
+              switch (a.getId()) {
+                  case R.id.matchingPair1Left: procced=1;   break;
+                  case R.id.matchingPair2Left: procced=1;  break;
+                  case R.id.matchingPair3Left: procced=1;  break;
+                  case R.id.matchingPair4Left:  procced=1; break;
+                  case R.id.matchingPair5Left:  procced=1; break;
+                  case R.id.matchingPair1Right: procced=2;   break;
+                  case R.id.matchingPair2Right: procced=2;  break;
+                  case R.id.matchingPair3Right: procced=2;  break;
+                  case R.id.matchingPair4Right:  procced=2; break;
+                  case R.id.matchingPair5Right:  procced=2; break;
+              }
+
+              if(procced == 1)
+              {
+                  LinearLayout ta = MatchingGameActivity.this.findViewById(a.getId());
+                  ta.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
+                  if(tempa == 0)
+                  {
+                      tempa = a.getId();
+                  }
+
+
+
+              }
+              if(procced == 2)
+              {
+
+                  if(tempa == 0)
+                  {
+
+                  }
+                  else {
+                      LinearLayout ta = MatchingGameActivity.this.findViewById(a.getId());
+                      ta.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
+                      tempb= a.getId();
+                      matchpair();
+
+
+                  }
+
+
+              }
+
+          }
+        }
 
 
 
