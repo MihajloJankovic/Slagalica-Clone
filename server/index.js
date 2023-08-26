@@ -157,7 +157,37 @@ io.on('connection', (socket) => {
 
 
     })
+    socket.on('matchsend', (ab) => {
 
+        if(socket.id == a)
+        {
+            io.to(b).emit("matchsenda",ab);
+        }
+        if(socket.id == b)
+        {
+            io.to(a).emit("matchsenda",ab);
+        }
+
+
+    })
+    socket.on('wrongmatchsend', (av,bv) => {
+
+        if(socket.id == a)
+        {
+
+            const person = {a:av, b:bv};
+            console.log(person.toString());
+            io.to(b).emit("wrongmatchsenda",person);
+        }
+        if(socket.id == b)
+        {
+            const person = {a:av, b:bv};
+            console.log(person.toString());
+            io.to(a).emit("wrongmatchsenda",person);
+        }
+
+
+    })
     socket.on('nextquestion', (av,bv,cv,dv) => {
 
         if(socket.id == a)

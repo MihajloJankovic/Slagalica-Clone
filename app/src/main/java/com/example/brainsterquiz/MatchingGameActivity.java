@@ -8,9 +8,11 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -22,7 +24,7 @@ import java.util.Map;
 
 import io.socket.client.Socket;
 
-public class MatchingGameActivity extends AppCompatActivity {
+public class  MatchingGameActivity extends AppCompatActivity {
 
     private TextView a1;
     private TextView a2;
@@ -113,22 +115,122 @@ public class MatchingGameActivity extends AppCompatActivity {
                         this.trScore = Integer.valueOf(extras.getString("tscore"));
                     }
                     mSocket.on("changeturn",(a) -> {
-
+                        switcha = 1;
+                        runOnUiThread(() -> Toast.makeText(MatchingGameActivity.this, "Your turn !", Toast.LENGTH_SHORT).show());
                         this.turn = 1;
 
                     });
-                    mSocket.on("opens",(a) -> {
+                        mSocket.on("matchsenda",(a) -> {
+                        String tempf= a[0].toString();
+                        int aa=0;
+                        switch (tempf) {
+                            case "l1c": aa=R.id.matchingPair1Left;  break;
+                            case "l2c": aa=R.id.matchingPair2Left; break;
+                            case "l3c": aa=R.id.matchingPair3Left;break;
+                            case "l4c": aa=R.id.matchingPair4Left;  break;
+                            case "l5c": aa=R.id.matchingPair5Left;  break;
+                        }
+                        int finalAa = aa;
+                        db.collection("/games/matchinggame/round").document(round+"")
+                                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                        if(documentSnapshot.getString(tempf).equals(a1.getText().toString()))
+                                        {
+                                            LinearLayout ta = MatchingGameActivity.this.findViewById(finalAa);
+                                            LinearLayout tb = MatchingGameActivity.this.findViewById(R.id.matchingPair1Right);
+                                            ta.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+                                            tb.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+                                            ta.setClickable(false);
+                                            tb.setClickable(false);
+                                        }
+                                        if(documentSnapshot.getString(tempf).equals(a2.getText().toString()))
+                                        {
+                                            LinearLayout ta = MatchingGameActivity.this.findViewById(finalAa);
+                                            LinearLayout tb = MatchingGameActivity.this.findViewById(R.id.matchingPair2Right);
+                                            ta.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+                                            tb.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+                                            ta.setClickable(false);
+                                            tb.setClickable(false);
+                                        }
+                                        if(documentSnapshot.getString(tempf).equals(a3.getText().toString()))
+                                        {
+                                            LinearLayout ta = MatchingGameActivity.this.findViewById(finalAa);
+                                            LinearLayout tb = MatchingGameActivity.this.findViewById(R.id.matchingPair3Right);
+                                            ta.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+                                            tb.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+                                            ta.setClickable(false);
+                                            tb.setClickable(false);
+                                        }
+                                        if(documentSnapshot.getString(tempf).equals(a4.getText().toString()))
+                                        {
+                                            LinearLayout ta = MatchingGameActivity.this.findViewById(finalAa);
+                                            LinearLayout tb = MatchingGameActivity.this.findViewById(R.id.matchingPair4Right);
+                                            ta.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+                                            tb.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+                                            ta.setClickable(false);
+                                            tb.setClickable(false);
+                                        }
+                                        if(documentSnapshot.getString(tempf).equals(a5.getText().toString()))
+                                        {
+                                            LinearLayout ta = MatchingGameActivity.this.findViewById(finalAa);
+                                            LinearLayout tb = MatchingGameActivity.this.findViewById(R.id.matchingPair5Right);
+                                            ta.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+                                            tb.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+                                            ta.setClickable(false);
+                                            tb.setClickable(false);
+                                        }
+
+
+                                    }
+
+                                    //db get string and set it to int
+                                });
+
+
 
 
                     });
-                    mSocket.on("opencs",(a) -> {
+                    mSocket.on("wrongmatchsenda",(a) -> {
+
+                        String tempf= a[0].toString();
+                        String tempg= a[1].toString();
+                        int aa=0;
+                        int bb=0;
+                        switch (tempf) {
+                            case "l1": aa=R.id.matchingPair1Left;  break;
+                            case "l2": aa=R.id.matchingPair2Left; break;
+                            case "l3": aa=R.id.matchingPair3Left;break;
+                            case "l4": aa=R.id.matchingPair4Left;  break;
+                            case "l5": aa=R.id.matchingPair5Left;  break;
+                        }
+                        switch (tempf) {
+                            case "a1": bb=R.id.matchingPair1Left;  break;
+                            case "a2": bb=R.id.matchingPair2Left; break;
+                            case "a3": bb=R.id.matchingPair3Left;break;
+                            case "a4": bb=R.id.matchingPair4Left;  break;
+                            case "a5": bb=R.id.matchingPair5Left;  break;
+                        }
+                        int finalAa = aa;
+                        LinearLayout ta = MatchingGameActivity.this.findViewById(aa);
+                        LinearLayout tb = MatchingGameActivity.this.findViewById(bb);
+                        ta.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
+                        tb.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
+
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ta.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
+                                tb.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
+                            }
+                        }, 300);
+
 
 
                     });
-                    mSocket.on("ennemywin",(a) -> {
-
-
-                    });
+                  
 
                 }
             }
@@ -156,20 +258,7 @@ public class MatchingGameActivity extends AppCompatActivity {
         LinearLayout a3a = (LinearLayout) findViewById(R.id.matchingPair3Right);
         LinearLayout a4a = (LinearLayout) findViewById(R.id.matchingPair4Right);
         LinearLayout a5a = (LinearLayout) findViewById(R.id.matchingPair5Right);
-        if(turn ==2)
-        {
-            l1a.setClickable(false);
-            l2a.setClickable(false);
-            l3a.setClickable(false);
-            l4a.setClickable(false);
-            l5a.setClickable(false);
-            a1a.setClickable(false);
-            a2a.setClickable(false);
-            a3a.setClickable(false);
-            a4a.setClickable(false);
-            a5a.setClickable(false);
 
-        }
 
         this.timer = (TextView) findViewById(R.id.timer);
         this.rScore1 = (TextView) findViewById(R.id.redPlayerScore);
@@ -182,7 +271,7 @@ public class MatchingGameActivity extends AppCompatActivity {
         this.bName1.setText(bName);
 
 
-        timera= new CountDownTimer(120000, 1000) {
+        timera= new CountDownTimer(30000, 1000) {
 
             public void onTick(long millisUntilFinished) {
 
@@ -490,101 +579,113 @@ public class MatchingGameActivity extends AppCompatActivity {
 
     }
     public void  matchpair( ) {
+            if(turn == 1)
+            {
 
-        db.collection("/games/matchinggame/round").document(round+"")
-                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                db.collection("/games/matchinggame/round").document(round+"")
+                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                        String texttemp1 = null;
-                        int aa = 0;
-                        switch (tempa) {
-                            case R.id.matchingPair1Left: aa=R.id.matchingPair1LeftTxt;texttemp1 ="l1c" ;  break;
-                            case R.id.matchingPair2Left: aa=R.id.matchingPair2LeftTxt;texttemp1 ="l2c" ; break;
-                            case R.id.matchingPair3Left: aa=R.id.matchingPair3LeftTxt;texttemp1 ="l3c"; break;
-                            case R.id.matchingPair4Left: aa=R.id.matchingPair4LeftTxt; texttemp1 ="l4c"; break;
-                            case R.id.matchingPair5Left: aa=R.id.matchingPair5LeftTxt; texttemp1 ="l5c"; break;
-                        }
-                        int bb=0;
-                        switch (tempb) {
-                            case R.id.matchingPair1Right: bb=R.id.matchingPair1RightTxt;   break;
-                            case R.id.matchingPair2Right: bb=R.id.matchingPair2RightTxt; break;
-                            case R.id.matchingPair3Right: bb=R.id.matchingPair3RightTxt;  break;
-                            case R.id.matchingPair4Right:  bb=R.id.matchingPair4RightTxt; break;
-                            case R.id.matchingPair5Right:  bb=R.id.matchingPair5RightTxt; break;
-                        }
-                        LinearLayout ta = MatchingGameActivity.this.findViewById(tempa);
-                        LinearLayout tb = MatchingGameActivity.this.findViewById(tempb);
-                        TextView tbb = MatchingGameActivity.this.findViewById(bb);
-                        TextView taa = MatchingGameActivity.this.findViewById(aa);
-                        if(tbb.getText().toString().equals(documentSnapshot.getString(texttemp1))) {
-                            ++matchcounter;
 
-                            if(turn == 1)
-                            {
-                                mSocket.emit("matchsend",texttemp1);
-                            }
-                            ++counter;
-                            rScore =String.valueOf(Integer.valueOf(rScore) + 5);
-                            TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
-                            field1.setText(rScore);
-                            tempa = 0;
-                            tempb = 0;
-                            ta.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
-                            tb.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
-                            ta.setClickable(false);
-                            tb.setClickable(false);
-                            if(counter == 5 && turn ==3)
-                            {
-                                Pobeda();
-                            }
-                            if(counter == 5 && turn ==1)
-                            {
-                                if(matchcounter <5 )
-                                {
-                                    mSocket.emit("turn");
-                                    switcha = 1;
-                                    turn = 2;
+                                String texttemp1 = null;
+                                int aa = 0;
+                                switch (tempa) {
+                                    case R.id.matchingPair1Left: aa=R.id.matchingPair1LeftTxt;texttemp1 ="l1c" ;  break;
+                                    case R.id.matchingPair2Left: aa=R.id.matchingPair2LeftTxt;texttemp1 ="l2c" ; break;
+                                    case R.id.matchingPair3Left: aa=R.id.matchingPair3LeftTxt;texttemp1 ="l3c"; break;
+                                    case R.id.matchingPair4Left: aa=R.id.matchingPair4LeftTxt; texttemp1 ="l4c"; break;
+                                    case R.id.matchingPair5Left: aa=R.id.matchingPair5LeftTxt; texttemp1 ="l5c"; break;
                                 }
-
-
-                            }
-
-
-                        }
-                        else {
-                            if(turn ==1)
-                            {
-                                mSocket.emit("matchsend",taa.getText().toString(),tbb.getText().toString());
-                            }
-                            if(counter == 5 && turn ==3)
-                            {
-                                Pobeda();
-                            }
-                            if(counter == 5 && turn ==1)
-                            {
-                                if(matchcounter <5 )
-                                {
-                                    mSocket.emit("turn");
-                                    switcha = 1;
-                                    turn = 2;
+                                int bb=0;
+                                switch (tempb) {
+                                    case R.id.matchingPair1Right: bb=R.id.matchingPair1RightTxt;   break;
+                                    case R.id.matchingPair2Right: bb=R.id.matchingPair2RightTxt; break;
+                                    case R.id.matchingPair3Right: bb=R.id.matchingPair3RightTxt;  break;
+                                    case R.id.matchingPair4Right:  bb=R.id.matchingPair4RightTxt; break;
+                                    case R.id.matchingPair5Right:  bb=R.id.matchingPair5RightTxt; break;
                                 }
+                                LinearLayout ta = MatchingGameActivity.this.findViewById(tempa);
+                                LinearLayout tb = MatchingGameActivity.this.findViewById(tempb);
+                                TextView tbb = MatchingGameActivity.this.findViewById(bb);
+                                TextView taa = MatchingGameActivity.this.findViewById(aa);
+                                if(tbb.getText().toString().equals(documentSnapshot.getString(texttemp1))) {
+                                    ++matchcounter;
+
+                                    if(turn == 1)
+                                    {
+                                        mSocket.emit("matchsend",texttemp1);
+                                    }
+                                    ++counter;
+                                    rScore =String.valueOf(Integer.valueOf(rScore) + 5);
+                                    TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
+                                    field1.setText(rScore);
+                                    tempa = 0;
+                                    tempb = 0;
+                                    ta.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+                                    tb.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+                                    ta.setClickable(false);
+                                    tb.setClickable(false);
+                                    if(counter == 5 && turn ==3)
+                                    {
+                                        Pobeda();
+                                    }
+                                    if(counter == 5 && turn ==1)
+                                    {
+                                        if(matchcounter <5 && switcha == 0)
+                                        {
+                                            mSocket.emit("turn");
+                                            switcha = 1;
+                                            turn = 2;
+                                        }
+                                        if(matchcounter ==5)
+                                        {
+                                            Pobeda();
+                                        }
+                                        if(matchcounter < 5 && switcha == 1)
+                                        {
+                                            Pobeda();
+                                        }
 
 
+                                    }
+
+
+                                }
+                                else {
+                                    if(turn ==1)
+                                    {
+                                        mSocket.emit("wrongmatchsend",taa.getText().toString(),tbb.getText().toString());
+                                    }
+                                    if(counter == 5 && turn ==3)
+                                    {
+                                        Pobeda();
+                                    }
+                                    if(counter == 5 && turn ==1)
+                                    {
+                                        if(matchcounter <5 )
+                                        {
+                                            mSocket.emit("turn");
+                                            switcha = 1;
+                                            turn = 2;
+                                        }
+
+
+                                    }
+                                    ta.setClickable(false);
+                                    ++counter;
+                                    tempa = 0;
+                                    tempb = 0;
+                                    ta.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
+                                    tb.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+                                }
                             }
-                            ta.setClickable(false);
-                           ++counter;
-                            tempa = 0;
-                            tempb = 0;
-                            ta.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
-                            tb.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-                        }
-                    }
 
-                    //db get string and set it to int
-                });
+                            //db get string and set it to int
+                        });
 
 
+            }
     }
 
 
