@@ -393,7 +393,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/confirm_clicked"
-                    android:clickable="true"
+                    android:clickable="false"
                     tools:ignore="TouchTargetSizeCheck">
 
                     <TextView
@@ -401,12 +401,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fontFamily="@font/quiz_font"
+                        android:clickable="false"
                         android:gravity="center"
-                        android:clickable="true"
-                        android:onClick="makeExpression"
-                        android:text="STOP"
+                        android:text="SHAKE TO STOP"
                         android:textColor="#011A40"
-                        android:textSize="17dp"></TextView>
+                        android:textSize="15dp"></TextView>
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>

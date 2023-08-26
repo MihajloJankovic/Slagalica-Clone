@@ -548,12 +548,18 @@ public class BrainsterHome extends AppCompatActivity {
         ArrayList<String> peopleStarsString = new ArrayList<>(10);
         ArrayList<Integer> peopleStars = new ArrayList<>(10);
 
+//        LinearLayout newPeopleLayout = new LinearLayout(BrainsterHome.this);
+//        newPeopleLayout.setLayoutParams(peopleLayout.getLayoutParams());
+//        newPeopleLayout.setBackground(peopleLayout.getBackground());
+//        newPeopleLayout.setOrientation(peopleLayout.getOrientation());
+//        peopleList.addView(newPeopleLayout);
+
         for (int i = 0; i <= peopleList.getChildCount() - 1; i++) {
-            peopleLayout = (LinearLayout) peopleList.getChildAt(i);
-            peoplePointsLayout = (LinearLayout) peopleLayout.getChildAt(2);
-            LinearLayout peopleStarsLayout = (LinearLayout) peoplePointsLayout.getChildAt(0);
-            LinearLayout peopleStarsQuantityLayout = (LinearLayout) peopleStarsLayout.getChildAt(1);
-            TextView starsQuantity = (TextView) peopleStarsQuantityLayout.getChildAt(0);
+            LinearLayout newPeopleLayout = (LinearLayout) peopleList.getChildAt(i);
+            LinearLayout newPeoplePointsLayout = (LinearLayout) newPeopleLayout.getChildAt(2);
+            LinearLayout newPeopleStarsLayout = (LinearLayout) newPeoplePointsLayout.getChildAt(0);
+            LinearLayout newPeopleStarsQuantityLayout = (LinearLayout) newPeopleStarsLayout.getChildAt(1);
+            TextView starsQuantity = (TextView) newPeopleStarsQuantityLayout.getChildAt(0);
 
             String starsQuantityString = starsQuantity.getText().toString();
             peopleStarsString.add(starsQuantityString);
@@ -574,8 +580,12 @@ public class BrainsterHome extends AppCompatActivity {
             p += 1;
             LinearLayout newPeopleLayout = (LinearLayout) peopleList.getChildAt(p-1);
             TextView newPeopleNumber = (TextView) newPeopleLayout.getChildAt(0);
+            LinearLayout newPeoplePointsLayout = (LinearLayout) newPeopleLayout.getChildAt(2);
+            LinearLayout newPeopleStarsLayout = (LinearLayout) newPeoplePointsLayout.getChildAt(0);
+            LinearLayout newPeopleStarsQuantityLayout = (LinearLayout) newPeopleStarsLayout.getChildAt(1);
+            TextView newStarsQuantity = (TextView) newPeopleStarsQuantityLayout.getChildAt(0);
             newPeopleNumber.setText(p + ".");
-            starsQuantity.setText(i);
+            newStarsQuantity.setText(i);
             peopleStars.remove(0);
 
 
@@ -588,6 +598,7 @@ public class BrainsterHome extends AppCompatActivity {
 
     public void ladderMovingFunctionWeekly() {
         setUIViews();
+        placeBasedOnStars();
 
         if(peopleNumber.getText() == "1."){
             peopleTokensQuantity.setText("7");
