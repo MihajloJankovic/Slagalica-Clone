@@ -282,22 +282,22 @@ public class QuestionsGame extends AppCompatActivity {
                 }
                 if(round == 0 && turn !=3)
                 {
-                    Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
-                    intent.putExtra("rName", rName);
-                    intent.putExtra("bName", bName);
-                    intent.putExtra("rScore", rScore);
-                    intent.putExtra("gameid",String.valueOf(gameid));
-                    intent.putExtra("bScore",bScore);
-                    if(turn == 3)
-                    {
-                        intent.putExtra("solo", 1);
-                    }else{
-                        intent.putExtra("solo", 0);
-                    }
-                    db.collection("/questionsgame").document(gameid)
+                    db.collection("/matches").document(gameid)
                             .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    Intent intent = new Intent(getApplicationContext(), MatchingGameActivity.class);
+                                    intent.putExtra("rName", rName);
+                                    intent.putExtra("bName", bName);
+                                    intent.putExtra("rScore", rScore);
+                                    intent.putExtra("gameid",String.valueOf(gameid));
+                                    intent.putExtra("bScore",bScore);
+                                    if(turn == 3)
+                                    {
+                                        intent.putExtra("solo", 1);
+                                    }else{
+                                        intent.putExtra("solo", 0);
+                                    }
                                     if(documentSnapshot.getString("user1").equals(myid))
                                     {
                                         intent.putExtra("turn", 1);
@@ -306,13 +306,13 @@ public class QuestionsGame extends AppCompatActivity {
                                     {
                                         intent.putExtra("turn", 2);
                                     }
+                                    intent.putExtra("round", 0);
+                                    finish();
+                                    startActivity(intent);
                                 }
 
                                 //db get string and set it to int
                             });
-                    intent.putExtra("round", 0);
-                    finish();
-                    startActivity(intent);
 
 
 
@@ -379,22 +379,24 @@ public class QuestionsGame extends AppCompatActivity {
         }
         if(round == 0 && turn !=3)
         {
-            Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
-            intent.putExtra("rName", rName);
-            intent.putExtra("bName", bName);
-            intent.putExtra("rScore", rScore);
-            intent.putExtra("gameid",String.valueOf(gameid));
-            intent.putExtra("bScore",bScore);
-            if(turn == 3)
-            {
-                intent.putExtra("solo", 1);
-            }else{
-                intent.putExtra("solo", 0);
-            }
+
+
             db.collection("/matches").document(gameid)
                     .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            Intent intent = new Intent(getApplicationContext(), MatchingGameActivity.class);
+                            intent.putExtra("rName", rName);
+                            intent.putExtra("bName", bName);
+                            intent.putExtra("rScore", rScore);
+                            intent.putExtra("gameid",String.valueOf(gameid));
+                            intent.putExtra("bScore",bScore);
+                            if(turn == 3)
+                            {
+                                intent.putExtra("solo", 1);
+                            }else{
+                                intent.putExtra("solo", 0);
+                            }
                             if(documentSnapshot.getString("user1").equals(myid))
                             {
                                 intent.putExtra("turn", 1);
@@ -403,13 +405,14 @@ public class QuestionsGame extends AppCompatActivity {
                             {
                                 intent.putExtra("turn", 2);
                             }
+                            intent.putExtra("round", 0);
+                            finish();
+                            startActivity(intent);
                         }
 
                         //db get string and set it to int
                     });
-            intent.putExtra("round", 0);
-            finish();
-            startActivity(intent);
+
 
 
 
