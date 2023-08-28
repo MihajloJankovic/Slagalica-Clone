@@ -411,6 +411,7 @@
                 android:layout_height="60dp"
                 android:layout_marginBottom="20dp"
                 android:clickable="true"
+                android:onClick="OpenAsnwer"
                 android:background="@drawable/numbers_clicked">
 
                 <TextView
@@ -432,6 +433,7 @@
                 android:layout_height="60dp"
                 android:layout_marginBottom="20dp"
                 android:clickable="true"
+                android:onClick="OpenAsnwer"
                 android:background="@drawable/numbers_clicked">
 
                 <TextView
@@ -453,6 +455,7 @@
                 android:layout_height="60dp"
                 android:layout_marginBottom="20dp"
                 android:clickable="true"
+                android:onClick="OpenAsnwer"
                 android:background="@drawable/numbers_clicked">
 
                 <TextView
@@ -474,6 +477,7 @@
                 android:layout_height="60dp"
                 android:layout_marginBottom="20dp"
                 android:clickable="true"
+                android:onClick="OpenAsnwer"
                 android:background="@drawable/numbers_clicked">
 
                 <TextView
@@ -502,6 +506,7 @@
                     android:layout_marginTop="40dp"
                     android:layout_marginBottom="20dp"
                     android:clickable="true"
+                    android:onClick="OpenAsnwer"
                     android:background="@drawable/numbers_clicked">
 
                     <TextView
@@ -510,6 +515,7 @@
                         android:layout_height="match_parent"
                         android:text="Don't know"
                         android:textSize="18dp"
+
                         android:fontFamily="@font/quiz_font"
                         android:textColor="#0D3778"
                         android:gravity="center"

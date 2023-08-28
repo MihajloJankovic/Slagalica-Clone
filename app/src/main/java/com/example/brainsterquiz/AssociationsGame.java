@@ -17,6 +17,10 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import io.socket.client.Socket;
 
@@ -66,6 +70,10 @@ public class AssociationsGame extends AppCompatActivity {
     private TextView rScore1;
     private TextView bScore1;
     private int hint = 0;
+    private QueryDocumentSnapshot user;
+    int trScore=0;
+    String myid;
+    String gameid;
     private int opened;
     private Socket mSocket;
     CountDownTimer timera;
@@ -75,7 +83,14 @@ public class AssociationsGame extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-         db = FirebaseFirestore.getInstance();
+
+
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_associations_game);
+        getSupportActionBar().hide();
+
+        db = FirebaseFirestore.getInstance();
         ab = 0;
         Aopen = 0;
         Bopen = 0;
@@ -86,11 +101,6 @@ public class AssociationsGame extends AppCompatActivity {
         Cg= 0;
         Dg= 0;
         this.opened = 0;
-
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_associations_game);
-        getSupportActionBar().hide();
         this.turn = 3;
         this.rName = "Guest";
         this.bName = "";
@@ -115,11 +125,22 @@ public class AssociationsGame extends AppCompatActivity {
             this.bName = extras.getString("bName");
             this.rScore = extras.getString("rScore");
             this.bScore = extras.getString("bScore");
+
+
+
             this.turn = extras.getInt("turn");
            if(turn != 3)
            {
                Konekcija  app = (Konekcija) AssociationsGame.this.getApplication();
                this.mSocket = app.getSocket();
+               this.user =app.getUser();
+               this.myid= user.getId();
+               this.gameid = extras.getString("gameid");
+               this.trScore = Integer.parseInt(rScore);
+               if(round == 1 )
+               {
+                   this.trScore = Integer.valueOf(extras.getString("tscore"));
+               }
                mSocket.on("changeturn",(a) -> {
 
                    this.turn = 1;
@@ -182,6 +203,28 @@ public class AssociationsGame extends AppCompatActivity {
             }
 
             public void onFinish() {
+                if(round ==1 && turn != 3)
+                {
+                    Map<String, Object> userForOrgs = new HashMap<>();
+
+                    db.collection("/matches").document(gameid)
+                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    if(documentSnapshot.getString("user1").equals(myid))
+                                    {
+                                        userForOrgs.put("a1",Integer.valueOf(rScore)-trScore );
+                                    }
+                                    if(documentSnapshot.getString("user2").equals(myid))
+                                    {
+                                        userForOrgs.put("a2",Integer.valueOf(rScore)-trScore );
+                                    }
+                                    documentSnapshot.getReference().set(userForOrgs);
+                                }
+
+                                //db get string and set it to int
+                            });
+                }
                 timer.setText("done!");
                 if(round == 1 && ab == 0 && turn != 3)
                 {
@@ -190,12 +233,15 @@ public class AssociationsGame extends AppCompatActivity {
                     intent.putExtra("bName", bName);
                     intent.putExtra("rScore", rScore);
                     intent.putExtra("bScore",bScore);
+
+                    intent.putExtra("gameid",String.valueOf(gameid));
                     if(turn == 3)
                     {
                         intent.putExtra("solo", 1);
                     }else{
                         intent.putExtra("solo", 0);
                     }
+
                     intent.putExtra("round", 0);
                     intent.putExtra("round", 0);
                     intent.putExtra("turn", turn);
@@ -211,6 +257,7 @@ public class AssociationsGame extends AppCompatActivity {
                     intent.putExtra("bName", bName);
                     intent.putExtra("rScore", rScore);
                     intent.putExtra("bScore",bScore);
+
                     if(turn == 3)
                     {
                         intent.putExtra("solo", 1);
@@ -230,6 +277,8 @@ public class AssociationsGame extends AppCompatActivity {
                     intent.putExtra("rName", rName);
                     intent.putExtra("bName", bName);
                     intent.putExtra("rScore", rScore);
+                    intent.putExtra("tscore",String.valueOf(trScore));
+                    intent.putExtra("gameid",String.valueOf(gameid));
                     intent.putExtra("bScore",bScore);
                     if(turn == 3)
                     {
@@ -822,7 +871,29 @@ public class AssociationsGame extends AppCompatActivity {
                                 }
                                 bScore =String.valueOf(Integer.valueOf(bScore) + rs);
                                 TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
-                                field1.setText(rScore);
+                                field1.setText(bScore);
+                              if(round ==1 && turn != 3)
+                              {
+                                  Map<String, Object> userForOrgs = new HashMap<>();
+
+                                  db.collection("/matches").document(gameid)
+                                          .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                              @Override
+                                              public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                  if(documentSnapshot.getString("user1").equals(myid))
+                                                  {
+                                                      userForOrgs.put("a1",Integer.valueOf(rScore)-trScore );
+                                                  }
+                                                  if(documentSnapshot.getString("user2").equals(myid))
+                                                  {
+                                                      userForOrgs.put("a1",Integer.valueOf(rScore)-trScore );
+                                                  }
+                                                  documentSnapshot.getReference().set(userForOrgs);
+                                              }
+
+                                              //db get string and set it to int
+                                          });
+                              }
 
                                 TextView field5 = (TextView) findViewById(R.id.A1Txt);
                                 field5.setText(documentSnapshot.getString("A1Txt"));
@@ -898,6 +969,7 @@ public class AssociationsGame extends AppCompatActivity {
                                             intent.putExtra("bName", bName);
                                             intent.putExtra("rScore", rScore);
                                             intent.putExtra("bScore",bScore);
+
                                             if(turn == 3)
                                             {
                                                 intent.putExtra("solo", 1);
@@ -906,6 +978,7 @@ public class AssociationsGame extends AppCompatActivity {
                                             }
                                             intent.putExtra("round", 0);
                                             intent.putExtra("turn", turn);
+                                            intent.putExtra("gameid",String.valueOf(gameid));
                                             finish();
                                             startActivity(intent);
 
@@ -919,6 +992,8 @@ public class AssociationsGame extends AppCompatActivity {
                                             intent.putExtra("rName", rName);
                                             intent.putExtra("bName", bName);
                                             intent.putExtra("rScore", rScore);
+                                            intent.putExtra("tscore",String.valueOf(trScore));
+                                            intent.putExtra("gameid",String.valueOf(gameid));
                                             intent.putExtra("bScore",bScore);
                                             if(turn == 3)
                                             {
@@ -1040,9 +1115,31 @@ public class AssociationsGame extends AppCompatActivity {
                                         }else{
                                             rs=  rs-Dopen;
                                         }
-                                        rScore =String.valueOf(Integer.valueOf(rScore) + rs);
+                                        // write into  db                                        rScore =String.valueOf(Integer.valueOf(rScore) + rs);
                                         TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
                                         field1.setText(rScore);
+                                        if(round ==1 && turn != 3)
+                                        {
+                                            Map<String, Object> userForOrgs = new HashMap<>();
+
+                                            db.collection("/matches").document(gameid)
+                                                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                            if(documentSnapshot.getString("user1").equals(myid))
+                                                            {
+                                                                userForOrgs.put("a1",Integer.valueOf(rScore)-trScore );
+                                                            }
+                                                            if(documentSnapshot.getString("user2").equals(myid))
+                                                            {
+                                                                userForOrgs.put("a1",Integer.valueOf(rScore)-trScore );
+                                                            }
+                                                            documentSnapshot.getReference().set(userForOrgs);
+                                                        }
+
+                                                        //db get string and set it to int
+                                                    });
+                                        }
 
                                         TextView field5 = (TextView) findViewById(R.id.A1Txt);
                                         field5.setText(documentSnapshot.getString("A1Txt"));
@@ -1122,7 +1219,9 @@ public class AssociationsGame extends AppCompatActivity {
                                                     intent.putExtra("rName", rName);
                                                     intent.putExtra("bName", bName);
                                                     intent.putExtra("rScore", rScore);
+                                                    intent.putExtra("gameid",String.valueOf(gameid));
                                                     intent.putExtra("bScore",bScore);
+
                                                     if(turn == 3)
                                                     {
                                                         intent.putExtra("solo", 1);
@@ -1143,6 +1242,8 @@ public class AssociationsGame extends AppCompatActivity {
                                                     intent.putExtra("rName", rName);
                                                     intent.putExtra("bName", bName);
                                                     intent.putExtra("rScore", rScore);
+                                                    intent.putExtra("tscore",String.valueOf(trScore));
+                                                    intent.putExtra("gameid",String.valueOf(gameid));
                                                     intent.putExtra("bScore",bScore);
                                                     if(turn == 3)
                                                     {

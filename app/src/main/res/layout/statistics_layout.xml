@@ -105,7 +105,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:textAlignment="center"
-                            android:text="62%"
+                            android:text="0%"
                             android:gravity="center"
                             android:textColor="#FFFFFF"
                             android:fontFamily="@font/quiz_font"
@@ -144,7 +144,7 @@
                             android:id="@+id/winsQuantity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="145"
+                            android:text="0"
                             android:layout_marginLeft="10dp"
                             android:textColor="#046AB8"
                             android:fontFamily="@font/quiz_font"
@@ -174,7 +174,7 @@
                             android:id="@+id/losesQuantity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="119"
+                            android:text="0"
                             android:layout_marginLeft="10dp"
                             android:textColor="#046AB8"
                             android:fontFamily="@font/quiz_font"
@@ -202,13 +202,12 @@
                         <TextView
                             android:id="@+id/totalQuantity"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="264"
+                            android:layout_height="20dp"
                             android:layout_marginLeft="10dp"
-                            android:textColor="#046AB8"
                             android:fontFamily="@font/quiz_font"
-                            android:textSize="20dp">
-                        </TextView>
+                            android:text="0"
+                            android:textColor="#046AB8"
+                            android:textSize="20dp"></TextView>
                     </LinearLayout>
 
                 </RelativeLayout>
