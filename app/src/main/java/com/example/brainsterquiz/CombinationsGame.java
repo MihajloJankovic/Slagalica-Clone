@@ -17,7 +17,10 @@ import android.widget.Toast;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -61,6 +64,14 @@ public class CombinationsGame extends AppCompatActivity {
     CountDownTimer timera;
 
     FirebaseFirestore db;
+    private QueryDocumentSnapshot user;
+    int trScore=0;
+    String myid;
+    String gameid;
+
+
+
+
 
 
 
@@ -101,6 +112,13 @@ public class CombinationsGame extends AppCompatActivity {
 
                     Konekcija  app = (Konekcija )CombinationsGame.this.getApplication();
                     this.mSocket = app.getSocket();
+                    this.myid= user.getId();
+                    this.gameid = extras.getString("gameid");
+                    this.trScore = Integer.parseInt(rScore);
+                    if(round == 1 )
+                    {
+                        this.trScore = Integer.valueOf(extras.getString("tscore"));
+                    }
                     mSocket.on("changeturna",(a) -> {
 
                         this.turn = 1;
@@ -290,6 +308,28 @@ public class CombinationsGame extends AppCompatActivity {
 
 
                                     }
+                                    if(round ==1 && turn != 3)
+                                    {
+                                        Map<String, Object> userForOrgs = new HashMap<>();
+
+                                        db.collection("/matches").document(gameid)
+                                                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                        if(documentSnapshot.getString("user1").equals(myid))
+                                                        {
+                                                            userForOrgs.put("m1",Integer.valueOf(rScore)-trScore );
+                                                        }
+                                                        if(documentSnapshot.getString("user2").equals(myid))
+                                                        {
+                                                            userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
+                                                        }
+                                                        documentSnapshot.getReference().set(userForOrgs);
+                                                    }
+
+                                                    //db get string and set it to int
+                                                });
+                                    }
                                     Handler handler = new Handler();
                                     handler.postDelayed(new Runnable() {
                                         @Override
@@ -298,11 +338,14 @@ public class CombinationsGame extends AppCompatActivity {
 
                                             if(round == 1  && turn != 3)
                                             {
+
                                                 Intent intent = new Intent(getApplicationContext(), StepByStepGame.class);
                                                 intent.putExtra("rName", rName);
                                                 intent.putExtra("bName", bName);
+                                                intent.putExtra("gameid",String.valueOf(gameid));
                                                 intent.putExtra("rScore", rScore);
                                                 intent.putExtra("bScore",bScore);
+
                                                 if(turn == 3)
                                                 {
                                                     intent.putExtra("turn", 3);
@@ -382,6 +425,8 @@ public class CombinationsGame extends AppCompatActivity {
                                                 intent.putExtra("bName", bName);
                                                 intent.putExtra("rScore", rScore);
                                                 intent.putExtra("bScore",bScore);
+                                                intent.putExtra("tscore",String.valueOf(trScore));
+                                                intent.putExtra("gameid",String.valueOf(gameid));
                                                 if(turn == 3)
                                                 {
                                                     intent.putExtra("turn", 3);
@@ -514,13 +559,35 @@ public class CombinationsGame extends AppCompatActivity {
 
                 }
                 timera.cancel();
+                if(round ==1 && turn != 3)
+                {
+                    Map<String, Object> userForOrgs = new HashMap<>();
 
+                    db.collection("/matches").document(gameid)
+                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    if(documentSnapshot.getString("user1").equals(myid))
+                                    {
+                                        userForOrgs.put("m1",Integer.valueOf(rScore)-trScore );
+                                    }
+                                    if(documentSnapshot.getString("user2").equals(myid))
+                                    {
+                                        userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
+                                    }
+                                    documentSnapshot.getReference().set(userForOrgs);
+                                }
+
+                                //db get string and set it to int
+                            });
+                }
                 if(round == 1  && turn != 3)
                 {
                     Intent intent = new Intent(getApplicationContext(), StepByStepGame.class);
                     intent.putExtra("rName", rName);
                     intent.putExtra("bName", bName);
                     intent.putExtra("rScore", rScore);
+                    intent.putExtra("gameid",String.valueOf(gameid));
                     intent.putExtra("bScore",bScore);
                     if(turn == 3)
                     {
@@ -600,6 +667,8 @@ public class CombinationsGame extends AppCompatActivity {
                     intent.putExtra("bName", bName);
                     intent.putExtra("rScore", rScore);
                     intent.putExtra("bScore",bScore);
+                    intent.putExtra("tscore",String.valueOf(trScore));
+                    intent.putExtra("gameid",String.valueOf(gameid));
                     if(turn == 3)
                     {
                         intent.putExtra("turn", 3);
@@ -821,6 +890,28 @@ public class CombinationsGame extends AppCompatActivity {
 
 
             }
+            if(round ==1 && turn != 3)
+            {
+                Map<String, Object> userForOrgs = new HashMap<>();
+
+                db.collection("/matches").document(gameid)
+                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if(documentSnapshot.getString("user1").equals(myid))
+                                {
+                                    userForOrgs.put("m1",Integer.valueOf(rScore)-trScore );
+                                }
+                                if(documentSnapshot.getString("user2").equals(myid))
+                                {
+                                    userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
+                                }
+                                documentSnapshot.getReference().set(userForOrgs);
+                            }
+
+                            //db get string and set it to int
+                        });
+            }
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -833,7 +924,7 @@ public class CombinationsGame extends AppCompatActivity {
                         intent.putExtra("rName", rName);
                         intent.putExtra("bName", bName);
                         intent.putExtra("rScore", rScore);
-                        intent.putExtra("bScore",bScore);
+                        intent.putExtra("gameid",String.valueOf(gameid));
                         if(turn == 3)
                         {
                             intent.putExtra("turn", 3);
@@ -911,6 +1002,8 @@ public class CombinationsGame extends AppCompatActivity {
                         intent.putExtra("rName", rName);
                         intent.putExtra("bName", bName);
                         intent.putExtra("rScore", rScore);
+                        intent.putExtra("tscore",String.valueOf(trScore));
+                        intent.putExtra("gameid",String.valueOf(gameid));
                         intent.putExtra("bScore",bScore);
                         if(turn == 3)
                         {
@@ -1062,6 +1155,28 @@ public class CombinationsGame extends AppCompatActivity {
                    mSocket.emit("points");
                    mSocket.emit("nextgamec");
                }
+                if(round ==1 && turn != 3)
+                {
+                    Map<String, Object> userForOrgs = new HashMap<>();
+
+                    db.collection("/matches").document(gameid)
+                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    if(documentSnapshot.getString("user1").equals(myid))
+                                    {
+                                        userForOrgs.put("m1",Integer.valueOf(rScore)-trScore );
+                                    }
+                                    if(documentSnapshot.getString("user2").equals(myid))
+                                    {
+                                        userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
+                                    }
+                                    documentSnapshot.getReference().set(userForOrgs);
+                                }
+
+                                //db get string and set it to int
+                            });
+                }
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -1074,6 +1189,7 @@ public class CombinationsGame extends AppCompatActivity {
                             intent.putExtra("rName", rName);
                             intent.putExtra("bName", bName);
                             intent.putExtra("rScore", rScore);
+                            intent.putExtra("gameid",String.valueOf(gameid));
                             intent.putExtra("bScore",bScore);
                             if(turn == 3)
                             {
@@ -1152,6 +1268,8 @@ public class CombinationsGame extends AppCompatActivity {
                             intent.putExtra("rName", rName);
                             intent.putExtra("bName", bName);
                             intent.putExtra("rScore", rScore);
+                            intent.putExtra("tscore",String.valueOf(trScore));
+                            intent.putExtra("gameid",String.valueOf(gameid));
                             intent.putExtra("bScore",bScore);
                             if(turn == 3)
                             {
@@ -1242,7 +1360,28 @@ public class CombinationsGame extends AppCompatActivity {
                     mSocket.emit("enemyguess",coma.get(0),coma.get(1),coma.get(2),coma.get(3));
                     mSocket.emit("nextgamec");
                     timera.cancel();
+                    if(round ==1 && turn != 3)
+                    {
+                        Map<String, Object> userForOrgs = new HashMap<>();
 
+                        db.collection("/matches").document(gameid)
+                                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        if(documentSnapshot.getString("user1").equals(myid))
+                                        {
+                                            userForOrgs.put("c1",Integer.valueOf(rScore)-trScore );
+                                        }
+                                        if(documentSnapshot.getString("user2").equals(myid))
+                                        {
+                                            userForOrgs.put("c2",Integer.valueOf(rScore)-trScore );
+                                        }
+                                        documentSnapshot.getReference().set(userForOrgs);
+                                    }
+
+                                    //db get string and set it to int
+                                });
+                    }
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -1255,6 +1394,7 @@ public class CombinationsGame extends AppCompatActivity {
                                 intent.putExtra("rName", rName);
                                 intent.putExtra("bName", bName);
                                 intent.putExtra("rScore", rScore);
+                                intent.putExtra("gameid",String.valueOf(gameid));
                                 intent.putExtra("bScore",bScore);
                                 if(turn == 3)
                                 {
@@ -1333,6 +1473,8 @@ public class CombinationsGame extends AppCompatActivity {
                                 intent.putExtra("rName", rName);
                                 intent.putExtra("bName", bName);
                                 intent.putExtra("rScore", rScore);
+                                intent.putExtra("tscore",String.valueOf(trScore));
+                                intent.putExtra("gameid",String.valueOf(gameid));
                                 intent.putExtra("bScore",bScore);
                                 if(turn == 3)
                                 {

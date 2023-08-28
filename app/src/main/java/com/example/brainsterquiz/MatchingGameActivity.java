@@ -700,16 +700,6 @@ public class  MatchingGameActivity extends AppCompatActivity {
                                         {
                                             if(matchcounter <5 && switcha == 0)
                                             {
-                                                mSocket.emit("turn");
-                                                switcha = 1;
-                                                turn = 2;
-                                            }
-                                            if(matchcounter ==5 && turn ==3)
-                                            {
-                                                Pobeda();
-                                            }
-                                            if(matchcounter < 5 && switcha == 1)
-                                            {
                                                 mSocket.emit("nextgamec");
                                                 Pobeda();
                                             }

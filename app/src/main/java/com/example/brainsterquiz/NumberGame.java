@@ -14,7 +14,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fathzer.soft.javaluator.DoubleEvaluator;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +38,10 @@ public class NumberGame extends AppCompatActivity {
     private RelativeLayout clearInput;
     TextView confirmTxt;
     TextView inputNumbers;
-
+    private QueryDocumentSnapshot user;
+    int trScore=0;
+    String myid;
+    String gameid;
     LinearLayout confirmButton;
     TextView number1;
     TextView number2;
@@ -189,6 +195,14 @@ public class NumberGame extends AppCompatActivity {
 
                     Konekcija  app = (Konekcija )NumberGame.this.getApplication();
                     this.mSocket = app.getSocket();
+                    this.user =app.getUser();
+                    this.myid= user.getId();
+                    this.gameid = extras.getString("gameid");
+                    this.trScore = Integer.parseInt(rScore);
+                    if(round == 1 )
+                    {
+                        this.trScore = Integer.valueOf(extras.getString("tscore"));
+                    }
 
                     mSocket.on("neededc",(a) -> {
 
@@ -296,7 +310,30 @@ public class NumberGame extends AppCompatActivity {
                                         @Override
                                         public void run() {
                                             timera.cancel();
+                                            if(round ==1 && turn != 3)
+                                            {
+                                                Map<String, Object> userForOrgs = new HashMap<>();
 
+                                                db.collection("/matches").document(gameid)
+                                                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                Map<String, Object> map = new HashMap<>();
+                                                                map.put("yourProperty", "yourValue");
+                                                                if(documentSnapshot.getString("user1").equals(myid))
+                                                                {
+                                                                    userForOrgs.put("n1",Integer.valueOf(rScore)-trScore );
+                                                                }
+                                                                if(documentSnapshot.getString("user2").equals(myid))
+                                                                {
+                                                                    userForOrgs.put("n2",Integer.valueOf(rScore)-trScore );
+                                                                }
+                                                                db.collection("/matches").document(gameid).update(userForOrgs);
+                                                            }
+
+                                                            //db get string and set it to int
+                                                        });
+                                            }
                                             if(round == 1  && turn != 3)
                                             {
                                                 Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
@@ -319,6 +356,8 @@ public class NumberGame extends AppCompatActivity {
                                                 intent.putExtra("rName", rName);
                                                 intent.putExtra("bName", bName);
                                                 intent.putExtra("rScore", rScore);
+                                                intent.putExtra("tscore",String.valueOf(trScore));
+                                                intent.putExtra("gameid",String.valueOf(gameid));
                                                 intent.putExtra("bScore",bScore);
                                                 if(turn == 3)
                                                 {
@@ -377,7 +416,30 @@ public class NumberGame extends AppCompatActivity {
                                         @Override
                                         public void run() {
                                             timera.cancel();
+                                            if(round ==0 && turn != 3)
+                                            {
+                                                Map<String, Object> userForOrgs = new HashMap<>();
 
+                                                db.collection("/matches").document(gameid)
+                                                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                Map<String, Object> map = new HashMap<>();
+                                                                map.put("yourProperty", "yourValue");
+                                                                if(documentSnapshot.getString("user1").equals(myid))
+                                                                {
+                                                                    userForOrgs.put("n1",Integer.valueOf(rScore)-trScore );
+                                                                }
+                                                                if(documentSnapshot.getString("user2").equals(myid))
+                                                                {
+                                                                    userForOrgs.put("n2",Integer.valueOf(rScore)-trScore );
+                                                                }
+                                                                db.collection("/matches").document(gameid).update(userForOrgs);
+                                                            }
+
+                                                            //db get string and set it to int
+                                                        });
+                                            }
                                             if(round == 1  && turn != 3)
                                             {
                                                 Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
@@ -400,6 +462,8 @@ public class NumberGame extends AppCompatActivity {
                                                 intent.putExtra("rName", rName);
                                                 intent.putExtra("bName", bName);
                                                 intent.putExtra("rScore", rScore);
+                                                intent.putExtra("tscore",String.valueOf(trScore));
+                                                intent.putExtra("gameid",String.valueOf(gameid));
                                                 intent.putExtra("bScore",bScore);
                                                 if(turn == 3)
                                                 {
@@ -453,6 +517,30 @@ public class NumberGame extends AppCompatActivity {
 
             public void onFinish() {
                 timer.setText("done!");
+                if(round ==0 && turn != 3)
+                {
+                    Map<String, Object> userForOrgs = new HashMap<>();
+
+                    db.collection("/matches").document(gameid)
+                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    Map<String, Object> map = new HashMap<>();
+                                    map.put("yourProperty", "yourValue");
+                                    if(documentSnapshot.getString("user1").equals(myid))
+                                    {
+                                        userForOrgs.put("n1",Integer.valueOf(rScore)-trScore );
+                                    }
+                                    if(documentSnapshot.getString("user2").equals(myid))
+                                    {
+                                        userForOrgs.put("n2",Integer.valueOf(rScore)-trScore );
+                                    }
+                                    db.collection("/matches").document(gameid).update(userForOrgs);
+                                }
+
+                                //db get string and set it to int
+                            });
+                }
                 if(round == 1&& turn != 3)
                 {
                     Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
@@ -474,6 +562,8 @@ public class NumberGame extends AppCompatActivity {
                     intent.putExtra("bName", bName);
                     intent.putExtra("rScore", rScore);
                     intent.putExtra("bScore",bScore);
+                    intent.putExtra("tscore",String.valueOf(trScore));
+                    intent.putExtra("gameid",String.valueOf(gameid));
                     intent.putExtra("round", 1);
                     if(turn == 3)
                     {
@@ -930,6 +1020,30 @@ public class NumberGame extends AppCompatActivity {
               @Override
               public void run() {
                   timera.cancel();
+                  if(round ==0 && turn != 3)
+                  {
+                      Map<String, Object> userForOrgs = new HashMap<>();
+
+                      db.collection("/matches").document(gameid)
+                              .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                  @Override
+                                  public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                      Map<String, Object> map = new HashMap<>();
+                                      map.put("yourProperty", "yourValue");
+                                      if(documentSnapshot.getString("user1").equals(myid))
+                                      {
+                                          userForOrgs.put("n1",Integer.valueOf(rScore)-trScore );
+                                      }
+                                      if(documentSnapshot.getString("user2").equals(myid))
+                                      {
+                                          userForOrgs.put("n2",Integer.valueOf(rScore)-trScore );
+                                      }
+                                      db.collection("/matches").document(gameid).update(userForOrgs);
+                                  }
+
+                                  //db get string and set it to int
+                              });
+                  }
                   Intent intent = new Intent(getApplicationContext(), BrainsterHomeUnregistered.class);
                   finish();
                   startActivity(intent);
