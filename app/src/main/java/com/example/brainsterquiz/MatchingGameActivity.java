@@ -84,6 +84,16 @@ public class  MatchingGameActivity extends AppCompatActivity {
         //   int solo = 3;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+            this.l1 = (TextView) findViewById(R.id.matchingPair1LeftTxt);
+            this.l2 = (TextView) findViewById(R.id.matchingPair2LeftTxt);
+            this.l3 = (TextView) findViewById(R.id.matchingPair3LeftTxt);
+            this.l4 = (TextView) findViewById(R.id.matchingPair4LeftTxt);
+            this.l5 = (TextView) findViewById(R.id.matchingPair5LeftTxt);
+            this.a1 = (TextView) findViewById(R.id.matchingPair1RightTxt);
+            this.a2 = (TextView) findViewById(R.id.matchingPair2RightTxt);
+            this.a3 = (TextView) findViewById(R.id.matchingPair3RightTxt);
+            this.a4 = (TextView) findViewById(R.id.matchingPair4RightTxt);
+            this.a5 = (TextView) findViewById(R.id.matchingPair5RightTxt);
 
             int solo = extras.getInt("solo");
             this.round = extras.getInt("round");
@@ -112,16 +122,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
                     this.myid= user.getId();
                     this.gameid = extras.getString("gameid");
                     this.trScore = Integer.parseInt(rScore);
-                    this.l1 = (TextView) findViewById(R.id.matchingPair1LeftTxt);
-                    this.l2 = (TextView) findViewById(R.id.matchingPair2LeftTxt);
-                    this.l3 = (TextView) findViewById(R.id.matchingPair3LeftTxt);
-                    this.l4 = (TextView) findViewById(R.id.matchingPair4LeftTxt);
-                    this.l5 = (TextView) findViewById(R.id.matchingPair5LeftTxt);
-                    this.a1 = (TextView) findViewById(R.id.matchingPair1RightTxt);
-                    this.a2 = (TextView) findViewById(R.id.matchingPair2RightTxt);
-                    this.a3 = (TextView) findViewById(R.id.matchingPair3RightTxt);
-                    this.a4 = (TextView) findViewById(R.id.matchingPair4RightTxt);
-                    this.a5 = (TextView) findViewById(R.id.matchingPair5RightTxt);
+
                     if(round == 1 )
                     {
                         this.trScore = Integer.valueOf(extras.getString("tscore"));
@@ -321,6 +322,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
                             });
                 }
                 timer.setText("done!");
+                timera.cancel();
                 if(round == 1  && turn != 3)
                 {
                     Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
@@ -364,7 +366,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
                 }if(round == 0  && turn == 3)
                 {
 
-                    Intent intent = new Intent(getApplicationContext(), CombinationsGame.class);
+                    Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
                     intent.putExtra("rName", rName);
                     intent.putExtra("bName", bName);
                     intent.putExtra("rScore", rScore);
@@ -491,6 +493,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
                     });
         }
         timer.setText("done!");
+        timera.cancel();
         if(round == 1  && turn != 3)
         {
             Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
@@ -729,7 +732,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
 
         public void  match(View a)
         {
-          if(turn == 1)
+          if(turn == 1 ||  turn == 3)
           {
               int procced = 0;
               switch (a.getId()) {

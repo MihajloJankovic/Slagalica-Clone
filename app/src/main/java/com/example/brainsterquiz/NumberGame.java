@@ -53,7 +53,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
     TextView confirmTxt;
     TextView inputNumbers;
     private QueryDocumentSnapshot user;
-    int trScore=0;
+    int trScore = 0;
     String myid;
     String gameid;
     LinearLayout confirmButton;
@@ -104,26 +104,26 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
 
     private int hint = 0;
     private int opened;
-    private int posetion =1;
-    private int cardPosition =1;
-    private int allSubmited= 0;
+    private int posetion = 1;
+    private int cardPosition = 1;
+    private int allSubmited = 0;
     private int guessedTrue = 0;
     private Socket mSocket;
 
-    Map<Integer,Integer> combination=new HashMap<Integer,Integer>();
-    Map<Integer,Integer> guessedCombination=new HashMap<Integer,Integer>();
-    Map<Integer,Integer> temp=new HashMap<Integer,Integer>();
+    Map<Integer, Integer> combination = new HashMap<Integer, Integer>();
+    Map<Integer, Integer> guessedCombination = new HashMap<Integer, Integer>();
+    Map<Integer, Integer> temp = new HashMap<Integer, Integer>();
     CountDownTimer timera;
 
     FirebaseFirestore db;
 
-    int MaxNumber(int a , int b , int c )
-    {
+    int MaxNumber(int a, int b, int c) {
         if (Math.abs(c - a) < Math.abs(c - b))
             return a;
         else
             return b;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,35 +193,31 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
 
             int solo = extras.getInt("solo");
             this.round = extras.getInt("round");
-            if(solo == 1)
-            {
+            if (solo == 1) {
                 this.turn = 3;
                 this.bName = "";
                 this.rScore = extras.getString("rScore");
                 this.rName = "Guest";
 
-            }
-            else{
+            } else {
                 this.rName = extras.getString("rName");
                 this.bName = extras.getString("bName");
                 this.rScore = extras.getString("rScore");
                 this.bScore = extras.getString("bScore");
                 this.turn = extras.getInt("turn");
-                if(turn != 3)
-                {
+                if (turn != 3) {
 
-                    Konekcija  app = (Konekcija )NumberGame.this.getApplication();
+                    Konekcija app = (Konekcija) NumberGame.this.getApplication();
                     this.mSocket = app.getSocket();
-                    this.user =app.getUser();
-                    this.myid= user.getId();
+                    this.user = app.getUser();
+                    this.myid = user.getId();
                     this.gameid = extras.getString("gameid");
                     this.trScore = Integer.parseInt(rScore);
-                    if(round == 1 )
-                    {
+                    if (round == 1) {
                         this.trScore = Integer.valueOf(extras.getString("tscore"));
                     }
 
-                    mSocket.on("neededc",(a) -> {
+                    mSocket.on("neededc", (a) -> {
 
                         runOnUiThread(new Runnable() {
 
@@ -232,10 +228,10 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
 
                                 List<Integer> neededNumbers = new ArrayList<Integer>();
 
-                                for (int i = 1; i<=1000; i++){
+                                for (int i = 1; i <= 1000; i++) {
                                     neededNumbers.add(i);
                                 }
-                                if(confirmTxt.getText().toString().equals("CONFIRM")) {
+                                if (confirmTxt.getText().toString().equals("CONFIRM")) {
                                     number1.setClickable(true);
                                     number2.setClickable(true);
                                     number3.setClickable(true);
@@ -250,7 +246,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                     openBracket.setClickable(true);
                                     closedBracket.setClickable(true);
                                 }
-                                if(confirmTxt.getText().toString().equals("STOP")){
+                                if (confirmTxt.getText().toString().equals("STOP")) {
                                     neededNumber.setText(neededNumbers.get(random.nextInt(neededNumbers.size())).toString());
                                     number1.setText(digits.get(random.nextInt(digits.size())).toString());
                                     number2.setText(digits.get(random.nextInt(digits.size())).toString());
@@ -280,16 +276,14 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                         });
 
                     });
-                    mSocket.on("myguessc",(a) -> {
+                    mSocket.on("myguessc", (a) -> {
                         runOnUiThread(new Runnable() {
 
                             @Override
                             public void run() {
                                 bluePlayerNumber.setText(a[0].toString());
-                                if(!bluePlayerNumber.getText().toString().equals("???") && bluePlayerNumber.getText().toString() != " ")
-                                {
-                                    if(!redPlayerNumber.getText().toString().equals("???") && redPlayerNumber.getText().toString() != " ")
-                                    {
+                                if (!bluePlayerNumber.getText().toString().equals("???") && bluePlayerNumber.getText().toString() != " ") {
+                                    if (!redPlayerNumber.getText().toString().equals("???") && redPlayerNumber.getText().toString() != " ") {
                                         mSocket.emit("finalNumberGame");
                                     }
                                 }
@@ -298,39 +292,34 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
 
                     });
 
-                    mSocket.on("finalNumberGamea",(a) -> {
+                    mSocket.on("finalNumberGamea", (a) -> {
                         runOnUiThread(new Runnable() {
 
                             @Override
                             public void run() {
 
-                                if(turn == 2)
-                                {
-                                    if(bluePlayerNumber.getText() == neededNumber.getText())
-                                    {
-                                        bScore =String.valueOf(Integer.valueOf(bScore) + 20);
+                                if (turn == 2) {
+                                    if (bluePlayerNumber.getText() == neededNumber.getText()) {
+                                        bScore = String.valueOf(Integer.valueOf(bScore) + 20);
                                         TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
                                         field1.setText(bScore);
 
-                                    }
-                                    else{
-                                        if(redPlayerNumber.getText() == neededNumber.getText())
-                                        {
-                                            rScore =String.valueOf(Integer.valueOf(rScore) + 20);
+                                    } else {
+                                        if (redPlayerNumber.getText() == neededNumber.getText()) {
+                                            rScore = String.valueOf(Integer.valueOf(rScore) + 20);
                                             TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
                                             field1.setText(rScore);
 
-                                        }
-                                        else{
-                                            int nedeed =  Integer.valueOf((String) neededNumber.getText());
-                                            int closer=   MaxNumber(Integer.valueOf((String) redPlayerNumber.getText()),Integer.valueOf((String) bluePlayerNumber.getText()),Integer.valueOf((String) neededNumber.getText()));
-                                            if(closer == Integer.valueOf((String) redPlayerNumber.getText())){
-                                                rScore =String.valueOf(Integer.valueOf(rScore) + 5);
+                                        } else {
+                                            int nedeed = Integer.valueOf((String) neededNumber.getText());
+                                            int closer = MaxNumber(Integer.valueOf((String) redPlayerNumber.getText()), Integer.valueOf((String) bluePlayerNumber.getText()), Integer.valueOf((String) neededNumber.getText()));
+                                            if (closer == Integer.valueOf((String) redPlayerNumber.getText())) {
+                                                rScore = String.valueOf(Integer.valueOf(rScore) + 5);
                                                 TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
                                                 field1.setText(rScore);
                                             }
-                                            if(closer == Integer.valueOf((String) bluePlayerNumber.getText())){
-                                                bScore =String.valueOf(Integer.valueOf(bScore) + 5);
+                                            if (closer == Integer.valueOf((String) bluePlayerNumber.getText())) {
+                                                bScore = String.valueOf(Integer.valueOf(bScore) + 5);
                                                 TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
                                                 field1.setText(bScore);
                                             }
@@ -342,8 +331,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                         @Override
                                         public void run() {
                                             timera.cancel();
-                                            if(round ==1 && turn != 3)
-                                            {
+                                            if (round == 1 && turn != 3) {
                                                 Map<String, Object> userForOrgs = new HashMap<>();
 
                                                 db.collection("/matches").document(gameid)
@@ -352,13 +340,11 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                                                 Map<String, Object> map = new HashMap<>();
                                                                 map.put("yourProperty", "yourValue");
-                                                                if(documentSnapshot.getString("user1").equals(myid))
-                                                                {
-                                                                    userForOrgs.put("n1",Integer.valueOf(rScore)-trScore );
+                                                                if (documentSnapshot.getString("user1").equals(myid)) {
+                                                                    userForOrgs.put("n1", Integer.valueOf(rScore) - trScore);
                                                                 }
-                                                                if(documentSnapshot.getString("user2").equals(myid))
-                                                                {
-                                                                    userForOrgs.put("n2",Integer.valueOf(rScore)-trScore );
+                                                                if (documentSnapshot.getString("user2").equals(myid)) {
+                                                                    userForOrgs.put("n2", Integer.valueOf(rScore) - trScore);
                                                                 }
                                                                 db.collection("/matches").document(gameid).update(userForOrgs);
                                                             }
@@ -366,15 +352,14 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                                             //db get string and set it to int
                                                         });
                                             }
-                                            if(round == 1  && turn != 3)
-                                            {
+                                            if (round == 1 && turn != 3) {
                                                 Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
                                                 finish();
                                                 startActivity(intent);
 
 
-                                            }if(round == 0 && turn == 3)
-                                            {
+                                            }
+                                            if (round == 0 && turn == 3) {
 
                                                 Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
                                                 finish();
@@ -382,20 +367,18 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
 
 
                                             }
-                                            if(round == 0  && turn !=3)
-                                            {
+                                            if (round == 0 && turn != 3) {
                                                 Intent intent = new Intent(getApplicationContext(), NumberGame.class);
                                                 intent.putExtra("rName", rName);
                                                 intent.putExtra("bName", bName);
                                                 intent.putExtra("rScore", rScore);
-                                                intent.putExtra("tscore",String.valueOf(trScore));
-                                                intent.putExtra("gameid",String.valueOf(gameid));
-                                                intent.putExtra("bScore",bScore);
-                                                if(turn == 3)
-                                                {
+                                                intent.putExtra("tscore", String.valueOf(trScore));
+                                                intent.putExtra("gameid", String.valueOf(gameid));
+                                                intent.putExtra("bScore", bScore);
+                                                if (turn == 3) {
                                                     intent.putExtra("turn", 3);
                                                     intent.putExtra("solo", 1);
-                                                }else{
+                                                } else {
                                                     intent.putExtra("solo", 0);
                                                 }
                                                 intent.putExtra("round", 1);
@@ -411,32 +394,27 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                         }
                                     }, 6000);
                                 }
-                                if(turn == 1)
-                                {
-                                    if(redPlayerNumber.getText().equals(neededNumber.getText()))
-                                    {
-                                        rScore =String.valueOf(Integer.valueOf(rScore) + 20);
+                                if (turn == 1) {
+                                    if (redPlayerNumber.getText().equals(neededNumber.getText())) {
+                                        rScore = String.valueOf(Integer.valueOf(rScore) + 20);
                                         TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
                                         field1.setText(rScore);
-                                    }
-                                    else{
-                                        if(bluePlayerNumber.getText().equals(neededNumber.getText()))
-                                        {
-                                            bScore =String.valueOf(Integer.valueOf(bScore) + 20);
+                                    } else {
+                                        if (bluePlayerNumber.getText().equals(neededNumber.getText())) {
+                                            bScore = String.valueOf(Integer.valueOf(bScore) + 20);
                                             TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
                                             field1.setText(bScore);
 
-                                        }
-                                        else{
-                                            int nedeed =  Integer.valueOf((String) neededNumber.getText());
-                                            int closer=   MaxNumber(Integer.valueOf((String) redPlayerNumber.getText()),Integer.valueOf((String) bluePlayerNumber.getText()),Integer.valueOf((String) neededNumber.getText()));
-                                            if(closer == Integer.valueOf((String) redPlayerNumber.getText())){
-                                                rScore =String.valueOf(Integer.valueOf(rScore) + 5);
+                                        } else {
+                                            int nedeed = Integer.valueOf((String) neededNumber.getText());
+                                            int closer = MaxNumber(Integer.valueOf((String) redPlayerNumber.getText()), Integer.valueOf((String) bluePlayerNumber.getText()), Integer.valueOf((String) neededNumber.getText()));
+                                            if (closer == Integer.valueOf((String) redPlayerNumber.getText())) {
+                                                rScore = String.valueOf(Integer.valueOf(rScore) + 5);
                                                 TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
                                                 field1.setText(rScore);
                                             }
-                                            if(closer == Integer.valueOf((String) bluePlayerNumber.getText())){
-                                                bScore =String.valueOf(Integer.valueOf(bScore) + 5);
+                                            if (closer == Integer.valueOf((String) bluePlayerNumber.getText())) {
+                                                bScore = String.valueOf(Integer.valueOf(bScore) + 5);
                                                 TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
                                                 field1.setText(bScore);
                                             }
@@ -448,8 +426,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                         @Override
                                         public void run() {
                                             timera.cancel();
-                                            if(round ==0 && turn != 3)
-                                            {
+                                            if (round == 0 && turn != 3) {
                                                 Map<String, Object> userForOrgs = new HashMap<>();
 
                                                 db.collection("/matches").document(gameid)
@@ -458,13 +435,11 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                                                 Map<String, Object> map = new HashMap<>();
                                                                 map.put("yourProperty", "yourValue");
-                                                                if(documentSnapshot.getString("user1").equals(myid))
-                                                                {
-                                                                    userForOrgs.put("n1",Integer.valueOf(rScore)-trScore );
+                                                                if (documentSnapshot.getString("user1").equals(myid)) {
+                                                                    userForOrgs.put("n1", Integer.valueOf(rScore) - trScore);
                                                                 }
-                                                                if(documentSnapshot.getString("user2").equals(myid))
-                                                                {
-                                                                    userForOrgs.put("n2",Integer.valueOf(rScore)-trScore );
+                                                                if (documentSnapshot.getString("user2").equals(myid)) {
+                                                                    userForOrgs.put("n2", Integer.valueOf(rScore) - trScore);
                                                                 }
                                                                 db.collection("/matches").document(gameid).update(userForOrgs);
                                                             }
@@ -472,15 +447,14 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                                             //db get string and set it to int
                                                         });
                                             }
-                                            if(round == 1  && turn != 3)
-                                            {
+                                            if (round == 1 && turn != 3) {
                                                 Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
                                                 finish();
                                                 startActivity(intent);
 
 
-                                            }if(round == 0 && turn == 3)
-                                            {
+                                            }
+                                            if (round == 0 && turn == 3) {
 
                                                 Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
                                                 finish();
@@ -488,20 +462,18 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
 
 
                                             }
-                                            if(round == 0  && turn !=3)
-                                            {
+                                            if (round == 0 && turn != 3) {
                                                 Intent intent = new Intent(getApplicationContext(), NumberGame.class);
                                                 intent.putExtra("rName", rName);
                                                 intent.putExtra("bName", bName);
                                                 intent.putExtra("rScore", rScore);
-                                                intent.putExtra("tscore",String.valueOf(trScore));
-                                                intent.putExtra("gameid",String.valueOf(gameid));
-                                                intent.putExtra("bScore",bScore);
-                                                if(turn == 3)
-                                                {
+                                                intent.putExtra("tscore", String.valueOf(trScore));
+                                                intent.putExtra("gameid", String.valueOf(gameid));
+                                                intent.putExtra("bScore", bScore);
+                                                if (turn == 3) {
                                                     intent.putExtra("turn", 3);
                                                     intent.putExtra("solo", 1);
-                                                }else{
+                                                } else {
                                                     intent.putExtra("solo", 0);
                                                 }
                                                 intent.putExtra("round", 1);
@@ -523,36 +495,27 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                     });
 
 
-
-
-
-                        }
-
-
-
-
-
-
-
-
                 }
+
+
             }
-            //The key argument here must match that used in the other activity
+        }
+        //The key argument here must match that used in the other activity
         setupUI();
 
-        timera= new CountDownTimer(120000, 1000) {
+        timera = new CountDownTimer(120000, 1000) {
 
             public void sensorSetup() {
 
             }
+
             public void onTick(long millisUntilFinished) {
                 timer.setText("" + millisUntilFinished / 1000);
             }
 
             public void onFinish() {
                 timer.setText("done!");
-                if(round ==0 && turn != 3)
-                {
+                if (round == 0 && turn != 3) {
                     Map<String, Object> userForOrgs = new HashMap<>();
 
                     db.collection("/matches").document(gameid)
@@ -561,13 +524,11 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                                     Map<String, Object> map = new HashMap<>();
                                     map.put("yourProperty", "yourValue");
-                                    if(documentSnapshot.getString("user1").equals(myid))
-                                    {
-                                        userForOrgs.put("n1",Integer.valueOf(rScore)-trScore );
+                                    if (documentSnapshot.getString("user1").equals(myid)) {
+                                        userForOrgs.put("n1", Integer.valueOf(rScore) - trScore);
                                     }
-                                    if(documentSnapshot.getString("user2").equals(myid))
-                                    {
-                                        userForOrgs.put("n2",Integer.valueOf(rScore)-trScore );
+                                    if (documentSnapshot.getString("user2").equals(myid)) {
+                                        userForOrgs.put("n2", Integer.valueOf(rScore) - trScore);
                                     }
                                     db.collection("/matches").document(gameid).update(userForOrgs);
                                 }
@@ -575,51 +536,44 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                 //db get string and set it to int
                             });
                 }
-                if(round == 1&& turn != 3)
-                {
-                    Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
-                    finish();
-                    startActivity(intent);
-
-               }
-                if(round == 0 && turn == 3)
-                {
+                if (round == 1 && turn != 3) {
                     Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
                     finish();
                     startActivity(intent);
 
                 }
-                if(round == 0 && turn !=3)
-                {
+                if (round == 0 && turn == 3) {
+                    Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
+                    finish();
+                    startActivity(intent);
+
+                }
+                if (round == 0 && turn != 3) {
                     Intent intent = new Intent(getApplicationContext(), NumberGame.class);
                     intent.putExtra("rName", rName);
                     intent.putExtra("bName", bName);
                     intent.putExtra("rScore", rScore);
-                    intent.putExtra("bScore",bScore);
-                    intent.putExtra("tscore",String.valueOf(trScore));
-                    intent.putExtra("gameid",String.valueOf(gameid));
+                    intent.putExtra("bScore", bScore);
+                    intent.putExtra("tscore", String.valueOf(trScore));
+                    intent.putExtra("gameid", String.valueOf(gameid));
                     intent.putExtra("round", 1);
-                    if(turn == 3)
-                    {
+                    if (turn == 3) {
                         intent.putExtra("solo", 1);
-                    }else{
+                    } else {
                         intent.putExtra("solo", 0);
                     }
 
-                    if(turn == 1)
-                    {
+                    if (turn == 1) {
                         intent.putExtra("turn", 2);
                     }
-                    if(turn == 2)
-                    {
+                    if (turn == 2) {
                         intent.putExtra("turn", 1);
                     }
-                    if(turn == 3)
-                    {
+                    if (turn == 3) {
                         intent.putExtra("turn", 3);
                     }
 
-                     finish();
+                    finish();
                     startActivity(intent);
 
                 }
@@ -628,6 +582,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
 
 
     }
+
     public void sensorInit() {
         setupUI();
         textViews = new TextView[7];
@@ -718,10 +673,11 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                 animators[i].setRepeatMode(ValueAnimator.RESTART);
                 animators[i].setRepeatCount(ValueAnimator.INFINITE);
                 animators[i].start();
-                }
             }
-
         }
+
+    }
+
     public void onResume() {
         super.onResume();
         for (int i = 0; i < textViews.length; i++) {
@@ -763,102 +719,103 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
-        public void setupUI() {
-            if (turn == 2) {
-                runOnUiThread(new Runnable() {
+    public void setupUI() {
+        if (turn == 2) {
+            runOnUiThread(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        confirmTxt.setText(" ");
-                        confirmButton.setClickable(false);
-                    }
-                });
-            }
-            this.neededNumber = (TextView) findViewById(R.id.neededNumber);
-            this.bluePlayerNumber = (TextView) findViewById(R.id.bluePlayerNumber);
-            this.redPlayerNumber = (TextView) findViewById(R.id.redPlayerNumber);
-            this.clearInput = (RelativeLayout) findViewById(R.id.clearInput);
-            this.confirmTxt = (TextView) findViewById(R.id.confirmTxt);
-            this.number1 = (TextView) findViewById(R.id.number1);
-            this.number2 = (TextView) findViewById(R.id.number2);
-            this.number3 = (TextView) findViewById(R.id.number3);
-            this.number4 = (TextView) findViewById(R.id.number4);
-            this.number5 = (TextView) findViewById(R.id.number5);
-            this.number6 = (TextView) findViewById(R.id.number6);
-            this.addition = (TextView) findViewById(R.id.addition);
-            this.subtraction = (TextView) findViewById(R.id.subtraction);
-            this.multiplication = (TextView) findViewById(R.id.multiplication);
-            this.division = (TextView) findViewById(R.id.division);
-            this.openBracket = (TextView) findViewById(R.id.openBracket);
-            this.closedBracket = (TextView) findViewById(R.id.closedBracket);
-            this.inputNumbers = (TextView) findViewById(R.id.inputNumbers);
-            this.timer = (TextView) findViewById(R.id.timer);
-            this.rScore1 = (TextView) findViewById(R.id.redPlayerScore);
-            this.bScore1 = (TextView) findViewById(R.id.bluePlayerScore);
-            this.rName1 = (TextView) findViewById(R.id.redPlayerName);
-            this.bName1 = (TextView) findViewById(R.id.bluePlayerName);
-            this.rScore1.setText(rScore);
-            this.bScore1.setText(bScore);
-            this.rName1.setText(rName);
-            this.bName1.setText(bName);
-            this.openBracketLayout = (LinearLayout) findViewById(R.id.openBracketLayout);
-            this.closedBracketLayout = (LinearLayout) findViewById(R.id.closedBracketLayout);
-            this.number1Layout = (LinearLayout) findViewById(R.id.number1Layout);
-            this.number2Layout = (LinearLayout) findViewById(R.id.number2Layout);
-            this.number3Layout = (LinearLayout) findViewById(R.id.number3Layout);
-            this.number4Layout = (LinearLayout) findViewById(R.id.number4Layout);
-            this.number5Layout = (LinearLayout) findViewById(R.id.number5Layout);
-            this.number6Layout = (LinearLayout) findViewById(R.id.number6Layout);
-            this.additionLayout = (LinearLayout) findViewById(R.id.additionLayout);
-            this.substractionLayout = (LinearLayout) findViewById(R.id.subtractionLayout);
-            this.multiplicationLayout = (LinearLayout) findViewById(R.id.multiplicationLayout);
-            this.divisionLayout = (LinearLayout) findViewById(R.id.divisionLayout);
-            this.confirmButton = (LinearLayout) findViewById(R.id.confirmButtonMainLayout);
-
-        }
-        public void generateNumbers (){
-
-
-            Random random = new Random();
-
-            List<Integer> neededNumbers = new ArrayList<Integer>();
-
-            for (int i = 1; i <= 1000; i++) {
-                neededNumbers.add(i);
-            }
-            if (confirmTxt.getText().toString().equals("CONFIRM")) {
-
-                number1.setClickable(true);
-                number2.setClickable(true);
-                number3.setClickable(true);
-                number4.setClickable(true);
-                number5.setClickable(true);
-                number6.setClickable(true);
-
-                addition.setClickable(false);
-                subtraction.setClickable(false);
-                multiplication.setClickable(false);
-                division.setClickable(false);
-                openBracket.setClickable(true);
-                closedBracket.setClickable(true);
-            }
-
-            confirmTxt.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    if (!Character.isDigit(inputNumbers.getText().charAt(inputNumbers.length() - 1)) || inputNumbers.getText().toString().equals("") || inputNumbers.getText().toString() == null) {
-                        Toast.makeText(NumberGame.this, "Expression not valid!", Toast.LENGTH_SHORT).show();
-                    }
+                public void run() {
+                    confirmTxt.setText(" ");
+                    confirmButton.setClickable(false);
                 }
             });
-
-            if (turn == 1) {
-                mSocket.emit("needed", Integer.valueOf((String) neededNumber.getText()));
-            }
-
         }
+        this.neededNumber = (TextView) findViewById(R.id.neededNumber);
+        this.bluePlayerNumber = (TextView) findViewById(R.id.bluePlayerNumber);
+        this.redPlayerNumber = (TextView) findViewById(R.id.redPlayerNumber);
+        this.clearInput = (RelativeLayout) findViewById(R.id.clearInput);
+        this.confirmTxt = (TextView) findViewById(R.id.confirmTxt);
+        this.number1 = (TextView) findViewById(R.id.number1);
+        this.number2 = (TextView) findViewById(R.id.number2);
+        this.number3 = (TextView) findViewById(R.id.number3);
+        this.number4 = (TextView) findViewById(R.id.number4);
+        this.number5 = (TextView) findViewById(R.id.number5);
+        this.number6 = (TextView) findViewById(R.id.number6);
+        this.addition = (TextView) findViewById(R.id.addition);
+        this.subtraction = (TextView) findViewById(R.id.subtraction);
+        this.multiplication = (TextView) findViewById(R.id.multiplication);
+        this.division = (TextView) findViewById(R.id.division);
+        this.openBracket = (TextView) findViewById(R.id.openBracket);
+        this.closedBracket = (TextView) findViewById(R.id.closedBracket);
+        this.inputNumbers = (TextView) findViewById(R.id.inputNumbers);
+        this.timer = (TextView) findViewById(R.id.timer);
+        this.rScore1 = (TextView) findViewById(R.id.redPlayerScore);
+        this.bScore1 = (TextView) findViewById(R.id.bluePlayerScore);
+        this.rName1 = (TextView) findViewById(R.id.redPlayerName);
+        this.bName1 = (TextView) findViewById(R.id.bluePlayerName);
+        this.rScore1.setText(rScore);
+        this.bScore1.setText(bScore);
+        this.rName1.setText(rName);
+        this.bName1.setText(bName);
+        this.openBracketLayout = (LinearLayout) findViewById(R.id.openBracketLayout);
+        this.closedBracketLayout = (LinearLayout) findViewById(R.id.closedBracketLayout);
+        this.number1Layout = (LinearLayout) findViewById(R.id.number1Layout);
+        this.number2Layout = (LinearLayout) findViewById(R.id.number2Layout);
+        this.number3Layout = (LinearLayout) findViewById(R.id.number3Layout);
+        this.number4Layout = (LinearLayout) findViewById(R.id.number4Layout);
+        this.number5Layout = (LinearLayout) findViewById(R.id.number5Layout);
+        this.number6Layout = (LinearLayout) findViewById(R.id.number6Layout);
+        this.additionLayout = (LinearLayout) findViewById(R.id.additionLayout);
+        this.substractionLayout = (LinearLayout) findViewById(R.id.subtractionLayout);
+        this.multiplicationLayout = (LinearLayout) findViewById(R.id.multiplicationLayout);
+        this.divisionLayout = (LinearLayout) findViewById(R.id.divisionLayout);
+        this.confirmButton = (LinearLayout) findViewById(R.id.confirmButtonMainLayout);
+
     }
-    public void calculateExpression(View view){
+
+    public void generateNumbers() {
+
+
+        Random random = new Random();
+
+        List<Integer> neededNumbers = new ArrayList<Integer>();
+
+        for (int i = 1; i <= 1000; i++) {
+            neededNumbers.add(i);
+        }
+        if (confirmTxt.getText().toString().equals("CONFIRM")) {
+
+            number1.setClickable(true);
+            number2.setClickable(true);
+            number3.setClickable(true);
+            number4.setClickable(true);
+            number5.setClickable(true);
+            number6.setClickable(true);
+
+            addition.setClickable(false);
+            subtraction.setClickable(false);
+            multiplication.setClickable(false);
+            division.setClickable(false);
+            openBracket.setClickable(true);
+            closedBracket.setClickable(true);
+        }
+
+        confirmTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!Character.isDigit(inputNumbers.getText().charAt(inputNumbers.length() - 1)) || inputNumbers.getText().toString().equals("") || inputNumbers.getText().toString() == null) {
+                    Toast.makeText(NumberGame.this, "Expression not valid!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        if (turn == 1) {
+            mSocket.emit("needed", Integer.valueOf((String) neededNumber.getText()));
+        }
+
+    }
+
+    public void calculateExpression(View view) {
         String expression = String.valueOf(inputNumbers.getText());
         Double result = new DoubleEvaluator().evaluate(expression);
 
@@ -885,406 +842,348 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
     }
 
     public void givePoints(View view) {
-      if(turn == 3)
-      {
-          if(neededNumber.getText() == redPlayerNumber.getText()){
-              rScore =String.valueOf(Integer.valueOf(rScore) + 20);
-              TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
-              field1.setText(rScore);
+        if (turn == 3) {
+            if (neededNumber.getText() == redPlayerNumber.getText()) {
+                rScore = String.valueOf(Integer.valueOf(rScore) + 20);
+                TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
+                field1.setText(rScore);
 
-          }
-          else{
-              rScore =String.valueOf(Integer.valueOf(rScore) + 5);
-              TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
-              field1.setText(rScore);
-          }
-          Handler handler = new Handler();
-          handler.postDelayed(new Runnable() {
-              @Override
-              public void run() {
-                  timera.cancel();
-                  if(round ==0 && turn != 3)
-                  {
-                      Map<String, Object> userForOrgs = new HashMap<>();
-
-                      db.collection("/matches").document(gameid)
-                              .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                  @Override
-                                  public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                      Map<String, Object> map = new HashMap<>();
-                                      map.put("yourProperty", "yourValue");
-                                      if(documentSnapshot.getString("user1").equals(myid))
-                                      {
-                                          userForOrgs.put("n1",Integer.valueOf(rScore)-trScore );
-                                      }
-                                      if(documentSnapshot.getString("user2").equals(myid))
-                                      {
-                                          userForOrgs.put("n2",Integer.valueOf(rScore)-trScore );
-                                      }
-                                      db.collection("/matches").document(gameid).update(userForOrgs);
-                                  }
-
-                                  //db get string and set it to int
-                              });
-                  }
-                  Intent intent = new Intent(getApplicationContext(), BrainsterHomeUnregistered.class);
-                  finish();
-                  startActivity(intent);
-              }
-          }, 3000);
-
-      }
-      if(turn == 1)
-      {
-            mSocket.emit("myguess",redPlayerNumber.getText());
-
-      }
-        if(turn == 2)
-        {
-            mSocket.emit("myguess",redPlayerNumber.getText());
-
-        }
-
-
-        public void makeExpression (){
-            generateNumbers();
-            inputNumbers.setText("");
-            clearInput.setOnClickListener(new View.OnClickListener() {
+            } else {
+                rScore = String.valueOf(Integer.valueOf(rScore) + 5);
+                TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
+                field1.setText(rScore);
+            }
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
                 @Override
-                public void onClick(View view) {
-                    inputNumbers.setText("");
-                    number1.setClickable(true);
-                    number2.setClickable(true);
-                    number3.setClickable(true);
-                    number4.setClickable(true);
-                    number5.setClickable(true);
-                    number6.setClickable(true);
+                public void run() {
+                    timera.cancel();
+                    if (round == 0 && turn != 3) {
+                        Map<String, Object> userForOrgs = new HashMap<>();
 
-                    addition.setClickable(false);
-                    subtraction.setClickable(false);
-                    multiplication.setClickable(false);
-                    division.setClickable(false);
-                    openBracket.setClickable(true);
-                    closedBracket.setClickable(true);
+                        db.collection("/matches").document(gameid)
+                                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        Map<String, Object> map = new HashMap<>();
+                                        map.put("yourProperty", "yourValue");
+                                        if (documentSnapshot.getString("user1").equals(myid)) {
+                                            userForOrgs.put("n1", Integer.valueOf(rScore) - trScore);
+                                        }
+                                        if (documentSnapshot.getString("user2").equals(myid)) {
+                                            userForOrgs.put("n2", Integer.valueOf(rScore) - trScore);
+                                        }
+                                        db.collection("/matches").document(gameid).update(userForOrgs);
+                                    }
 
-                    number1Layout.setBackgroundResource(R.drawable.numbers_clicked);
-                    number2Layout.setBackgroundResource(R.drawable.numbers_clicked);
-                    number3Layout.setBackgroundResource(R.drawable.numbers_clicked);
-                    number4Layout.setBackgroundResource(R.drawable.numbers_clicked);
-                    number5Layout.setBackgroundResource(R.drawable.numbers_clicked);
-                    number6Layout.setBackgroundResource(R.drawable.numbers_clicked);
-
-                    number1Layout.setClickable(true);
-                    number2Layout.setClickable(true);
-                    number3Layout.setClickable(true);
-                    number4Layout.setClickable(true);
-                    number5Layout.setClickable(true);
-                    number6Layout.setClickable(true);
-                }
-            });
-
-            addition.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    inputNumbers.setText(inputNumbers.getText() + "+");
-                    addition.setClickable(false);
-                    subtraction.setClickable(false);
-                    multiplication.setClickable(false);
-                    division.setClickable(false);
-
-                    number1.setClickable(true);
-                    number2.setClickable(true);
-                    number3.setClickable(true);
-                    number4.setClickable(true);
-                    number5.setClickable(true);
-                    number6.setClickable(true);
-                }
-            });
-
-            subtraction.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    inputNumbers.setText(inputNumbers.getText() + "-");
-                    addition.setClickable(false);
-                    subtraction.setClickable(false);
-                    multiplication.setClickable(false);
-                    division.setClickable(false);
-
-                    number1.setClickable(true);
-                    number2.setClickable(true);
-                    number3.setClickable(true);
-                    number4.setClickable(true);
-                    number5.setClickable(true);
-                    number6.setClickable(true);
-
-                }
-            });
-
-            multiplication.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    inputNumbers.setText(inputNumbers.getText() + "*");
-                    addition.setClickable(false);
-                    subtraction.setClickable(false);
-                    multiplication.setClickable(false);
-                    division.setClickable(false);
-
-                    number1.setClickable(true);
-                    number2.setClickable(true);
-                    number3.setClickable(true);
-                    number4.setClickable(true);
-                    number5.setClickable(true);
-                    number6.setClickable(true);
-                }
-            });
-
-            division.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    inputNumbers.setText(inputNumbers.getText() + "/");
-                    addition.setClickable(false);
-                    subtraction.setClickable(false);
-                    multiplication.setClickable(false);
-                    division.setClickable(false);
-
-                    number1.setClickable(true);
-                    number2.setClickable(true);
-                    number3.setClickable(true);
-                    number4.setClickable(true);
-                    number5.setClickable(true);
-                    number6.setClickable(true);
-                }
-            });
-
-            openBracket.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    inputNumbers.setText(inputNumbers.getText() + "(");
-                    addition.setClickable(true);
-                    subtraction.setClickable(true);
-                    multiplication.setClickable(true);
-                    division.setClickable(true);
-
-                    number1.setClickable(true);
-                    number2.setClickable(true);
-                    number3.setClickable(true);
-                    number4.setClickable(true);
-                    number5.setClickable(true);
-                    number6.setClickable(true);
-                }
-            });
-
-            closedBracket.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    inputNumbers.setText(inputNumbers.getText() + ")");
-                    addition.setClickable(true);
-                    subtraction.setClickable(true);
-                    multiplication.setClickable(true);
-                    division.setClickable(true);
-
-                    number1.setClickable(true);
-                    number2.setClickable(true);
-                    number3.setClickable(true);
-                    number4.setClickable(true);
-                    number5.setClickable(true);
-                    number6.setClickable(true);
-                }
-            });
-
-
-            number1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    inputNumbers.setText(inputNumbers.getText() + String.valueOf(number1.getText()));
-                    number1.setClickable(false);
-                    number2.setClickable(false);
-                    number3.setClickable(false);
-                    number4.setClickable(false);
-                    number5.setClickable(false);
-                    number6.setClickable(false);
-
-                    addition.setClickable(true);
-                    subtraction.setClickable(true);
-                    multiplication.setClickable(true);
-                    division.setClickable(true);
-
-                    number1Layout.setBackgroundColor(Color.GRAY);
-                    number1Layout.setClickable(false);
-                }
-            });
-
-            number2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    inputNumbers.setText(inputNumbers.getText() + String.valueOf(number2.getText()));
-                    number1.setClickable(false);
-                    number2.setClickable(false);
-                    number3.setClickable(false);
-                    number4.setClickable(false);
-                    number5.setClickable(false);
-                    number6.setClickable(false);
-
-                    addition.setClickable(true);
-                    subtraction.setClickable(true);
-                    multiplication.setClickable(true);
-                    division.setClickable(true);
-
-                    number2Layout.setBackgroundColor(Color.GRAY);
-                    number2Layout.setClickable(false);
-                }
-            });
-
-            number3.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    inputNumbers.setText(inputNumbers.getText() + String.valueOf(number3.getText()));
-                    number1.setClickable(false);
-                    number2.setClickable(false);
-                    number3.setClickable(false);
-                    number4.setClickable(false);
-                    number5.setClickable(false);
-                    number6.setClickable(false);
-
-                    addition.setClickable(true);
-                    subtraction.setClickable(true);
-                    multiplication.setClickable(true);
-                    division.setClickable(true);
-
-                    number3Layout.setBackgroundColor(Color.GRAY);
-                    number3Layout.setClickable(false);
-                }
-            });
-
-            number4.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    inputNumbers.setText(inputNumbers.getText() + String.valueOf(number4.getText()));
-                    number1.setClickable(false);
-                    number2.setClickable(false);
-                    number3.setClickable(false);
-                    number4.setClickable(false);
-                    number5.setClickable(false);
-                    number6.setClickable(false);
-
-                    addition.setClickable(true);
-                    subtraction.setClickable(true);
-                    multiplication.setClickable(true);
-                    division.setClickable(true);
-
-                    number4Layout.setBackgroundColor(Color.GRAY);
-                    number4Layout.setClickable(false);
-                }
-            });
-
-            number5.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    inputNumbers.setText(inputNumbers.getText() + String.valueOf(number5.getText()));
-                    number1.setClickable(false);
-                    number2.setClickable(false);
-                    number3.setClickable(false);
-                    number4.setClickable(false);
-                    number5.setClickable(false);
-                    number6.setClickable(false);
-
-                    addition.setClickable(true);
-                    subtraction.setClickable(true);
-                    multiplication.setClickable(true);
-                    division.setClickable(true);
-
-                    number5Layout.setBackgroundColor(Color.GRAY);
-                    number5Layout.setClickable(false);
-                }
-            });
-
-            number6.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    inputNumbers.setText(inputNumbers.getText() + String.valueOf(number6.getText()));
-                    number1.setClickable(false);
-                    number2.setClickable(false);
-                    number3.setClickable(false);
-                    number4.setClickable(false);
-                    number5.setClickable(false);
-                    number6.setClickable(false);
-
-                    addition.setClickable(true);
-                    subtraction.setClickable(true);
-                    multiplication.setClickable(true);
-                    division.setClickable(true);
-
-                    number6Layout.setBackgroundColor(Color.GRAY);
-                    number6Layout.setClickable(false);
-                }
-            });
-
-            if (!confirmTxt.getText().toString().equals("STOP")) {
-                confirmTxt.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        calculateExpression(view);
+                                    //db get string and set it to int
+                                });
                     }
-                });
-            }
-        }
-        public void calculateExpression (View view){
-            String expression = String.valueOf(inputNumbers.getText());
-            Double result = new DoubleEvaluator().evaluate(expression);
-
-            int resultInt = result.intValue();
-
-            redPlayerNumber.setText(String.valueOf(resultInt));
-            confirmButton.setVisibility(View.GONE);
-
-            number1Layout.setVisibility(View.GONE);
-            number2Layout.setVisibility(View.GONE);
-            number3Layout.setVisibility(View.GONE);
-            number4Layout.setVisibility(View.GONE);
-            number5Layout.setVisibility(View.GONE);
-            number6Layout.setVisibility(View.GONE);
-
-            additionLayout.setVisibility(View.GONE);
-            substractionLayout.setVisibility(View.GONE);
-            multiplicationLayout.setVisibility(View.GONE);
-            divisionLayout.setVisibility(View.GONE);
-            openBracketLayout.setVisibility(View.GONE);
-            closedBracketLayout.setVisibility(View.GONE);
-            givePoints(view);
-            timera.cancel();
-        }
-
-        public void givePoints (View view){
-            if (turn == 3) {
-                if (neededNumber.getText() == redPlayerNumber.getText()) {
-                    rScore = String.valueOf(Integer.valueOf(rScore) + 20);
-                    TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
-                    field1.setText(rScore);
-
-                } else {
-                    rScore = String.valueOf(Integer.valueOf(rScore) + 5);
-                    TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
-                    field1.setText(rScore);
+                    Intent intent = new Intent(getApplicationContext(), BrainsterHomeUnregistered.class);
+                    finish();
+                    startActivity(intent);
                 }
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        timera.cancel();
-                        Intent intent = new Intent(getApplicationContext(), BrainsterHomeUnregistered.class);
-                        finish();
-                        startActivity(intent);
-                    }
-                }, 3000);
-
-            }
-            if (turn == 1) {
-                mSocket.emit("myguess", redPlayerNumber.getText());
-
-            }
-            if (turn == 2) {
-                mSocket.emit("myguess", redPlayerNumber.getText());
-            }
+            }, 3000);
 
         }
+        if (turn == 1) {
+            mSocket.emit("myguess", redPlayerNumber.getText());
+
+        }
+        if (turn == 2) {
+            mSocket.emit("myguess", redPlayerNumber.getText());
+
+        }
+
+    }
+
+    public void makeExpression() {
+        generateNumbers();
+        inputNumbers.setText("");
+        clearInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputNumbers.setText("");
+                number1.setClickable(true);
+                number2.setClickable(true);
+                number3.setClickable(true);
+                number4.setClickable(true);
+                number5.setClickable(true);
+                number6.setClickable(true);
+
+                addition.setClickable(false);
+                subtraction.setClickable(false);
+                multiplication.setClickable(false);
+                division.setClickable(false);
+                openBracket.setClickable(true);
+                closedBracket.setClickable(true);
+
+                number1Layout.setBackgroundResource(R.drawable.numbers_clicked);
+                number2Layout.setBackgroundResource(R.drawable.numbers_clicked);
+                number3Layout.setBackgroundResource(R.drawable.numbers_clicked);
+                number4Layout.setBackgroundResource(R.drawable.numbers_clicked);
+                number5Layout.setBackgroundResource(R.drawable.numbers_clicked);
+                number6Layout.setBackgroundResource(R.drawable.numbers_clicked);
+
+                number1Layout.setClickable(true);
+                number2Layout.setClickable(true);
+                number3Layout.setClickable(true);
+                number4Layout.setClickable(true);
+                number5Layout.setClickable(true);
+                number6Layout.setClickable(true);
+            }
+        });
+
+        addition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputNumbers.setText(inputNumbers.getText() + "+");
+                addition.setClickable(false);
+                subtraction.setClickable(false);
+                multiplication.setClickable(false);
+                division.setClickable(false);
+
+                number1.setClickable(true);
+                number2.setClickable(true);
+                number3.setClickable(true);
+                number4.setClickable(true);
+                number5.setClickable(true);
+                number6.setClickable(true);
+            }
+        });
+
+        subtraction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputNumbers.setText(inputNumbers.getText() + "-");
+                addition.setClickable(false);
+                subtraction.setClickable(false);
+                multiplication.setClickable(false);
+                division.setClickable(false);
+
+                number1.setClickable(true);
+                number2.setClickable(true);
+                number3.setClickable(true);
+                number4.setClickable(true);
+                number5.setClickable(true);
+                number6.setClickable(true);
+
+            }
+        });
+
+        multiplication.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputNumbers.setText(inputNumbers.getText() + "*");
+                addition.setClickable(false);
+                subtraction.setClickable(false);
+                multiplication.setClickable(false);
+                division.setClickable(false);
+
+                number1.setClickable(true);
+                number2.setClickable(true);
+                number3.setClickable(true);
+                number4.setClickable(true);
+                number5.setClickable(true);
+                number6.setClickable(true);
+            }
+        });
+
+        division.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputNumbers.setText(inputNumbers.getText() + "/");
+                addition.setClickable(false);
+                subtraction.setClickable(false);
+                multiplication.setClickable(false);
+                division.setClickable(false);
+
+                number1.setClickable(true);
+                number2.setClickable(true);
+                number3.setClickable(true);
+                number4.setClickable(true);
+                number5.setClickable(true);
+                number6.setClickable(true);
+            }
+        });
+
+        openBracket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputNumbers.setText(inputNumbers.getText() + "(");
+                addition.setClickable(true);
+                subtraction.setClickable(true);
+                multiplication.setClickable(true);
+                division.setClickable(true);
+
+                number1.setClickable(true);
+                number2.setClickable(true);
+                number3.setClickable(true);
+                number4.setClickable(true);
+                number5.setClickable(true);
+                number6.setClickable(true);
+            }
+        });
+
+        closedBracket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputNumbers.setText(inputNumbers.getText() + ")");
+                addition.setClickable(true);
+                subtraction.setClickable(true);
+                multiplication.setClickable(true);
+                division.setClickable(true);
+
+                number1.setClickable(true);
+                number2.setClickable(true);
+                number3.setClickable(true);
+                number4.setClickable(true);
+                number5.setClickable(true);
+                number6.setClickable(true);
+            }
+        });
+
+
+        number1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputNumbers.setText(inputNumbers.getText() + String.valueOf(number1.getText()));
+                number1.setClickable(false);
+                number2.setClickable(false);
+                number3.setClickable(false);
+                number4.setClickable(false);
+                number5.setClickable(false);
+                number6.setClickable(false);
+
+                addition.setClickable(true);
+                subtraction.setClickable(true);
+                multiplication.setClickable(true);
+                division.setClickable(true);
+
+                number1Layout.setBackgroundColor(Color.GRAY);
+                number1Layout.setClickable(false);
+            }
+        });
+
+        number2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputNumbers.setText(inputNumbers.getText() + String.valueOf(number2.getText()));
+                number1.setClickable(false);
+                number2.setClickable(false);
+                number3.setClickable(false);
+                number4.setClickable(false);
+                number5.setClickable(false);
+                number6.setClickable(false);
+
+                addition.setClickable(true);
+                subtraction.setClickable(true);
+                multiplication.setClickable(true);
+                division.setClickable(true);
+
+                number2Layout.setBackgroundColor(Color.GRAY);
+                number2Layout.setClickable(false);
+            }
+        });
+
+        number3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputNumbers.setText(inputNumbers.getText() + String.valueOf(number3.getText()));
+                number1.setClickable(false);
+                number2.setClickable(false);
+                number3.setClickable(false);
+                number4.setClickable(false);
+                number5.setClickable(false);
+                number6.setClickable(false);
+
+                addition.setClickable(true);
+                subtraction.setClickable(true);
+                multiplication.setClickable(true);
+                division.setClickable(true);
+
+                number3Layout.setBackgroundColor(Color.GRAY);
+                number3Layout.setClickable(false);
+            }
+        });
+
+        number4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputNumbers.setText(inputNumbers.getText() + String.valueOf(number4.getText()));
+                number1.setClickable(false);
+                number2.setClickable(false);
+                number3.setClickable(false);
+                number4.setClickable(false);
+                number5.setClickable(false);
+                number6.setClickable(false);
+
+                addition.setClickable(true);
+                subtraction.setClickable(true);
+                multiplication.setClickable(true);
+                division.setClickable(true);
+
+                number4Layout.setBackgroundColor(Color.GRAY);
+                number4Layout.setClickable(false);
+            }
+        });
+
+        number5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputNumbers.setText(inputNumbers.getText() + String.valueOf(number5.getText()));
+                number1.setClickable(false);
+                number2.setClickable(false);
+                number3.setClickable(false);
+                number4.setClickable(false);
+                number5.setClickable(false);
+                number6.setClickable(false);
+
+                addition.setClickable(true);
+                subtraction.setClickable(true);
+                multiplication.setClickable(true);
+                division.setClickable(true);
+
+                number5Layout.setBackgroundColor(Color.GRAY);
+                number5Layout.setClickable(false);
+            }
+        });
+
+        number6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputNumbers.setText(inputNumbers.getText() + String.valueOf(number6.getText()));
+                number1.setClickable(false);
+                number2.setClickable(false);
+                number3.setClickable(false);
+                number4.setClickable(false);
+                number5.setClickable(false);
+                number6.setClickable(false);
+
+                addition.setClickable(true);
+                subtraction.setClickable(true);
+                multiplication.setClickable(true);
+                division.setClickable(true);
+
+                number6Layout.setBackgroundColor(Color.GRAY);
+                number6Layout.setClickable(false);
+            }
+        });
+
+
+        confirmTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                calculateExpression(view);
+            }
+        });
+
+    }
+
+
+
+
+
+
+
     }
