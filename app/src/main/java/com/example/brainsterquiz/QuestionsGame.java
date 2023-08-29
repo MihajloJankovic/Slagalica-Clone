@@ -258,6 +258,7 @@ public class QuestionsGame extends AppCompatActivity {
                             });
                 }
                 timer.setText("done!");
+                timera.cancel();
               if(round == 0 &&turn == 3)
                 {
 
@@ -355,6 +356,7 @@ public class QuestionsGame extends AppCompatActivity {
                     });
         }
         timer.setText("done!");
+        timera.cancel();
         if(round == 0 &&turn == 3)
         {
 
@@ -439,7 +441,7 @@ public class QuestionsGame extends AppCompatActivity {
                 case 2:   questionnum=3;     break;
                 case 3:    questionnum=4;    break;
                 case 4:   questionnum=5;     break;
-                case 5:   nextgame();   break;
+                case 5:   nextgame();timera.cancel();   break;
             }
 
         db.collection("/games").document("questiongame")

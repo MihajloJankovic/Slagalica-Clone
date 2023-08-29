@@ -56,7 +56,7 @@ io.on('connection', (socket) => {
 
    })
     socket.on('turna', async () => {
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 900));
         if (socket.id == a) {
             io.to(b).emit("changeturna");
         }
@@ -147,7 +147,7 @@ io.on('connection', (socket) => {
 
         if(socket.id == a)
         {
-         //  console.log("a");
+         ///////////////////////////////////  console.log("a");
             io.to(b).emit("ennemywin");
         }
         if(socket.id == b)
@@ -274,12 +274,26 @@ io.on('connection', (socket) => {
 
         if(socket.id == a)
         {
-        ////////////  console.log("a");
+        ////////////  console.log("a");///////
             io.to(b).emit("pointsc");
         }
         if(socket.id == b)
         {
             io.to(a).emit("pointsc");
+        }
+
+
+    })
+
+    socket.on('nextgameccda', (ab) => {
+
+
+        if (socket.id == a) {
+            /// console.log("a");
+            io.to(b).emit("nextgameccd");
+        }
+        if (socket.id == b) {
+            io.to(a).emit("nextgameccd");
         }
 
 
@@ -336,9 +350,9 @@ io.on('connection', (socket) => {
             io.to(a).emit("nextstepc");
         }
 
-
+///////////////////////////////////
     })
-    socket.on('passcom', async (av, bv, cv, dv) => {
+    socket.on('passcom',  (av, bv, cv, dv) => {
         const person = {a: av, b: bv, c: cv, d: dv};
 
         if (socket.id == a) {

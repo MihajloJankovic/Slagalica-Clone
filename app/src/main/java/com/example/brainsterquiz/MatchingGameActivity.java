@@ -257,7 +257,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
 
 
                     });
-                    mSocket.on("nextgamecc",(a) -> {
+                    mSocket.on("nextgameccd",(a) -> {
 
                       Pobeda();
 
@@ -318,22 +318,22 @@ public class  MatchingGameActivity extends AppCompatActivity {
                                     {
                                         userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
                                     }
-                                    documentSnapshot.getReference().set(userForOrgs);
+                                    documentSnapshot.getReference().update(userForOrgs);
                                 }
 
                                 //db get string and set it to int
                             });
                 }
                 timer.setText("done!");
-                timera.cancel();
+
                 if(round == 1  && turn != 3)
                 {
+                    timera.cancel();
                     Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
                     intent.putExtra("rName", rName);
                     intent.putExtra("bName", bName);
                     intent.putExtra("rScore", rScore);
                     intent.putExtra("bScore",bScore);
-                    intent.putExtra("tscore",String.valueOf(trScore));
                     intent.putExtra("gameid",String.valueOf(gameid));
                     if(turn == 3)
                     {
@@ -367,7 +367,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
 
                 }if(round == 0  && turn == 3)
                 {
-
+                    timera.cancel();
                     Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
                     intent.putExtra("rName", rName);
                     intent.putExtra("bName", bName);
@@ -389,6 +389,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
                 }
                 if(round == 0 && turn !=3)
                 {
+                    timera.cancel();
                     Intent intent = new Intent(getApplicationContext(), MatchingGameActivity.class);
                     intent.putExtra("rName", rName);
                     intent.putExtra("bName", bName);
@@ -488,7 +489,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
                             {
                                 userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
                             }
-                            documentSnapshot.getReference().set(userForOrgs);
+                            documentSnapshot.getReference().update(userForOrgs);
                         }
 
                         //db get string and set it to int
@@ -498,12 +499,12 @@ public class  MatchingGameActivity extends AppCompatActivity {
         timera.cancel();
         if(round == 1  && turn != 3)
         {
+            timera.cancel();
             Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
             intent.putExtra("rName", rName);
             intent.putExtra("bName", bName);
             intent.putExtra("rScore", rScore);
             intent.putExtra("bScore",bScore);
-            intent.putExtra("tscore",String.valueOf(trScore));
             intent.putExtra("gameid",String.valueOf(gameid));
             if(turn == 3)
             {
@@ -539,7 +540,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
 
         }if(round == 0  && turn == 3)
         {
-
+            timera.cancel();
             Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
             intent.putExtra("rName", rName);
             intent.putExtra("bName", bName);
@@ -670,7 +671,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
                                         {
                                             if(matchcounter < 5 && switcha == 1)
                                             {
-                                                mSocket.emit("nextgamec");
+                                                mSocket.emit("nextgameccda");
                                                 Pobeda();
                                             }
                                         }
@@ -705,7 +706,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
                                         {
                                             if(matchcounter < 5 && switcha == 1)
                                             {
-                                                mSocket.emit("nextgamec");
+                                                mSocket.emit("nextgameccda");
                                                 Pobeda();
                                             }
                                         }

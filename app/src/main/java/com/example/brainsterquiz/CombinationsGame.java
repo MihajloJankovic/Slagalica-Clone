@@ -80,7 +80,7 @@ public class CombinationsGame extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_combinations_game);
         getSupportActionBar().hide();
-
+        db = FirebaseFirestore.getInstance();
 //edrfR
         this.turn = 3;
         this.rName = "Guest";
@@ -112,6 +112,7 @@ public class CombinationsGame extends AppCompatActivity {
 
                     Konekcija  app = (Konekcija )CombinationsGame.this.getApplication();
                     this.mSocket = app.getSocket();
+                    this.user =app.getUser();
                     this.myid= user.getId();
                     this.gameid = extras.getString("gameid");
                     this.trScore = Integer.parseInt(rScore);
@@ -324,7 +325,7 @@ public class CombinationsGame extends AppCompatActivity {
                                                         {
                                                             userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
                                                         }
-                                                        documentSnapshot.getReference().set(userForOrgs);
+                                                        documentSnapshot.getReference().update(userForOrgs);
                                                     }
 
                                                     //db get string and set it to int
@@ -575,7 +576,7 @@ public class CombinationsGame extends AppCompatActivity {
                                     {
                                         userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
                                     }
-                                    documentSnapshot.getReference().set(userForOrgs);
+                                    documentSnapshot.getReference().update(userForOrgs);
                                 }
 
                                 //db get string and set it to int
@@ -906,7 +907,7 @@ public class CombinationsGame extends AppCompatActivity {
                                 {
                                     userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
                                 }
-                                documentSnapshot.getReference().set(userForOrgs);
+                                documentSnapshot.getReference().update(userForOrgs);
                             }
 
                             //db get string and set it to int
@@ -1171,7 +1172,7 @@ public class CombinationsGame extends AppCompatActivity {
                                     {
                                         userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
                                     }
-                                    documentSnapshot.getReference().set(userForOrgs);
+                                    documentSnapshot.getReference().update(userForOrgs);
                                 }
 
                                 //db get string and set it to int
@@ -1376,7 +1377,7 @@ public class CombinationsGame extends AppCompatActivity {
                                         {
                                             userForOrgs.put("c2",Integer.valueOf(rScore)-trScore );
                                         }
-                                        documentSnapshot.getReference().set(userForOrgs);
+                                        documentSnapshot.getReference().update(userForOrgs);
                                     }
 
                                     //db get string and set it to int

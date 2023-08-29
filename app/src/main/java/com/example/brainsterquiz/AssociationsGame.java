@@ -219,13 +219,14 @@ public class AssociationsGame extends AppCompatActivity {
                                     {
                                         userForOrgs.put("a2",Integer.valueOf(rScore)-trScore );
                                     }
-                                    documentSnapshot.getReference().set(userForOrgs);
+                                    documentSnapshot.getReference().update(userForOrgs);
                                 }
 
                                 //db get string and set it to int
                             });
                 }
                 timer.setText("done!");
+                timera.cancel();
                 if(round == 1 && ab == 0 && turn != 3)
                 {
                     Intent intent = new Intent(getApplicationContext(), CombinationsGame.class);
@@ -273,6 +274,7 @@ public class AssociationsGame extends AppCompatActivity {
                 }
                 if(round == 0 && ab== 0 && turn !=3)
                 {
+                    timera.cancel();
                     Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
                     intent.putExtra("rName", rName);
                     intent.putExtra("bName", bName);
@@ -888,7 +890,7 @@ public class AssociationsGame extends AppCompatActivity {
                                                   {
                                                       userForOrgs.put("a1",Integer.valueOf(rScore)-trScore );
                                                   }
-                                                  documentSnapshot.getReference().set(userForOrgs);
+                                                  documentSnapshot.getReference().update(userForOrgs);
                                               }
 
                                               //db get string and set it to int
@@ -988,7 +990,7 @@ public class AssociationsGame extends AppCompatActivity {
                                         {
                                             ab=1;
                                             timera.cancel();
-                                            Intent intent = new Intent(getApplicationContext(), NumberGame.class);
+                                            Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
                                             intent.putExtra("rName", rName);
                                             intent.putExtra("bName", bName);
                                             intent.putExtra("rScore", rScore);
@@ -1134,7 +1136,7 @@ public class AssociationsGame extends AppCompatActivity {
                                                             {
                                                                 userForOrgs.put("a1",Integer.valueOf(rScore)-trScore );
                                                             }
-                                                            documentSnapshot.getReference().set(userForOrgs);
+                                                            documentSnapshot.getReference().update(userForOrgs);
                                                         }
 
                                                         //db get string and set it to int
@@ -1238,7 +1240,7 @@ public class AssociationsGame extends AppCompatActivity {
                                                 {
                                                     ab=1;
                                                     timera.cancel();
-                                                    Intent intent = new Intent(getApplicationContext(), NumberGame.class);
+                                                    Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
                                                     intent.putExtra("rName", rName);
                                                     intent.putExtra("bName", bName);
                                                     intent.putExtra("rScore", rScore);

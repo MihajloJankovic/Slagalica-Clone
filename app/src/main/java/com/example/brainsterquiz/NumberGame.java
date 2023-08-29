@@ -130,7 +130,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
         setContentView(R.layout.activity_number_game);
         getSupportActionBar().hide();
 
-
+        db = FirebaseFirestore.getInstance();
         digits = new ArrayList<Integer>();
         doubleDigits = new ArrayList<Integer>();
         lastDigits = new ArrayList<Integer>();
