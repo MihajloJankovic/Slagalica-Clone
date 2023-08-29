@@ -112,11 +112,6 @@ public class QuestionsGame extends AppCompatActivity {
                     {
                         this.trScore = Integer.valueOf(extras.getString("tscore"));
                     }
-                    mSocket.on("changeturn",(a) -> {
-
-                        this.turn = 1;
-
-                    });
                     mSocket.on("enemyrightguessa",(a) -> {
 
                         final Handler handler = new Handler(Looper.getMainLooper());

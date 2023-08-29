@@ -126,7 +126,7 @@ public class CombinationsGame extends AppCompatActivity {
                         switcha = 1;
                         posetion = 1;
                         allSubmited = 0;
-                        runOnUiThread(() -> Toast.makeText(CombinationsGame.this, "Your turn !", Toast.LENGTH_SHORT).show());
+                        runOnUiThread(() -> Toast.makeText(CombinationsGame.this, "Your turn combinations !", Toast.LENGTH_SHORT).show());
                         cardPosition = 25;
 
                     });

@@ -245,6 +245,7 @@ public class BrainsterHome extends AppCompatActivity {
                 intent.putExtra("gameid",gameid );
                 intent.putExtra("turn", 1);
 
+                finish();
                 startActivity(intent);
 
 
