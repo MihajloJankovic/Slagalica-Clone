@@ -284,6 +284,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                 bluePlayerNumber.setText(a[0].toString());
                                 if (!bluePlayerNumber.getText().toString().equals("???") && bluePlayerNumber.getText().toString() != " ") {
                                     if (!redPlayerNumber.getText().toString().equals("???") && redPlayerNumber.getText().toString() != " ") {
+
                                         mSocket.emit("finalNumberGame");
                                     }
                                 }
@@ -293,6 +294,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                     });
 
                     mSocket.on("finalNumberGamea", (a) -> {
+                        timera.cancel();
                         runOnUiThread(new Runnable() {
 
                             @Override
@@ -843,6 +845,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
 
     public void givePoints(View view) {
         if (turn == 3) {
+            timera.cancel();
             if (neededNumber.getText() == redPlayerNumber.getText()) {
                 rScore = String.valueOf(Integer.valueOf(rScore) + 20);
                 TextView field1 = (TextView) findViewById(R.id.redPlayerScore);

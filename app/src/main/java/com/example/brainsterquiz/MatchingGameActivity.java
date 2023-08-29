@@ -262,7 +262,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
 
                     });
                     mSocket.on("nextgameccd",(a) -> {
-
+                        timera.cancel();
                       Pobeda();
 
                     });
@@ -479,6 +479,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
 
 
     public void Pobeda() {
+        timera.cancel();
         if(round ==1 && turn != 3 && ff == 0)
         {
             ff=1;
@@ -674,6 +675,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
                                     {
                                         if(matchcounter ==5 && switcha == 0 && ff==0)
                                         {
+                                            timera.cancel();
                                             mSocket.emit("nextgameccda");
                                             Pobeda();
                                         }
@@ -687,6 +689,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
                                         {
                                             if(matchcounter < 5 && switcha == 1&& ff==0)
                                             {
+                                                timera.cancel();
                                                 mSocket.emit("nextgameccda");
                                                 Pobeda();
                                             }
@@ -714,6 +717,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
                                     {
                                         if(matchcounter ==5 && switcha == 0 && ff==0)
                                         {
+                                            timera.cancel();
                                             mSocket.emit("nextgameccda");
                                             Pobeda();
                                         }
@@ -727,6 +731,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
                                         {
                                             if(matchcounter < 5 && switcha == 1 && ff==0          )
                                             {
+                                                timera.cancel();
                                                 mSocket.emit("nextgameccda");
                                                 Pobeda();
                                             }

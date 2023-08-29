@@ -139,7 +139,7 @@ public class StepByStepGame extends AppCompatActivity {
 
                     });
                     mSocket.on("nextgamecc",(a) -> {
-
+                        timera.cancel();
 
 
                         String finalID = "answer";
@@ -609,6 +609,7 @@ public class StepByStepGame extends AppCompatActivity {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if(guess.equals(documentSnapshot.getString(finalID))) {
+                                timera.cancel();
 
                                 Toast.makeText(getApplicationContext(),"Success Guess",Toast.LENGTH_SHORT).show();
                                 int result = 0;

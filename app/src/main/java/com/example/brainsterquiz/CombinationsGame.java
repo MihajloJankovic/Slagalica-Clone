@@ -251,7 +251,8 @@ public class CombinationsGame extends AppCompatActivity {
 
 
                     });
-                    mSocket.on("nextgamecc",(a) -> {
+                    mSocket.on("nextgamecca",(a) -> {
+                        timera.cancel();
 
                         runOnUiThread(new Runnable() {
 
@@ -309,6 +310,7 @@ public class CombinationsGame extends AppCompatActivity {
 
 
                                     }
+                                    timera.cancel();
                                     if(round ==1 && turn != 3)
                                     {
                                         Map<String, Object> userForOrgs = new HashMap<>();
@@ -336,6 +338,7 @@ public class CombinationsGame extends AppCompatActivity {
                                         @Override
                                         public void run() {
                                             timera.cancel();
+
 
                                             if(round == 1  && turn != 3)
                                             {
@@ -560,6 +563,7 @@ public class CombinationsGame extends AppCompatActivity {
 
                 }
                 timera.cancel();
+
                 if(round ==1 && turn != 3)
                 {
                     Map<String, Object> userForOrgs = new HashMap<>();
@@ -919,6 +923,7 @@ public class CombinationsGame extends AppCompatActivity {
                 public void run() {
                     timera.cancel();
 
+
                     if(round == 1  && turn != 3)
                     {
                         Intent intent = new Intent(getApplicationContext(), StepByStepGame.class);
@@ -1079,6 +1084,7 @@ public class CombinationsGame extends AppCompatActivity {
 
             if(status == 4)
             {
+                timera.cancel();
                 int hh=0;
                 guessedTrue = 1;
 
@@ -1092,7 +1098,7 @@ public class CombinationsGame extends AppCompatActivity {
                 if(turn != 3)
                 {
                     hh= 1;
-                    mSocket.emit("nextgamec");
+                    mSocket.emit("nextgameca");
 
                 }
 
@@ -1154,7 +1160,7 @@ public class CombinationsGame extends AppCompatActivity {
 
                    mSocket.emit("enemyguess",coma.get(0),coma.get(1),coma.get(2),coma.get(3));
                    mSocket.emit("points");
-                   mSocket.emit("nextgamec");
+                   mSocket.emit("nextgameca");
                }
                 if(round ==1 && turn != 3)
                 {
@@ -1183,6 +1189,7 @@ public class CombinationsGame extends AppCompatActivity {
                     @Override
                     public void run() {
                         timera.cancel();
+
 
                         if(round == 1  && turn != 3)
                         {
@@ -1359,8 +1366,9 @@ public class CombinationsGame extends AppCompatActivity {
                 {
                     List<Integer> coma = new ArrayList<>((Collection) guessedCombination.values());
                     mSocket.emit("enemyguess",coma.get(0),coma.get(1),coma.get(2),coma.get(3));
-                    mSocket.emit("nextgamec");
+                    mSocket.emit("nextgameca");
                     timera.cancel();
+
                     if(round ==1 && turn != 3)
                     {
                         Map<String, Object> userForOrgs = new HashMap<>();
@@ -1388,6 +1396,7 @@ public class CombinationsGame extends AppCompatActivity {
                         @Override
                         public void run() {
                             timera.cancel();
+
 
                             if(round == 1  && turn != 3)
                             {
