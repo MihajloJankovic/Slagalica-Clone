@@ -80,7 +80,7 @@ public class CombinationsGame extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_combinations_game);
         getSupportActionBar().hide();
-
+        db = FirebaseFirestore.getInstance();
 //edrfR
         this.turn = 3;
         this.rName = "Guest";
@@ -112,6 +112,7 @@ public class CombinationsGame extends AppCompatActivity {
 
                     Konekcija  app = (Konekcija )CombinationsGame.this.getApplication();
                     this.mSocket = app.getSocket();
+                    this.user =app.getUser();
                     this.myid= user.getId();
                     this.gameid = extras.getString("gameid");
                     this.trScore = Integer.parseInt(rScore);
@@ -125,7 +126,7 @@ public class CombinationsGame extends AppCompatActivity {
                         switcha = 1;
                         posetion = 1;
                         allSubmited = 0;
-                        runOnUiThread(() -> Toast.makeText(CombinationsGame.this, "Your turn !", Toast.LENGTH_SHORT).show());
+                        runOnUiThread(() -> Toast.makeText(CombinationsGame.this, "Your turn combinations !", Toast.LENGTH_SHORT).show());
                         cardPosition = 25;
 
                     });
@@ -250,7 +251,8 @@ public class CombinationsGame extends AppCompatActivity {
 
 
                     });
-                    mSocket.on("nextgamecc",(a) -> {
+                    mSocket.on("nextgamecca",(a) -> {
+                        timera.cancel();
 
                         runOnUiThread(new Runnable() {
 
@@ -308,6 +310,7 @@ public class CombinationsGame extends AppCompatActivity {
 
 
                                     }
+                                    timera.cancel();
                                     if(round ==1 && turn != 3)
                                     {
                                         Map<String, Object> userForOrgs = new HashMap<>();
@@ -324,7 +327,7 @@ public class CombinationsGame extends AppCompatActivity {
                                                         {
                                                             userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
                                                         }
-                                                        documentSnapshot.getReference().set(userForOrgs);
+                                                        documentSnapshot.getReference().update(userForOrgs);
                                                     }
 
                                                     //db get string and set it to int
@@ -335,6 +338,7 @@ public class CombinationsGame extends AppCompatActivity {
                                         @Override
                                         public void run() {
                                             timera.cancel();
+
 
                                             if(round == 1  && turn != 3)
                                             {
@@ -559,6 +563,7 @@ public class CombinationsGame extends AppCompatActivity {
 
                 }
                 timera.cancel();
+
                 if(round ==1 && turn != 3)
                 {
                     Map<String, Object> userForOrgs = new HashMap<>();
@@ -575,7 +580,7 @@ public class CombinationsGame extends AppCompatActivity {
                                     {
                                         userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
                                     }
-                                    documentSnapshot.getReference().set(userForOrgs);
+                                    documentSnapshot.getReference().update(userForOrgs);
                                 }
 
                                 //db get string and set it to int
@@ -906,7 +911,7 @@ public class CombinationsGame extends AppCompatActivity {
                                 {
                                     userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
                                 }
-                                documentSnapshot.getReference().set(userForOrgs);
+                                documentSnapshot.getReference().update(userForOrgs);
                             }
 
                             //db get string and set it to int
@@ -917,6 +922,7 @@ public class CombinationsGame extends AppCompatActivity {
                 @Override
                 public void run() {
                     timera.cancel();
+
 
                     if(round == 1  && turn != 3)
                     {
@@ -1078,6 +1084,7 @@ public class CombinationsGame extends AppCompatActivity {
 
             if(status == 4)
             {
+                timera.cancel();
                 int hh=0;
                 guessedTrue = 1;
 
@@ -1091,7 +1098,7 @@ public class CombinationsGame extends AppCompatActivity {
                 if(turn != 3)
                 {
                     hh= 1;
-                    mSocket.emit("nextgamec");
+                    mSocket.emit("nextgameca");
 
                 }
 
@@ -1153,7 +1160,7 @@ public class CombinationsGame extends AppCompatActivity {
 
                    mSocket.emit("enemyguess",coma.get(0),coma.get(1),coma.get(2),coma.get(3));
                    mSocket.emit("points");
-                   mSocket.emit("nextgamec");
+                   mSocket.emit("nextgameca");
                }
                 if(round ==1 && turn != 3)
                 {
@@ -1171,7 +1178,7 @@ public class CombinationsGame extends AppCompatActivity {
                                     {
                                         userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
                                     }
-                                    documentSnapshot.getReference().set(userForOrgs);
+                                    documentSnapshot.getReference().update(userForOrgs);
                                 }
 
                                 //db get string and set it to int
@@ -1182,6 +1189,7 @@ public class CombinationsGame extends AppCompatActivity {
                     @Override
                     public void run() {
                         timera.cancel();
+
 
                         if(round == 1  && turn != 3)
                         {
@@ -1358,8 +1366,9 @@ public class CombinationsGame extends AppCompatActivity {
                 {
                     List<Integer> coma = new ArrayList<>((Collection) guessedCombination.values());
                     mSocket.emit("enemyguess",coma.get(0),coma.get(1),coma.get(2),coma.get(3));
-                    mSocket.emit("nextgamec");
+                    mSocket.emit("nextgameca");
                     timera.cancel();
+
                     if(round ==1 && turn != 3)
                     {
                         Map<String, Object> userForOrgs = new HashMap<>();
@@ -1376,7 +1385,7 @@ public class CombinationsGame extends AppCompatActivity {
                                         {
                                             userForOrgs.put("c2",Integer.valueOf(rScore)-trScore );
                                         }
-                                        documentSnapshot.getReference().set(userForOrgs);
+                                        documentSnapshot.getReference().update(userForOrgs);
                                     }
 
                                     //db get string and set it to int
@@ -1387,6 +1396,7 @@ public class CombinationsGame extends AppCompatActivity {
                         @Override
                         public void run() {
                             timera.cancel();
+
 
                             if(round == 1  && turn != 3)
                             {

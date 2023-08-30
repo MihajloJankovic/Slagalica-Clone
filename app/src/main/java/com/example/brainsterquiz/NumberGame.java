@@ -136,7 +136,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
         setContentView(R.layout.activity_number_game);
         getSupportActionBar().hide();
 
-
+        db = FirebaseFirestore.getInstance();
         digits = new ArrayList<Integer>();
         doubleDigits = new ArrayList<Integer>();
         lastDigits = new ArrayList<Integer>();
@@ -234,7 +234,12 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                             @Override
                             public void run() {
                                 neededNumber.setText(String.valueOf(a[0]));
-                                Random random = new Random();
+
+                                //Za izmenuti da postavi random brojeve  osim u nedded number
+                                // AKo je turn 2 iskljuciti senzor da trigeruje odabir brojeva nego da ovde trigerujes
+                                // odabir brojeva ali posle trigera i postavljanja brojeva overajtuj random broj sa ovim
+                                // neededNumber.setText(String.valueOf(a[0]));
+                           /*     Random random = new Random();
 
                                 List<Integer> neededNumbers = new ArrayList<Integer>();
 
@@ -281,7 +286,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                     division.setClickable(false);
                                     openBracket.setClickable(true);
                                     closedBracket.setClickable(true);
-                                }
+                                }*/
                             }
                         });
 
@@ -294,6 +299,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                 bluePlayerNumber.setText(a[0].toString());
                                 if (!bluePlayerNumber.getText().toString().equals("???") && bluePlayerNumber.getText().toString() != " ") {
                                     if (!redPlayerNumber.getText().toString().equals("???") && redPlayerNumber.getText().toString() != " ") {
+
                                         mSocket.emit("finalNumberGame");
                                     }
                                 }
@@ -303,6 +309,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                     });
 
                     mSocket.on("finalNumberGamea", (a) -> {
+                        timera.cancel();
                         runOnUiThread(new Runnable() {
 
                             @Override
@@ -336,6 +343,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                         }
                                     }
                                     turn = 1;
+
                                     Handler handler = new Handler();
                                     handler.postDelayed(new Runnable() {
                                         @Override
@@ -352,9 +360,18 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                                                 map.put("yourProperty", "yourValue");
                                                                 if (documentSnapshot.getString("user1").equals(myid)) {
                                                                     userForOrgs.put("n1", Integer.valueOf(rScore) - trScore);
+                                                                    if(Integer.valueOf(rScore) >= Integer.valueOf(bScore))
+                                                                    {
+                                                                        userForOrgs.put("winner", myid);
+                                                                    }
+
                                                                 }
                                                                 if (documentSnapshot.getString("user2").equals(myid)) {
                                                                     userForOrgs.put("n2", Integer.valueOf(rScore) - trScore);
+                                                                    if(Integer.valueOf(rScore) >= Integer.valueOf(bScore))
+                                                                    {
+                                                                        userForOrgs.put("winner", myid);
+                                                                    }
                                                                 }
                                                                 db.collection("/matches").document(gameid).update(userForOrgs);
                                                             }
@@ -402,7 +419,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                             }
 
                                         }
-                                    }, 6000);
+                                    }, 2000);
                                 }
                                 if (turn == 1) {
                                     if (redPlayerNumber.getText().equals(neededNumber.getText())) {
@@ -435,7 +452,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                     handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            timera.cancel();
+
                                             if (round == 0 && turn != 3) {
                                                 Map<String, Object> userForOrgs = new HashMap<>();
 
@@ -497,7 +514,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                             }
 
                                         }
-                                    }, 6000);
+                                    }, 2000);
                                 }
                             }
                         });
@@ -854,6 +871,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
 
     public void givePoints(View view) {
         if (turn == 3) {
+            timera.cancel();
             if (neededNumber.getText() == redPlayerNumber.getText()) {
                 rScore = String.valueOf(Integer.valueOf(rScore) + 20);
                 TextView field1 = (TextView) findViewById(R.id.redPlayerScore);

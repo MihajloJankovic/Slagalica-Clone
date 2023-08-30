@@ -139,7 +139,7 @@ public class StepByStepGame extends AppCompatActivity {
 
                     });
                     mSocket.on("nextgamecc",(a) -> {
-
+                        timera.cancel();
 
 
                         String finalID = "answer";
@@ -225,7 +225,6 @@ public class StepByStepGame extends AppCompatActivity {
                                                 intent.putExtra("bName", bName);
                                                 intent.putExtra("rScore", rScore);
                                                 intent.putExtra("bScore",bScore);
-                                                intent.putExtra("tscore",String.valueOf(trScore));
                                                 intent.putExtra("gameid",String.valueOf(gameid));
                                                 if(turn == 3)
                                                 {
@@ -286,6 +285,7 @@ public class StepByStepGame extends AppCompatActivity {
                                                 intent.putExtra("rName", rName);
                                                 intent.putExtra("bName", bName);
                                                 intent.putExtra("gameid",String.valueOf(gameid));
+                                                intent.putExtra("tscore",String.valueOf(trScore));
                                                 intent.putExtra("rScore", rScore);
                                                 intent.putExtra("bScore",bScore);
                                                 if(turn == 3)
@@ -440,6 +440,7 @@ public class StepByStepGame extends AppCompatActivity {
                     intent.putExtra("bName", bName);
                     intent.putExtra("rScore", rScore);
                     intent.putExtra("gameid",String.valueOf(gameid));
+                    intent.putExtra("tscore",String.valueOf(trScore));
                     intent.putExtra("bScore", bScore);
                     if (turn == 3) {
                         intent.putExtra("solo", 1);
@@ -608,6 +609,7 @@ public class StepByStepGame extends AppCompatActivity {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if(guess.equals(documentSnapshot.getString(finalID))) {
+                                timera.cancel();
 
                                 Toast.makeText(getApplicationContext(),"Success Guess",Toast.LENGTH_SHORT).show();
                                 int result = 0;
@@ -735,6 +737,8 @@ public class StepByStepGame extends AppCompatActivity {
                                             intent.putExtra("bName", bName);
                                             intent.putExtra("rScore", rScore);
                                             intent.putExtra("bScore",bScore);
+                                            intent.putExtra("gameid",String.valueOf(gameid));
+                                            intent.putExtra("tscore",String.valueOf(trScore));
                                             if(turn == 3)
                                             {
                                                 intent.putExtra("solo", 1);
@@ -753,7 +757,6 @@ public class StepByStepGame extends AppCompatActivity {
                                             Intent intent = new Intent(getApplicationContext(), NumberGame.class);
                                             intent.putExtra("rName", rName);
                                             intent.putExtra("bName", bName);
-                                            intent.putExtra("gameid",String.valueOf(gameid));
                                             intent.putExtra("rScore", rScore);
                                             intent.putExtra("bScore",bScore);
                                             if(turn == 3)

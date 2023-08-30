@@ -156,7 +156,9 @@ public class AssociationsGame extends AppCompatActivity {
                });
                mSocket.on("ennemywin",(a) -> {
 
+                   timera.cancel();
                    Pobeda();
+
                });
 
            }
@@ -219,13 +221,14 @@ public class AssociationsGame extends AppCompatActivity {
                                     {
                                         userForOrgs.put("a2",Integer.valueOf(rScore)-trScore );
                                     }
-                                    documentSnapshot.getReference().set(userForOrgs);
+                                    documentSnapshot.getReference().update(userForOrgs);
                                 }
 
                                 //db get string and set it to int
                             });
                 }
                 timer.setText("done!");
+                timera.cancel();
                 if(round == 1 && ab == 0 && turn != 3)
                 {
                     Intent intent = new Intent(getApplicationContext(), CombinationsGame.class);
@@ -273,6 +276,7 @@ public class AssociationsGame extends AppCompatActivity {
                 }
                 if(round == 0 && ab== 0 && turn !=3)
                 {
+
                     Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
                     intent.putExtra("rName", rName);
                     intent.putExtra("bName", bName);
@@ -831,6 +835,7 @@ public class AssociationsGame extends AppCompatActivity {
         }
     }
     public void Pobeda() {
+        timera.cancel();
         if(turn != 3) {
 
 
@@ -886,9 +891,9 @@ public class AssociationsGame extends AppCompatActivity {
                                                   }
                                                   if(documentSnapshot.getString("user2").equals(myid))
                                                   {
-                                                      userForOrgs.put("a1",Integer.valueOf(rScore)-trScore );
+                                                      userForOrgs.put("a2",Integer.valueOf(rScore)-trScore );
                                                   }
-                                                  documentSnapshot.getReference().set(userForOrgs);
+                                                  documentSnapshot.getReference().update(userForOrgs);
                                               }
 
                                               //db get string and set it to int
@@ -955,6 +960,7 @@ public class AssociationsGame extends AppCompatActivity {
 
                                 TextView field4312 = (TextView) findViewById(R.id.finalTxt);
                                 field4312.setText(documentSnapshot.getString("Konacno"));
+                                timera.cancel();
 
                                 Handler handler = new Handler();
                                 handler.postDelayed(new Runnable() {
@@ -963,7 +969,7 @@ public class AssociationsGame extends AppCompatActivity {
                                         if(round == 1 && turn !=3)
                                         {
                                             ab=1;
-                                            timera.cancel();
+
                                             Intent intent = new Intent(getApplicationContext(), CombinationsGame.class);
                                             intent.putExtra("rName", rName);
                                             intent.putExtra("bName", bName);
@@ -987,8 +993,8 @@ public class AssociationsGame extends AppCompatActivity {
                                         if(round == 0 && turn !=3)
                                         {
                                             ab=1;
-                                            timera.cancel();
-                                            Intent intent = new Intent(getApplicationContext(), NumberGame.class);
+
+                                            Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
                                             intent.putExtra("rName", rName);
                                             intent.putExtra("bName", bName);
                                             intent.putExtra("rScore", rScore);
@@ -1010,7 +1016,7 @@ public class AssociationsGame extends AppCompatActivity {
                                         if(round == 0 && turn ==3)
                                         {
                                             ab=1;
-                                            timera.cancel();
+
                                             Intent intent = new Intent(getApplicationContext(), CombinationsGame.class);
                                             intent.putExtra("rName", rName);
                                             intent.putExtra("bName", bName);
@@ -1083,6 +1089,7 @@ public class AssociationsGame extends AppCompatActivity {
 
                                     if(valuea.equals(documentSnapshot.getString(finalIdd)))
                                     {
+                                        timera.cancel();
                                         if(turn != 3 )
                                         {
                                             mSocket.emit("turn");
@@ -1115,7 +1122,7 @@ public class AssociationsGame extends AppCompatActivity {
                                         }else{
                                             rs=  rs-Dopen;
                                         }
-                                        // write into  db                                        rScore =String.valueOf(Integer.valueOf(rScore) + rs);
+                                      rScore =String.valueOf(Integer.valueOf(rScore) + rs);
                                         TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
                                         field1.setText(rScore);
                                         if(round ==1 && turn != 3)
@@ -1132,9 +1139,9 @@ public class AssociationsGame extends AppCompatActivity {
                                                             }
                                                             if(documentSnapshot.getString("user2").equals(myid))
                                                             {
-                                                                userForOrgs.put("a1",Integer.valueOf(rScore)-trScore );
+                                                                userForOrgs.put("a2",Integer.valueOf(rScore)-trScore );
                                                             }
-                                                            documentSnapshot.getReference().set(userForOrgs);
+                                                            documentSnapshot.getReference().update(userForOrgs);
                                                         }
 
                                                         //db get string and set it to int
@@ -1204,6 +1211,7 @@ public class AssociationsGame extends AppCompatActivity {
 
                                         if(turn != 3)
                                         {
+
                                             mSocket.emit("Pobeda");
 
                                         }
@@ -1214,7 +1222,7 @@ public class AssociationsGame extends AppCompatActivity {
                                                 if(round == 1 && turn !=3)
                                                 {
                                                     ab=1;
-                                                    timera.cancel();
+
                                                     Intent intent = new Intent(getApplicationContext(), CombinationsGame.class);
                                                     intent.putExtra("rName", rName);
                                                     intent.putExtra("bName", bName);
@@ -1237,8 +1245,8 @@ public class AssociationsGame extends AppCompatActivity {
                                                 if(round == 0 && turn !=3)
                                                 {
                                                     ab=1;
-                                                    timera.cancel();
-                                                    Intent intent = new Intent(getApplicationContext(), NumberGame.class);
+
+                                                    Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
                                                     intent.putExtra("rName", rName);
                                                     intent.putExtra("bName", bName);
                                                     intent.putExtra("rScore", rScore);
@@ -1261,7 +1269,7 @@ public class AssociationsGame extends AppCompatActivity {
                                                 if(round == 0 && turn ==3)
                                                 {
                                                     ab=1;
-                                                    timera.cancel();
+
                                                     Intent intent = new Intent(getApplicationContext(), CombinationsGame.class);
                                                     intent.putExtra("rName", rName);
                                                     intent.putExtra("bName", bName);

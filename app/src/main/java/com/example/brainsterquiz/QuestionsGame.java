@@ -112,11 +112,6 @@ public class QuestionsGame extends AppCompatActivity {
                     {
                         this.trScore = Integer.valueOf(extras.getString("tscore"));
                     }
-                    mSocket.on("changeturn",(a) -> {
-
-                        this.turn = 1;
-
-                    });
                     mSocket.on("enemyrightguessa",(a) -> {
 
                         final Handler handler = new Handler(Looper.getMainLooper());
@@ -214,13 +209,13 @@ public class QuestionsGame extends AppCompatActivity {
                 });
 
 
-        timera= new CountDownTimer(120000, 1000) {
+        timera= new CountDownTimer(25000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 timer.setText("" + millisUntilFinished / 1000);
                 if(counter == 5)
                 {
-                    counter =0;
+
                     nextquestion();
                 }
                 else
@@ -232,7 +227,7 @@ public class QuestionsGame extends AppCompatActivity {
             }
 
             public void onFinish() {
-                timera.cancel();
+
                 if(round ==0 && turn != 3)
                 {
                     Map<String, Object> userForOrgs = new HashMap<>();
@@ -241,8 +236,6 @@ public class QuestionsGame extends AppCompatActivity {
                             .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    Map<String, Object> map = new HashMap<>();
-                                    map.put("yourProperty", "yourValue");
                                     if(documentSnapshot.getString("user1").equals(myid))
                                     {
                                         userForOrgs.put("q1",Integer.valueOf(rScore)-trScore );
@@ -257,8 +250,10 @@ public class QuestionsGame extends AppCompatActivity {
                                 //db get string and set it to int
                             });
                 }
-                timer.setText("done!");
-              if(round == 0 &&turn == 3)
+
+
+
+                if(round == 0 &&turn == 3)
                 {
 
                     Intent intent = new Intent(getApplicationContext(), MatchingGameActivity.class);
@@ -282,6 +277,9 @@ public class QuestionsGame extends AppCompatActivity {
                 }
                 if(round == 0 && turn !=3)
                 {
+
+
+
                     db.collection("/matches").document(gameid)
                             .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
@@ -316,6 +314,7 @@ public class QuestionsGame extends AppCompatActivity {
 
 
 
+
                 }
 
             }
@@ -331,6 +330,7 @@ public class QuestionsGame extends AppCompatActivity {
 
     public void nextgame(){
         timera.cancel();
+
 
         if(round ==0 && turn != 3)
         {
@@ -354,7 +354,9 @@ public class QuestionsGame extends AppCompatActivity {
                         //db get string and set it to int
                     });
         }
-        timer.setText("done!");
+
+
+
         if(round == 0 &&turn == 3)
         {
 
@@ -381,11 +383,12 @@ public class QuestionsGame extends AppCompatActivity {
         {
 
 
+
             db.collection("/matches").document(gameid)
                     .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            Intent intent = new Intent(getApplicationContext(), MatchingGameActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), NumberGame.class);
                             intent.putExtra("rName", rName);
                             intent.putExtra("bName", bName);
                             intent.putExtra("rScore", rScore);
@@ -420,6 +423,7 @@ public class QuestionsGame extends AppCompatActivity {
     }
     public void nextquestion()
     {
+
         opened = 0;
         eg = 0;
         counter =0;
@@ -439,7 +443,7 @@ public class QuestionsGame extends AppCompatActivity {
                 case 2:   questionnum=3;     break;
                 case 3:    questionnum=4;    break;
                 case 4:   questionnum=5;     break;
-                case 5:   nextgame();   break;
+                case 5:   nextgame();  break;
             }
 
         db.collection("/games").document("questiongame")
