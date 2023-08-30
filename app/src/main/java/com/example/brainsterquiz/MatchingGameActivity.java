@@ -538,7 +538,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
         }if(round == 0  && turn == 3)
         {
 
-            Intent intent = new Intent(getApplicationContext(), CombinationsGame.class);
+            Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
             intent.putExtra("rName", rName);
             intent.putExtra("bName", bName);
             intent.putExtra("rScore", rScore);

@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +44,9 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
 
     private TextView[] textViews;
     private ValueAnimator[] animators;
+    private ValueAnimator animator10;
+    private ValueAnimator animator15;
+    private ValueAnimator animator20;
     private SensorManager sensorManager;
     private float[] accelerations;
     private float[] currentAccelerations;
@@ -99,6 +104,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
     private TextView rScore1;
     private TextView bScore1;
     private List<Integer> digits;
+    private int currentIndexList = 0;
     private List<Integer> doubleDigits;
     private List<Integer> lastDigits;
 
@@ -180,6 +186,10 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
         numbers.add(number4);
         numbers.add(number5);
         numbers.add(number6);
+
+        animator10 = ValueAnimator.ofInt(10);
+        animator15 = ValueAnimator.ofInt(15);
+        animator20 = ValueAnimator.ofInt(20);
 
         sensorInit();
         this.turn = 3;
@@ -621,23 +631,24 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
             }
             if (i == 4) {
                 textViews[i].setText("00");
-                int[] numbersArray = new int[doubleDigits.size()];
-                for (int j = 0; j < doubleDigits.size(); j++) {
-                    numbersArray[j] = doubleDigits.get(j);
-                }
-                animators[i] = ValueAnimator.ofInt(100, 150, 200);
+
+                int[] valuesToRotate = {10, 15, 20};
+
+                animators[i] = ValueAnimator.ofInt(0, valuesToRotate.length - 1);
                 animators[i].setDuration(100);
-                animators[i].setInterpolator(null);
+
                 animators[i].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        int value = (int) valueAnimator.getAnimatedValue() / 10;
+                        int value = (int) valueAnimator.getAnimatedValue();
                         textViews[index].setText(String.valueOf(value));
                     }
                 });
                 animators[i].setRepeatMode(ValueAnimator.RESTART);
                 animators[i].setRepeatCount(ValueAnimator.INFINITE);
                 animators[i].start();
+
+
             }
             if (i == 5) {
                 textViews[i].setText("000");
