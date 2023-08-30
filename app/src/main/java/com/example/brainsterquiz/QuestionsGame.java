@@ -388,7 +388,7 @@ public class QuestionsGame extends AppCompatActivity {
                     .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
+                            Intent intent = new Intent(getApplicationContext(), NumberGame.class);
                             intent.putExtra("rName", rName);
                             intent.putExtra("bName", bName);
                             intent.putExtra("rScore", rScore);

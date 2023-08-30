@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/android.iml" filepath="$PROJECT_DIR$/.idea/android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BrainsterQuiz.iml" filepath="$PROJECT_DIR$/.idea/modules/BrainsterQuiz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BrainsterQuiz.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BrainsterQuiz.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BrainsterQuiz.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BrainsterQuiz.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BrainsterQuiz.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BrainsterQuiz.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BrainsterQuiz.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BrainsterQuiz.app.unitTest.iml" />
     </modules>
   </component>
 </project>
