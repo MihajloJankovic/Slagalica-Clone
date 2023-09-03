@@ -14,6 +14,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
@@ -29,6 +30,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,16 +43,7 @@ import io.socket.client.Socket;
 public class NumberGame extends AppCompatActivity implements SensorEventListener {
     private Timer singleDigitTimer;
     TextView neededNumber;
-
-    private TextView[] textViews;
-    private ValueAnimator[] animators;
-    private ValueAnimator animator10;
-    private ValueAnimator animator15;
-    private ValueAnimator animator20;
     private SensorManager sensorManager;
-    private float[] accelerations;
-    private float[] currentAccelerations;
-    private float[] lastAccelerations;
     private TextView bluePlayerNumber;
     List<TextView> allButtons;
     TextView redPlayerNumber;
@@ -79,7 +72,6 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
     LinearLayout substractionLayout;
     LinearLayout multiplicationLayout;
     LinearLayout divisionLayout;
-    private ValueAnimator animator;
     private TextView timer;
     private int turn;
     private int round;
@@ -115,6 +107,16 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
     private int allSubmited = 0;
     private int guessedTrue = 0;
     private Socket mSocket;
+    
+    private Sensor accelerometerSensor;
+    private static final int SHAKE_THRESHOLD = 45;
+    private ValueAnimator[] oneDigit = new ValueAnimator[4];
+    private ValueAnimator doubleDigitsAnim = new ValueAnimator();
+    private ValueAnimator lastDigitsAnim = new ValueAnimator();
+    private ValueAnimator neededNumberAnim = new ValueAnimator();
+
+    private int targetNumber;
+    private ArrayList<Integer> offeredNumbers = new ArrayList<>();
 
     Map<Integer, Integer> combination = new HashMap<Integer, Integer>();
     Map<Integer, Integer> guessedCombination = new HashMap<Integer, Integer>();
@@ -122,6 +124,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
     CountDownTimer timera;
 
     FirebaseFirestore db;
+    private ValueAnimator animatorDoubleDigit;
 
     int MaxNumber(int a, int b, int c) {
         if (Math.abs(c - a) < Math.abs(c - b))
@@ -187,11 +190,12 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
         numbers.add(number5);
         numbers.add(number6);
 
-        animator10 = ValueAnimator.ofInt(10);
-        animator15 = ValueAnimator.ofInt(15);
-        animator20 = ValueAnimator.ofInt(20);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        sensorInit();
+        numberAnimations();
+
+
         this.turn = 3;
         this.rName = "Guest";
         this.bName = "";
@@ -610,141 +614,137 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
 
     }
 
-    public void sensorInit() {
+
+    public void numberAnimations() {
         setupUI();
-        textViews = new TextView[7];
-        animators = new ValueAnimator[7];
-        accelerations = new float[7];
-        currentAccelerations = new float[7];
-        lastAccelerations = new float[7];
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        oneDigit = new ValueAnimator[4];
+        doubleDigitsAnim = new ValueAnimator();
+        lastDigitsAnim = new ValueAnimator();
+        neededNumberAnim = new ValueAnimator();
 
-        textViews[0] = findViewById(R.id.number1);
-        textViews[1] = findViewById(R.id.number2);
-        textViews[2] = findViewById(R.id.number3);
-        textViews[3] = findViewById(R.id.number4);
-        textViews[4] = findViewById(R.id.number5);
-        textViews[5] = findViewById(R.id.number6);
-        textViews[6] = findViewById(R.id.neededNumber);
-
-        for (int i = 0; i < textViews.length; i++) {
+        for (int i = 0; i < 4; i++) {
             final int index = i;
-            if (i < 4) {
-                int duration = 80;
-                textViews[i].setText("0");
-                animators[i] = ValueAnimator.ofInt(1, 9);
-                animators[i].setDuration(duration);
-                duration += 4;
-                animators[i].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        int value = (int) valueAnimator.getAnimatedValue();
-                        textViews[index].setText(String.valueOf(value));
-                    }
-                });
-                animators[i].setRepeatMode(ValueAnimator.RESTART);
-                animators[i].setRepeatCount(ValueAnimator.INFINITE);
-                animators[i].start();
-            }
-            if (i == 4) {
-                textViews[i].setText("00");
-
-                int[] valuesToRotate = {10, 15, 20};
-
-                animators[i] = ValueAnimator.ofInt(0, valuesToRotate.length - 1);
-                animators[i].setDuration(100);
-
-                animators[i].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        int value = (int) valueAnimator.getAnimatedValue();
-                        textViews[index].setText(String.valueOf(value));
-                    }
-                });
-                animators[i].setRepeatMode(ValueAnimator.RESTART);
-                animators[i].setRepeatCount(ValueAnimator.INFINITE);
-                animators[i].start();
-
-
-            }
-            if (i == 5) {
-                textViews[i].setText("000");
-                int[] numbersArray2 = new int[lastDigits.size()];
-                for (int j = 0; j < lastDigits.size(); j++) {
-                    numbersArray2[j] = lastDigits.get(j);
+            TextView[] textViews = new TextView[4];
+            textViews[0] = number1;
+            textViews[1] = number2;
+            textViews[2] = number3;
+            textViews[3] = number4;
+            int duration = 80 + i * 3;
+            oneDigit[i] = ValueAnimator.ofInt(1, 9);
+            oneDigit[i].setDuration(duration);
+            int finalI = i;
+            oneDigit[i].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int value = (int) valueAnimator.getAnimatedValue();
+                    textViews[finalI].setText(String.valueOf(value));
                 }
-                animators[i] = ValueAnimator.ofInt(250, 500, 750, 1000);
-                animators[i].setDuration(100);
-                animators[i].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        int value = (int) valueAnimator.getAnimatedValue() / 10;
-                        textViews[index].setText(String.valueOf(value));
-                    }
-                });
-                animators[i].setInterpolator(null);
-                animators[i].setRepeatMode(ValueAnimator.RESTART);
-                animators[i].setRepeatCount(ValueAnimator.INFINITE);
-                animators[i].start();
-            }
-            if (i == 6) {
-                textViews[i].setText("???");
-                animators[i] = ValueAnimator.ofInt(1, 1000);
-                animators[i].setDuration(100);
-                animators[i].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        int value = (int) valueAnimator.getAnimatedValue();
-                        textViews[index].setText(String.valueOf(value));
-                    }
-                });
-                animators[i].setRepeatMode(ValueAnimator.RESTART);
-                animators[i].setRepeatCount(ValueAnimator.INFINITE);
-                animators[i].start();
-            }
+            });
+            oneDigit[i].setRepeatMode(ValueAnimator.REVERSE);
+            oneDigit[i].setRepeatCount(ValueAnimator.INFINITE);
+            oneDigit[i].start();
         }
+        doubleDigitsAnim = ValueAnimator.ofInt(10, 15, 20);
+        doubleDigitsAnim.setInterpolator(null);
+        doubleDigitsAnim.setDuration(80);
 
+        doubleDigitsAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int value = (int) valueAnimator.getAnimatedValue();
+                int randomIndex = new Random().nextInt(3);
+                int[] values = {10, 15, 20};
+                number5.setText(String.valueOf(values[randomIndex]));
+            }
+        });
+        doubleDigitsAnim.setRepeatMode(ValueAnimator.REVERSE);
+        doubleDigitsAnim.setRepeatCount(ValueAnimator.INFINITE);
+        doubleDigitsAnim.start();
+
+        lastDigitsAnim = ValueAnimator.ofInt(25, 50, 75, 100);
+        lastDigitsAnim.setInterpolator(null);
+        lastDigitsAnim.setDuration(80);
+
+        lastDigitsAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int value = (int) valueAnimator.getAnimatedValue();
+                int randomIndex = new Random().nextInt(4);
+                int[] values = {25, 50, 75, 100};
+                number6.setText(String.valueOf(values[randomIndex]));
+            }
+        });
+        lastDigitsAnim.setRepeatMode(ValueAnimator.REVERSE);
+        lastDigitsAnim.setRepeatCount(ValueAnimator.INFINITE);
+        lastDigitsAnim.start();
+
+        neededNumberAnim = ValueAnimator.ofInt(1, 1000);
+        neededNumberAnim.setInterpolator(null);
+        neededNumberAnim.setDuration(80);
+
+        neededNumberAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int value = (int) valueAnimator.getAnimatedValue();
+                neededNumber.setText(String.valueOf(value));
+            }
+        });
+        neededNumberAnim.setRepeatMode(ValueAnimator.REVERSE);
+        neededNumberAnim.setRepeatCount(ValueAnimator.INFINITE);
+        neededNumberAnim.start();
     }
 
-    public void onResume() {
-        super.onResume();
-        for (int i = 0; i < textViews.length; i++) {
-            sensorManager.registerListener(this,
-                    sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                    SensorManager.SENSOR_DELAY_NORMAL);
+    private void stopValueAnimations() {
+        for (ValueAnimator animator : oneDigit) {
+            if (animator != null && animator.isRunning()) {
+                animator.cancel();
+            }
         }
-    }
+        if(doubleDigitsAnim != null && doubleDigitsAnim.isRunning()){
+            doubleDigitsAnim.cancel();
+        }
+        if(lastDigitsAnim != null && lastDigitsAnim.isRunning()){
+            lastDigitsAnim.cancel();
+        }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        sensorManager.unregisterListener(this);
+        if(neededNumberAnim != null && neededNumberAnim.isRunning()){
+            neededNumberAnim.cancel();
+        }
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // Detekcija potresa za svako polje
-        for (int i = 0; i < textViews.length; i++) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             float x = event.values[0];
             float y = event.values[1];
             float z = event.values[2];
 
-            lastAccelerations[i] = currentAccelerations[i];
-            currentAccelerations[i] = (float) Math.sqrt((double) (x * x + y * y + z * z));
-            float delta = currentAccelerations[i] - lastAccelerations[i];
-            accelerations[i] = accelerations[i] * 0.9f + delta;
+            float acceleration = (float) Math.sqrt(x * x + y * y + z * z);
 
-            if (accelerations[i] > 10) { // Prag potresa za zaustavljanje animacije
-                animators[i].cancel();
-                confirmTxt.setText("CONFIRM");
-                confirmTxt.setClickable(true);
+            if (acceleration > SHAKE_THRESHOLD) {
+                stopValueAnimations();
+
                 makeExpression();
+                Toast.makeText(this, "Device shaken!", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
     }
 
     public void setupUI() {
@@ -928,6 +928,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
 
     public void makeExpression() {
         generateNumbers();
+        confirmTxt.setText("CONFIRM");
         inputNumbers.setText("");
         clearInput.setOnClickListener(new View.OnClickListener() {
             @Override

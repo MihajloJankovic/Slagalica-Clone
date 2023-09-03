@@ -59,6 +59,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
     int trScore=0;
     String myid;
     String gameid;
+    int ff =0;
     private int opened;
     private Socket mSocket;
     CountDownTimer timera;
@@ -127,10 +128,20 @@ public class  MatchingGameActivity extends AppCompatActivity {
                     {
                         this.trScore = Integer.valueOf(extras.getString("tscore"));
                     }
-                    mSocket.on("changeturn",(a) -> {
-                        switcha = 1;
-                        runOnUiThread(() -> Toast.makeText(MatchingGameActivity.this, "Your turn !", Toast.LENGTH_SHORT).show());
-                        this.turn = 1;
+                    mSocket.on("changeturnaa",(a) -> {
+                        if(ff ==0) {
+
+                            switcha = 1;
+                            runOnUiThread(() -> Toast.makeText(MatchingGameActivity.this, "Your turn matching !", Toast.LENGTH_SHORT).show());
+                            this.turn = 1;
+                        }
+
+                    });
+                    mSocket.on("pointscac",(a) -> {
+
+                        bScore= String.valueOf(Integer.valueOf(bScore)+Integer.valueOf(a[0].toString()));
+                        TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
+                        field1.setText(bScore);
 
                     });
                         mSocket.on("matchsenda",(a) -> {
@@ -230,32 +241,28 @@ public class  MatchingGameActivity extends AppCompatActivity {
                             case "l5": aa=R.id.matchingPair5Left;  break;
                         }
                         switch (tempg                                                                                                                                                                                                                                                                                                                                                                                                                                    ) {
-                            case "a1": bb=R.id.matchingPair1Left;  break;
-                            case "a2": bb=R.id.matchingPair2Left; break;
-                            case "a3": bb=R.id.matchingPair3Left;break;
-                            case "a4": bb=R.id.matchingPair4Left;  break;
-                            case "a5": bb=R.id.matchingPair5Left;  break;
+                            case "a1": bb=R.id.matchingPair1Right;  break;
+                            case "a2": bb=R.id.matchingPair2Right; break;
+                            case "a3": bb=R.id.matchingPair3Right;break;
+                            case "a4": bb=R.id.matchingPair4Right;  break;
+                            case "a5": bb=R.id.matchingPair5Right;  break;
                         }
                         int finalAa = aa;
                         LinearLayout ta = MatchingGameActivity.this.findViewById(aa);
                         LinearLayout tb = MatchingGameActivity.this.findViewById(bb);
-                        ta.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
-                        tb.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
 
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                ta.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-                                tb.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-                            }
-                        }, 300);
+
+
+                        ta.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+                        tb.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+                        ta.setClickable(true);
+                        ta.setClickable(true);
 
 
 
                     });
-                    mSocket.on("nextgamecc",(a) -> {
-
+                    mSocket.on("nextgameccd",(a) -> {
+                        timera.cancel();
                       Pobeda();
 
                     });
@@ -299,7 +306,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
             }
 
             public void onFinish() {
-                if(round ==1 && turn != 3)
+                if(round ==1 && turn != 3 && ff ==0)
                 {
                     Map<String, Object> userForOrgs = new HashMap<>();
 
@@ -315,22 +322,22 @@ public class  MatchingGameActivity extends AppCompatActivity {
                                     {
                                         userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
                                     }
-                                    documentSnapshot.getReference().set(userForOrgs);
+                                    documentSnapshot.getReference().update(userForOrgs);
                                 }
 
                                 //db get string and set it to int
                             });
                 }
                 timer.setText("done!");
-                timera.cancel();
+
                 if(round == 1  && turn != 3)
                 {
+                    timera.cancel();
                     Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
                     intent.putExtra("rName", rName);
                     intent.putExtra("bName", bName);
                     intent.putExtra("rScore", rScore);
                     intent.putExtra("bScore",bScore);
-                    intent.putExtra("tscore",String.valueOf(trScore));
                     intent.putExtra("gameid",String.valueOf(gameid));
                     if(turn == 3)
                     {
@@ -338,7 +345,6 @@ public class  MatchingGameActivity extends AppCompatActivity {
                     }else{
                         intent.putExtra("solo", 0);
                     }
-                    intent.putExtra("round", 0);
                     intent.putExtra("round", 0);
                     if(turn == 1){
                         if(switcha == 0)
@@ -359,13 +365,14 @@ public class  MatchingGameActivity extends AppCompatActivity {
                             intent.putExtra("turn", 2);
                         }
                     }
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(intent);
 
 
                 }if(round == 0  && turn == 3)
                 {
-
+                    timera.cancel();
                     Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
                     intent.putExtra("rName", rName);
                     intent.putExtra("bName", bName);
@@ -387,7 +394,8 @@ public class  MatchingGameActivity extends AppCompatActivity {
                 }
                 if(round == 0 && turn !=3)
                 {
-                    Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
+                    timera.cancel();
+                    Intent intent = new Intent(getApplicationContext(), MatchingGameActivity.class);
                     intent.putExtra("rName", rName);
                     intent.putExtra("bName", bName);
                     intent.putExtra("rScore", rScore);
@@ -420,8 +428,10 @@ public class  MatchingGameActivity extends AppCompatActivity {
                         }
                     }
                     intent.putExtra("round", 1);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(intent);
+
 
 
 
@@ -469,9 +479,10 @@ public class  MatchingGameActivity extends AppCompatActivity {
 
 
     public void Pobeda() {
-        if(round ==1 && turn != 3)
+        timera.cancel();
+        if(round ==1 && turn != 3 && ff == 0)
         {
-
+            ff=1;
             Map<String, Object> userForOrgs = new HashMap<>();
 
             db.collection("/matches").document(gameid)
@@ -486,22 +497,22 @@ public class  MatchingGameActivity extends AppCompatActivity {
                             {
                                 userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
                             }
-                            documentSnapshot.getReference().set(userForOrgs);
+                            documentSnapshot.getReference().update(userForOrgs);
                         }
 
                         //db get string and set it to int
                     });
         }
         timer.setText("done!");
-        timera.cancel();
+
         if(round == 1  && turn != 3)
         {
+            timera.cancel();
             Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
             intent.putExtra("rName", rName);
             intent.putExtra("bName", bName);
             intent.putExtra("rScore", rScore);
             intent.putExtra("bScore",bScore);
-            intent.putExtra("tscore",String.valueOf(trScore));
             intent.putExtra("gameid",String.valueOf(gameid));
             if(turn == 3)
             {
@@ -509,7 +520,6 @@ public class  MatchingGameActivity extends AppCompatActivity {
             }else{
                 intent.putExtra("solo", 0);
             }
-            intent.putExtra("round", 0);
             intent.putExtra("round", 0);
 
             if(turn == 1){
@@ -531,12 +541,15 @@ public class  MatchingGameActivity extends AppCompatActivity {
                     intent.putExtra("turn", 2);
                 }
             }
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             finish();
             startActivity(intent);
 
 
         }if(round == 0  && turn == 3)
         {
+
+            timera.cancel();
 
             Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
             intent.putExtra("rName", rName);
@@ -559,7 +572,8 @@ public class  MatchingGameActivity extends AppCompatActivity {
         }
         if(round == 0 && turn !=3)
         {
-            Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
+            timera.cancel();
+            Intent intent = new Intent(getApplicationContext(), MatchingGameActivity.class);
             intent.putExtra("rName", rName);
             intent.putExtra("bName", bName);
             intent.putExtra("rScore", rScore);
@@ -592,8 +606,11 @@ public class  MatchingGameActivity extends AppCompatActivity {
                 }
             }
             intent.putExtra("round", 1);
+
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             finish();
             startActivity(intent);
+
 
 
 
@@ -639,6 +656,7 @@ public class  MatchingGameActivity extends AppCompatActivity {
 
                                     if(turn == 1)
                                     {
+                                        mSocket.emit("pointsca",5);
                                         mSocket.emit("matchsend",texttemp1);
                                     }
                                     ++counter;
@@ -657,63 +675,75 @@ public class  MatchingGameActivity extends AppCompatActivity {
                                     }
                                     if(counter == 5 && turn ==1)
                                     {
-                                        if(matchcounter <5 && switcha == 0)
+                                        if(matchcounter ==5 && switcha == 0 && ff==0)
                                         {
-                                            mSocket.emit("turn");
+                                            timera.cancel();
+                                            mSocket.emit("nextgameccda");
+                                            Pobeda();
+                                        }
+                                        if(matchcounter <5 && switcha == 0&& ff==0)
+                                        {
+                                            mSocket.emit("turnaa");
                                             switcha = 1;
                                             turn = 2;
                                         }
-                                        if(matchcounter ==5 && turn ==3)
+                                        else
                                         {
-                                            Pobeda();
+                                            if(matchcounter < 5 && switcha == 1&& ff==0)
+                                            {
+                                                timera.cancel();
+                                                mSocket.emit("nextgameccda");
+                                                Pobeda();
+                                            }
                                         }
-                                        if(matchcounter < 5 && switcha == 1)
-                                        {
-                                            mSocket.emit("nextgamec");
-                                            Pobeda();
-                                        }
+
+
 
 
                                     }
 
 
                                 }
-                                else {
-                                    if(turn ==1)
+                                if(!tbb.getText().toString().equals(documentSnapshot.getString(texttemp1))){
+                                    ++counter;
+                                    if(turn ==1 && ff==0)
                                     {
                                         mSocket.emit("wrongmatchsend",lg,ag);
                                     }
+
                                     if(counter == 5 && turn ==3)
                                     {
                                         Pobeda();
                                     }
                                     if(counter == 5 && turn ==1)
                                     {
-                                        if(matchcounter <5 )
+                                        if(matchcounter ==5 && switcha == 0 && ff==0)
                                         {
-                                            mSocket.emit("turn");
+                                            timera.cancel();
+                                            mSocket.emit("nextgameccda");
+                                            Pobeda();
+                                        }
+                                        if(matchcounter <5 && switcha == 0 && ff==0)
+                                        {
+                                            mSocket.emit("turnaa");
                                             switcha = 1;
                                             turn = 2;
                                         }
-                                        if(counter == 5 && turn ==3)
+                                        else
                                         {
-                                            Pobeda();
-                                        }
-                                        if(counter == 5 && turn ==1)
-                                        {
-                                            if(matchcounter <5 && switcha == 0)
+                                            if(matchcounter < 5 && switcha == 1 && ff==0          )
                                             {
-                                                mSocket.emit("nextgamec");
+                                                timera.cancel();
+                                                mSocket.emit("nextgameccda");
                                                 Pobeda();
                                             }
-
-
                                         }
+
+
 
 
                                     }
-                                    ta.setClickable(false);
-                                    ++counter;
+
                                     tempa = 0;
                                     tempb = 0;
                                     ta.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
