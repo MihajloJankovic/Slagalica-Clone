@@ -133,6 +133,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/click_bell"
+                        android:clickable="true"
+                        android:onClick="notificationsListeners"
                         android:gravity="right">
 
                         <RelativeLayout
@@ -171,6 +173,8 @@
                         android:id="@+id/rang_list"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:onClick="rankingBoxListeners"
                         android:background="@drawable/click_rang_list"
                         android:gravity="right"></RelativeLayout>
 

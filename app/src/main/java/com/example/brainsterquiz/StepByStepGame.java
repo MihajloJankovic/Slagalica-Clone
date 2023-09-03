@@ -65,6 +65,10 @@ public class StepByStepGame extends AppCompatActivity {
     private int allSubmited= 0;
     private Socket mSocket;
     private int guessedTrue = 0;
+    private QueryDocumentSnapshot user;
+    int trScore=0;
+    String myid;
+    String gameid;
     Map<Integer,Integer> combination=new HashMap<Integer,Integer>();
     Map<Integer,Integer> guessedCombination=new HashMap<Integer,Integer>();
     Map<Integer,Integer> temp=new HashMap<Integer,Integer>();
@@ -111,6 +115,14 @@ public class StepByStepGame extends AppCompatActivity {
 
                     Konekcija app = (Konekcija ) StepByStepGame.this.getApplication();
                     this.mSocket = app.getSocket();
+                    this.user =app.getUser();
+                    this.myid= user.getId();
+                    this.gameid = extras.getString("gameid");
+                    this.trScore = Integer.parseInt(rScore);
+                    if(round == 1 )
+                    {
+                        this.trScore = Integer.valueOf(extras.getString("tscore"));
+                    }
                     mSocket.on("changeturn",(a) -> {
                             this.turn = 1;
                             this.stepsRevealed = stepsRevealed +1;
@@ -183,7 +195,29 @@ public class StepByStepGame extends AppCompatActivity {
                                         @Override
                                         public void run() {
                                             timera.cancel();
+                                            if(round ==1 && turn != 3)
+                                            {
+                                                Map<String, Object> userForOrgs = new HashMap<>();
 
+                                                db.collection("/matches").document(gameid)
+                                                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                Map<String, Object> map = new HashMap<>();
+                                                                if(documentSnapshot.getString("user1").equals(myid))
+                                                                {
+                                                                    userForOrgs.put("s1",Integer.valueOf(rScore)-trScore );
+                                                                }
+                                                                if(documentSnapshot.getString("user2").equals(myid))
+                                                                {
+                                                                    userForOrgs.put("s2",Integer.valueOf(rScore)-trScore );
+                                                                }
+                                                                db.collection("/matches").document(gameid).update(userForOrgs);
+                                                            }
+
+                                                            //db get string and set it to int
+                                                        });
+                                            }
                                             if(round == 1  && turn != 3)
                                             {
                                                 Intent intent = new Intent(getApplicationContext(), NumberGame.class);
@@ -191,6 +225,7 @@ public class StepByStepGame extends AppCompatActivity {
                                                 intent.putExtra("bName", bName);
                                                 intent.putExtra("rScore", rScore);
                                                 intent.putExtra("bScore",bScore);
+                                                intent.putExtra("gameid",String.valueOf(gameid));
                                                 if(turn == 3)
                                                 {
                                                     intent.putExtra("turn", 3);
@@ -249,6 +284,8 @@ public class StepByStepGame extends AppCompatActivity {
                                                 Intent intent = new Intent(getApplicationContext(), StepByStepGame.class);
                                                 intent.putExtra("rName", rName);
                                                 intent.putExtra("bName", bName);
+                                                intent.putExtra("gameid",String.valueOf(gameid));
+                                                intent.putExtra("tscore",String.valueOf(trScore));
                                                 intent.putExtra("rScore", rScore);
                                                 intent.putExtra("bScore",bScore);
                                                 if(turn == 3)
@@ -308,10 +345,35 @@ public class StepByStepGame extends AppCompatActivity {
 
             public void onFinish() {
                 timer.setText("done!");
+                if(round ==1 && turn != 3)
+                {
+                    Map<String, Object> userForOrgs = new HashMap<>();
+
+                    db.collection("/matches").document(gameid)
+                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    Map<String, Object> map = new HashMap<>();
+                                    if(documentSnapshot.getString("user1").equals(myid))
+                                    {
+                                        userForOrgs.put("s1",Integer.valueOf(rScore)-trScore );
+                                    }
+                                    if(documentSnapshot.getString("user2").equals(myid))
+                                    {
+                                        userForOrgs.put("s2",Integer.valueOf(rScore)-trScore );
+                                    }
+                                    db.collection("/matches").document(gameid).update(userForOrgs);
+                                }
+
+                                //db get string and set it to int
+                            });
+                }
                 if (round == 1 && turn != 3) {
                     Intent intent = new Intent(getApplicationContext(), NumberGame.class);
                     intent.putExtra("rName", rName);
                     intent.putExtra("bName", bName);
+                    intent.putExtra("tscore",String.valueOf(trScore));
+                    intent.putExtra("gameid",String.valueOf(gameid));
                     intent.putExtra("rScore", rScore);
                     intent.putExtra("bScore", bScore);
                     if (turn == 3) {
@@ -377,6 +439,8 @@ public class StepByStepGame extends AppCompatActivity {
                     intent.putExtra("rName", rName);
                     intent.putExtra("bName", bName);
                     intent.putExtra("rScore", rScore);
+                    intent.putExtra("gameid",String.valueOf(gameid));
+                    intent.putExtra("tscore",String.valueOf(trScore));
                     intent.putExtra("bScore", bScore);
                     if (turn == 3) {
                         intent.putExtra("solo", 1);
@@ -614,7 +678,29 @@ public class StepByStepGame extends AppCompatActivity {
 
                                 EditText answer = (EditText) findViewById(R.id.answerInput);
                                 answer.setText(documentSnapshot.getString("answer"));
+                                if(round ==1 && turn != 3)
+                                {
+                                    Map<String, Object> userForOrgs = new HashMap<>();
 
+                                    db.collection("/matches").document(gameid)
+                                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                    Map<String, Object> map = new HashMap<>();
+                                                    if(documentSnapshot.getString("user1").equals(myid))
+                                                    {
+                                                        userForOrgs.put("s1",Integer.valueOf(rScore)-trScore );
+                                                    }
+                                                    if(documentSnapshot.getString("user2").equals(myid))
+                                                    {
+                                                        userForOrgs.put("s2",Integer.valueOf(rScore)-trScore );
+                                                    }
+                                                    db.collection("/matches").document(gameid).update(userForOrgs);
+                                                }
+
+                                                //db get string and set it to int
+                                            });
+                                }
                                 Handler handler = new Handler();
                                 handler.postDelayed(new Runnable() {
                                     @Override
@@ -628,6 +714,8 @@ public class StepByStepGame extends AppCompatActivity {
                                             intent.putExtra("bName", bName);
                                             intent.putExtra("rScore", rScore);
                                             intent.putExtra("bScore",bScore);
+                                            intent.putExtra("tscore",String.valueOf(trScore));
+                                            intent.putExtra("gameid",String.valueOf(gameid));
                                             if(turn == 3)
                                             {
                                                 intent.putExtra("solo", 1);
@@ -648,6 +736,8 @@ public class StepByStepGame extends AppCompatActivity {
                                             intent.putExtra("bName", bName);
                                             intent.putExtra("rScore", rScore);
                                             intent.putExtra("bScore",bScore);
+                                            intent.putExtra("gameid",String.valueOf(gameid));
+                                            intent.putExtra("tscore",String.valueOf(trScore));
                                             if(turn == 3)
                                             {
                                                 intent.putExtra("solo", 1);
