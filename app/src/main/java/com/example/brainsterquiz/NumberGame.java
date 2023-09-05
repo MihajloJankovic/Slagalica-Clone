@@ -109,7 +109,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
     private Socket mSocket;
     
     private Sensor accelerometerSensor;
-    private static final int SHAKE_THRESHOLD = 45;
+    private  int SHAKE_THRESHOLD = 45;
     private ValueAnimator[] oneDigit = new ValueAnimator[4];
     private ValueAnimator doubleDigitsAnim = new ValueAnimator();
     private ValueAnimator lastDigitsAnim = new ValueAnimator();
@@ -238,7 +238,9 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                             @Override
                             public void run() {
                                 neededNumber.setText(String.valueOf(a[0]));
+                                stopValueAnimations();
 
+                                makeExpression();
                                 //Za izmenuti da postavi random brojeve  osim u nedded number
                                 // AKo je turn 2 iskljuciti senzor da trigeruje odabir brojeva nego da ovde trigerujes
                                 // odabir brojeva ali posle trigera i postavljanja brojeva overajtuj random broj sa ovim
@@ -714,20 +716,41 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
+      if(turn == 1 )
+      {
+          db.collection("/matches").document(gameid)
+                  .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                      @Override
+                      public void onSuccess(DocumentSnapshot documentSnapshot) {
+                          if (documentSnapshot.getString("user1").equals(myid) && round ==0) {
+                             SHAKE_THRESHOLD = 1000000;
+                          }
+                          if (documentSnapshot.getString("user2").equals(myid)&& round ==1) {
+                              SHAKE_THRESHOLD = 1000000;
+                          }
+                      }
 
-            float acceleration = (float) Math.sqrt(x * x + y * y + z * z);
+                      //db get string and set it to int
+                  });
+      }
+      if(turn == 3)
+      {
 
-            if (acceleration > SHAKE_THRESHOLD) {
-                stopValueAnimations();
+          if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+              float x = event.values[0];
+              float y = event.values[1];
+              float z = event.values[2];
 
-                makeExpression();
-                Toast.makeText(this, "Device shaken!", Toast.LENGTH_SHORT).show();
-            }
-        }
+              float acceleration = (float) Math.sqrt(x * x + y * y + z * z);
+
+              if (acceleration > SHAKE_THRESHOLD) {
+                  stopValueAnimations();
+
+                  makeExpression();
+                  Toast.makeText(this, "Device shaken!", Toast.LENGTH_SHORT).show();
+              }
+          }
+      }
     }
 
     @Override
