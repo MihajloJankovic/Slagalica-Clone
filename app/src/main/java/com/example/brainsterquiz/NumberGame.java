@@ -725,8 +725,38 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                           if (documentSnapshot.getString("user1").equals(myid) && round ==0) {
                              SHAKE_THRESHOLD = 1000000;
                           }
+                          else {
+                              if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                                  float x = event.values[0];
+                                  float y = event.values[1];
+                                  float z = event.values[2];
+
+                                  float acceleration = (float) Math.sqrt(x * x + y * y + z * z);
+
+                                  if (acceleration > SHAKE_THRESHOLD) {
+                                      stopValueAnimations();
+
+                                      makeExpression();
+                                  }
+                              }
+                          }
                           if (documentSnapshot.getString("user2").equals(myid)&& round ==1) {
                               SHAKE_THRESHOLD = 1000000;
+                          }
+                          else {
+                              if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                                  float x = event.values[0];
+                                  float y = event.values[1];
+                                  float z = event.values[2];
+
+                                  float acceleration = (float) Math.sqrt(x * x + y * y + z * z);
+
+                                  if (acceleration > SHAKE_THRESHOLD) {
+                                      stopValueAnimations();
+
+                                      makeExpression();
+                                  }
+                              }
                           }
                       }
 
