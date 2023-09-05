@@ -138,7 +138,7 @@ public class StepByStepGame extends AppCompatActivity {
 
 
                     });
-                    mSocket.on("nextgamecc",(a) -> {
+                    mSocket.on("nextgamecca",(a) -> {
                         timera.cancel();
 
 
@@ -653,7 +653,7 @@ public class StepByStepGame extends AppCompatActivity {
                                 {
 
 
-                                    mSocket.emit("nextgamec");
+                                    mSocket.emit("nextgameca");
                                 }
 
                                 TextView sent1 = (TextView) findViewById(R.id.sentence1);

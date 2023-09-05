@@ -14,7 +14,7 @@ public class ChatApplication extends Application {
     private Socket mSocket;
     {
         try {
-            mSocket = IO.socket("http://192.168.0.12:4001/");
+            mSocket = IO.socket("http://192.168.96.4:4001/");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

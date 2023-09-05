@@ -227,95 +227,95 @@ public class QuestionsGame extends AppCompatActivity {
             }
 
             public void onFinish() {
-
-                if(round ==0 && turn != 3)
-                {
-                    Map<String, Object> userForOrgs = new HashMap<>();
-
-                    db.collection("/matches").document(gameid)
-                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    if(documentSnapshot.getString("user1").equals(myid))
-                                    {
-                                        userForOrgs.put("q1",Integer.valueOf(rScore)-trScore );
-                                    }
-                                    if(documentSnapshot.getString("user2").equals(myid))
-                                    {
-                                        userForOrgs.put("q2",Integer.valueOf(rScore)-trScore );
-                                    }
-                                    db.collection("/matches").document(gameid).update(userForOrgs);
-                                }
-
-                                //db get string and set it to int
-                            });
-                }
-
-
-
-                if(round == 0 &&turn == 3)
-                {
-
-                    Intent intent = new Intent(getApplicationContext(), MatchingGameActivity.class);
-                    intent.putExtra("rName", rName);
-                    intent.putExtra("bName", bName);
-                    intent.putExtra("rScore", rScore);
-                    intent.putExtra("bScore",bScore);
-
-                    if(turn == 3)
-                    {
-                        intent.putExtra("solo", 1);
-                    }else{
-                        intent.putExtra("solo", 0);
-                    }
-                    intent.putExtra("round", 0);
-                    intent.putExtra("turn", 3);
-                    finish();
-                    startActivity(intent);
-
-
-                }
-                if(round == 0 && turn !=3)
-                {
-
-
-
-                    db.collection("/matches").document(gameid)
-                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    Intent intent = new Intent(getApplicationContext(), MatchingGameActivity.class);
-                                    intent.putExtra("rName", rName);
-                                    intent.putExtra("bName", bName);
-                                    intent.putExtra("rScore", rScore);
-                                    intent.putExtra("gameid",String.valueOf(gameid));
-                                    intent.putExtra("bScore",bScore);
-                                    if(turn == 3)
-                                    {
-                                        intent.putExtra("solo", 1);
-                                    }else{
-                                        intent.putExtra("solo", 0);
-                                    }
-                                    if(documentSnapshot.getString("user1").equals(myid))
-                                    {
-                                        intent.putExtra("turn", 1);
-                                    }
-                                    if(documentSnapshot.getString("user2").equals(myid))
-                                    {
-                                        intent.putExtra("turn", 2);
-                                    }
-                                    intent.putExtra("round", 0);
-                                    finish();
-                                    startActivity(intent);
-                                }
-
-                                //db get string and set it to int
-                            });
-
-
-
-
-                }
+//
+//                if(round ==0 && turn != 3)
+//                {
+//                    Map<String, Object> userForOrgs = new HashMap<>();
+//
+//                    db.collection("/matches").document(gameid)
+//                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                @Override
+//                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                    if(documentSnapshot.getString("user1").equals(myid))
+//                                    {
+//                                        userForOrgs.put("q1",Integer.valueOf(rScore)-trScore );
+//                                    }
+//                                    if(documentSnapshot.getString("user2").equals(myid))
+//                                    {
+//                                        userForOrgs.put("q2",Integer.valueOf(rScore)-trScore );
+//                                    }
+//                                    db.collection("/matches").document(gameid).update(userForOrgs);
+//                                }
+//
+//                                //db get string and set it to int
+//                            });
+//                }
+//
+//
+//
+//                if(round == 0 &&turn == 3)
+//                {
+//
+//                    Intent intent = new Intent(getApplicationContext(), MatchingGameActivity.class);
+//                    intent.putExtra("rName", rName);
+//                    intent.putExtra("bName", bName);
+//                    intent.putExtra("rScore", rScore);
+//                    intent.putExtra("bScore",bScore);
+//
+//                    if(turn == 3)
+//                    {
+//                        intent.putExtra("solo", 1);
+//                    }else{
+//                        intent.putExtra("solo", 0);
+//                    }
+//                    intent.putExtra("round", 0);
+//                    intent.putExtra("turn", 3);
+//                    finish();
+//                    startActivity(intent);
+//
+//
+//                }
+//                if(round == 0 && turn !=3)
+//                {
+//
+//
+//
+//                    db.collection("/matches").document(gameid)
+//                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                @Override
+//                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                    Intent intent = new Intent(getApplicationContext(), MatchingGameActivity.class);
+//                                    intent.putExtra("rName", rName);
+//                                    intent.putExtra("bName", bName);
+//                                    intent.putExtra("rScore", rScore);
+//                                    intent.putExtra("gameid",String.valueOf(gameid));
+//                                    intent.putExtra("bScore",bScore);
+//                                    if(turn == 3)
+//                                    {
+//                                        intent.putExtra("solo", 1);
+//                                    }else{
+//                                        intent.putExtra("solo", 0);
+//                                    }
+//                                    if(documentSnapshot.getString("user1").equals(myid))
+//                                    {
+//                                        intent.putExtra("turn", 1);
+//                                    }
+//                                    if(documentSnapshot.getString("user2").equals(myid))
+//                                    {
+//                                        intent.putExtra("turn", 2);
+//                                    }
+//                                    intent.putExtra("round", 0);
+//                                    finish();
+//                                    startActivity(intent);
+//                                }
+//
+//                                //db get string and set it to int
+//                            });
+//
+//
+//
+//
+//                }
 
             }
         }.start();
@@ -388,7 +388,7 @@ public class QuestionsGame extends AppCompatActivity {
                     .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            Intent intent = new Intent(getApplicationContext(), NumberGame.class);
+                            Intent intent = new Intent(getApplicationContext(), MatchingGameActivity.class);
                             intent.putExtra("rName", rName);
                             intent.putExtra("bName", bName);
                             intent.putExtra("rScore", rScore);

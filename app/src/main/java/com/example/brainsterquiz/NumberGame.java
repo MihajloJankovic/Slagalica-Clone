@@ -14,7 +14,9 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +29,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,13 +43,7 @@ import io.socket.client.Socket;
 public class NumberGame extends AppCompatActivity implements SensorEventListener {
     private Timer singleDigitTimer;
     TextView neededNumber;
-
-    private TextView[] textViews;
-    private ValueAnimator[] animators;
     private SensorManager sensorManager;
-    private float[] accelerations;
-    private float[] currentAccelerations;
-    private float[] lastAccelerations;
     private TextView bluePlayerNumber;
     List<TextView> allButtons;
     TextView redPlayerNumber;
@@ -74,7 +72,6 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
     LinearLayout substractionLayout;
     LinearLayout multiplicationLayout;
     LinearLayout divisionLayout;
-    private ValueAnimator animator;
     private TextView timer;
     private int turn;
     private int round;
@@ -99,6 +96,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
     private TextView rScore1;
     private TextView bScore1;
     private List<Integer> digits;
+    private int currentIndexList = 0;
     private List<Integer> doubleDigits;
     private List<Integer> lastDigits;
 
@@ -110,12 +108,23 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
     private int guessedTrue = 0;
     private Socket mSocket;
 
+    private Sensor accelerometerSensor;
+    private  int SHAKE_THRESHOLD = 45;
+    private ValueAnimator[] oneDigit = new ValueAnimator[4];
+    private ValueAnimator doubleDigitsAnim = new ValueAnimator();
+    private ValueAnimator lastDigitsAnim = new ValueAnimator();
+    private ValueAnimator neededNumberAnim = new ValueAnimator();
+
+    private int targetNumber;
+    private ArrayList<Integer> offeredNumbers = new ArrayList<>();
+
     Map<Integer, Integer> combination = new HashMap<Integer, Integer>();
     Map<Integer, Integer> guessedCombination = new HashMap<Integer, Integer>();
     Map<Integer, Integer> temp = new HashMap<Integer, Integer>();
     CountDownTimer timera;
 
     FirebaseFirestore db;
+    private ValueAnimator animatorDoubleDigit;
 
     int MaxNumber(int a, int b, int c) {
         if (Math.abs(c - a) < Math.abs(c - b))
@@ -181,7 +190,12 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
         numbers.add(number5);
         numbers.add(number6);
 
-        sensorInit();
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        numberAnimations();
+
+
         this.turn = 3;
         this.rName = "Guest";
         this.bName = "";
@@ -224,7 +238,9 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                             @Override
                             public void run() {
                                 neededNumber.setText(String.valueOf(a[0]));
+                                stopValueAnimations();
 
+                                makeExpression();
                                 //Za izmenuti da postavi random brojeve  osim u nedded number
                                 // AKo je turn 2 iskljuciti senzor da trigeruje odabir brojeva nego da ovde trigerujes
                                 // odabir brojeva ali posle trigera i postavljanja brojeva overajtuj random broj sa ovim
@@ -411,100 +427,102 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
                                         }
                                     }, 2000);
                                 }
-                                if (turn == 1) {
-                                    if (redPlayerNumber.getText().equals(neededNumber.getText())) {
-                                        rScore = String.valueOf(Integer.valueOf(rScore) + 20);
-                                        TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
-                                        field1.setText(rScore);
-                                    } else {
-                                        if (bluePlayerNumber.getText().equals(neededNumber.getText())) {
-                                            bScore = String.valueOf(Integer.valueOf(bScore) + 20);
-                                            TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
-                                            field1.setText(bScore);
-
+                               else{
+                                    if (turn == 1) {
+                                        if (redPlayerNumber.getText().equals(neededNumber.getText())) {
+                                            rScore = String.valueOf(Integer.valueOf(rScore) + 20);
+                                            TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
+                                            field1.setText(rScore);
                                         } else {
-                                            int nedeed = Integer.valueOf((String) neededNumber.getText());
-                                            int closer = MaxNumber(Integer.valueOf((String) redPlayerNumber.getText()), Integer.valueOf((String) bluePlayerNumber.getText()), Integer.valueOf((String) neededNumber.getText()));
-                                            if (closer == Integer.valueOf((String) redPlayerNumber.getText())) {
-                                                rScore = String.valueOf(Integer.valueOf(rScore) + 5);
-                                                TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
-                                                field1.setText(rScore);
-                                            }
-                                            if (closer == Integer.valueOf((String) bluePlayerNumber.getText())) {
-                                                bScore = String.valueOf(Integer.valueOf(bScore) + 5);
+                                            if (bluePlayerNumber.getText().equals(neededNumber.getText())) {
+                                                bScore = String.valueOf(Integer.valueOf(bScore) + 20);
                                                 TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
                                                 field1.setText(bScore);
-                                            }
-                                        }
-                                    }
-                                    turn = 2;
-                                    Handler handler = new Handler();
-                                    handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
 
-                                            if (round == 0 && turn != 3) {
-                                                Map<String, Object> userForOrgs = new HashMap<>();
-
-                                                db.collection("/matches").document(gameid)
-                                                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                            @Override
-                                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                                Map<String, Object> map = new HashMap<>();
-                                                                map.put("yourProperty", "yourValue");
-                                                                if (documentSnapshot.getString("user1").equals(myid)) {
-                                                                    userForOrgs.put("n1", Integer.valueOf(rScore) - trScore);
-                                                                }
-                                                                if (documentSnapshot.getString("user2").equals(myid)) {
-                                                                    userForOrgs.put("n2", Integer.valueOf(rScore) - trScore);
-                                                                }
-                                                                db.collection("/matches").document(gameid).update(userForOrgs);
-                                                            }
-
-                                                            //db get string and set it to int
-                                                        });
-                                            }
-                                            if (round == 1 && turn != 3) {
-                                                Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
-                                                finish();
-                                                startActivity(intent);
-
-
-                                            }
-                                            if (round == 0 && turn == 3) {
-
-                                                Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
-                                                finish();
-                                                startActivity(intent);
-
-
-                                            }
-                                            if (round == 0 && turn != 3) {
-                                                Intent intent = new Intent(getApplicationContext(), NumberGame.class);
-                                                intent.putExtra("rName", rName);
-                                                intent.putExtra("bName", bName);
-                                                intent.putExtra("rScore", rScore);
-                                                intent.putExtra("tscore", String.valueOf(trScore));
-                                                intent.putExtra("gameid", String.valueOf(gameid));
-                                                intent.putExtra("bScore", bScore);
-                                                if (turn == 3) {
-                                                    intent.putExtra("turn", 3);
-                                                    intent.putExtra("solo", 1);
-                                                } else {
-                                                    intent.putExtra("solo", 0);
+                                            } else {
+                                                int nedeed = Integer.valueOf((String) neededNumber.getText());
+                                                int closer = MaxNumber(Integer.valueOf((String) redPlayerNumber.getText()), Integer.valueOf((String) bluePlayerNumber.getText()), Integer.valueOf((String) neededNumber.getText()));
+                                                if (closer == Integer.valueOf((String) redPlayerNumber.getText())) {
+                                                    rScore = String.valueOf(Integer.valueOf(rScore) + 5);
+                                                    TextView field1 = (TextView) findViewById(R.id.redPlayerScore);
+                                                    field1.setText(rScore);
                                                 }
-                                                intent.putExtra("round", 1);
+                                                if (closer == Integer.valueOf((String) bluePlayerNumber.getText())) {
+                                                    bScore = String.valueOf(Integer.valueOf(bScore) + 5);
+                                                    TextView field1 = (TextView) findViewById(R.id.bluePlayerScore);
+                                                    field1.setText(bScore);
+                                                }
+                                            }
+                                        }
+                                        turn = 2;
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
 
-                                                intent.putExtra("turn", turn);
+                                                if (round == 0 && turn != 3) {
+                                                    Map<String, Object> userForOrgs = new HashMap<>();
 
-                                                finish();
-                                                startActivity(intent);
+                                                    db.collection("/matches").document(gameid)
+                                                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                @Override
+                                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                    Map<String, Object> map = new HashMap<>();
+                                                                    map.put("yourProperty", "yourValue");
+                                                                    if (documentSnapshot.getString("user1").equals(myid)) {
+                                                                        userForOrgs.put("n1", Integer.valueOf(rScore) - trScore);
+                                                                    }
+                                                                    if (documentSnapshot.getString("user2").equals(myid)) {
+                                                                        userForOrgs.put("n2", Integer.valueOf(rScore) - trScore);
+                                                                    }
+                                                                    db.collection("/matches").document(gameid).update(userForOrgs);
+                                                                }
 
+                                                                //db get string and set it to int
+                                                            });
+                                                }
+                                                if (round == 1 && turn != 3) {
+                                                    Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
+                                                    finish();
+                                                    startActivity(intent);
+
+
+                                                }
+                                                if (round == 0 && turn == 3) {
+
+                                                    Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
+                                                    finish();
+                                                    startActivity(intent);
+
+
+                                                }
+                                                if (round == 0 && turn != 3) {
+                                                    Intent intent = new Intent(getApplicationContext(), NumberGame.class);
+                                                    intent.putExtra("rName", rName);
+                                                    intent.putExtra("bName", bName);
+                                                    intent.putExtra("rScore", rScore);
+                                                    intent.putExtra("tscore", String.valueOf(trScore));
+                                                    intent.putExtra("gameid", String.valueOf(gameid));
+                                                    intent.putExtra("bScore", bScore);
+                                                    if (turn == 3) {
+                                                        intent.putExtra("turn", 3);
+                                                        intent.putExtra("solo", 1);
+                                                    } else {
+                                                        intent.putExtra("solo", 0);
+                                                    }
+                                                    intent.putExtra("round", 1);
+
+                                                    intent.putExtra("turn", turn);
+
+                                                    finish();
+                                                    startActivity(intent);
+
+
+                                                }
 
                                             }
-
-                                        }
-                                    }, 2000);
+                                        }, 2000);
+                                    }
                                 }
                             }
                         });
@@ -600,140 +618,166 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
 
     }
 
-    public void sensorInit() {
+
+    public void numberAnimations() {
         setupUI();
-        textViews = new TextView[7];
-        animators = new ValueAnimator[7];
-        accelerations = new float[7];
-        currentAccelerations = new float[7];
-        lastAccelerations = new float[7];
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        oneDigit = new ValueAnimator[4];
+        doubleDigitsAnim = new ValueAnimator();
+        lastDigitsAnim = new ValueAnimator();
+        neededNumberAnim = new ValueAnimator();
 
-        textViews[0] = findViewById(R.id.number1);
-        textViews[1] = findViewById(R.id.number2);
-        textViews[2] = findViewById(R.id.number3);
-        textViews[3] = findViewById(R.id.number4);
-        textViews[4] = findViewById(R.id.number5);
-        textViews[5] = findViewById(R.id.number6);
-        textViews[6] = findViewById(R.id.neededNumber);
-
-        for (int i = 0; i < textViews.length; i++) {
+        for (int i = 0; i < 4; i++) {
             final int index = i;
-            if (i < 4) {
-                int duration = 80;
-                textViews[i].setText("0");
-                animators[i] = ValueAnimator.ofInt(1, 9);
-                animators[i].setDuration(duration);
-                duration += 4;
-                animators[i].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        int value = (int) valueAnimator.getAnimatedValue();
-                        textViews[index].setText(String.valueOf(value));
-                    }
-                });
-                animators[i].setRepeatMode(ValueAnimator.RESTART);
-                animators[i].setRepeatCount(ValueAnimator.INFINITE);
-                animators[i].start();
-            }
-            if (i == 4) {
-                textViews[i].setText("00");
-                int[] numbersArray = new int[doubleDigits.size()];
-                for (int j = 0; j < doubleDigits.size(); j++) {
-                    numbersArray[j] = doubleDigits.get(j);
+            TextView[] textViews = new TextView[4];
+            textViews[0] = number1;
+            textViews[1] = number2;
+            textViews[2] = number3;
+            textViews[3] = number4;
+            int duration = 80 + i * 3;
+            oneDigit[i] = ValueAnimator.ofInt(1, 9);
+            oneDigit[i].setDuration(duration);
+            int finalI = i;
+            oneDigit[i].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int value = (int) valueAnimator.getAnimatedValue();
+                    textViews[finalI].setText(String.valueOf(value));
                 }
-                animators[i] = ValueAnimator.ofInt(100, 150, 200);
-                animators[i].setDuration(100);
-                animators[i].setInterpolator(null);
-                animators[i].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        int value = (int) valueAnimator.getAnimatedValue() / 10;
-                        textViews[index].setText(String.valueOf(value));
-                    }
-                });
-                animators[i].setRepeatMode(ValueAnimator.RESTART);
-                animators[i].setRepeatCount(ValueAnimator.INFINITE);
-                animators[i].start();
-            }
-            if (i == 5) {
-                textViews[i].setText("000");
-                int[] numbersArray2 = new int[lastDigits.size()];
-                for (int j = 0; j < lastDigits.size(); j++) {
-                    numbersArray2[j] = lastDigits.get(j);
-                }
-                animators[i] = ValueAnimator.ofInt(250, 500, 750, 1000);
-                animators[i].setDuration(100);
-                animators[i].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        int value = (int) valueAnimator.getAnimatedValue() / 10;
-                        textViews[index].setText(String.valueOf(value));
-                    }
-                });
-                animators[i].setInterpolator(null);
-                animators[i].setRepeatMode(ValueAnimator.RESTART);
-                animators[i].setRepeatCount(ValueAnimator.INFINITE);
-                animators[i].start();
-            }
-            if (i == 6) {
-                textViews[i].setText("???");
-                animators[i] = ValueAnimator.ofInt(1, 1000);
-                animators[i].setDuration(100);
-                animators[i].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        int value = (int) valueAnimator.getAnimatedValue();
-                        textViews[index].setText(String.valueOf(value));
-                    }
-                });
-                animators[i].setRepeatMode(ValueAnimator.RESTART);
-                animators[i].setRepeatCount(ValueAnimator.INFINITE);
-                animators[i].start();
-            }
+            });
+            oneDigit[i].setRepeatMode(ValueAnimator.REVERSE);
+            oneDigit[i].setRepeatCount(ValueAnimator.INFINITE);
+            oneDigit[i].start();
         }
+        doubleDigitsAnim = ValueAnimator.ofInt(10, 15, 20);
+        doubleDigitsAnim.setInterpolator(null);
+        doubleDigitsAnim.setDuration(80);
 
+        doubleDigitsAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int value = (int) valueAnimator.getAnimatedValue();
+                int randomIndex = new Random().nextInt(3);
+                int[] values = {10, 15, 20};
+                number5.setText(String.valueOf(values[randomIndex]));
+            }
+        });
+        doubleDigitsAnim.setRepeatMode(ValueAnimator.REVERSE);
+        doubleDigitsAnim.setRepeatCount(ValueAnimator.INFINITE);
+        doubleDigitsAnim.start();
+
+        lastDigitsAnim = ValueAnimator.ofInt(25, 50, 75, 100);
+        lastDigitsAnim.setInterpolator(null);
+        lastDigitsAnim.setDuration(80);
+
+        lastDigitsAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int value = (int) valueAnimator.getAnimatedValue();
+                int randomIndex = new Random().nextInt(4);
+                int[] values = {25, 50, 75, 100};
+                number6.setText(String.valueOf(values[randomIndex]));
+            }
+        });
+        lastDigitsAnim.setRepeatMode(ValueAnimator.REVERSE);
+        lastDigitsAnim.setRepeatCount(ValueAnimator.INFINITE);
+        lastDigitsAnim.start();
+
+        neededNumberAnim = ValueAnimator.ofInt(1, 1000);
+        neededNumberAnim.setInterpolator(null);
+        neededNumberAnim.setDuration(80);
+
+        neededNumberAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int value = (int) valueAnimator.getAnimatedValue();
+                neededNumber.setText(String.valueOf(value));
+            }
+        });
+        neededNumberAnim.setRepeatMode(ValueAnimator.REVERSE);
+        neededNumberAnim.setRepeatCount(ValueAnimator.INFINITE);
+        neededNumberAnim.start();
     }
 
-    public void onResume() {
-        super.onResume();
-        for (int i = 0; i < textViews.length; i++) {
-            sensorManager.registerListener(this,
-                    sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                    SensorManager.SENSOR_DELAY_NORMAL);
+    private void stopValueAnimations() {
+        for (ValueAnimator animator : oneDigit) {
+            if (animator != null && animator.isRunning()) {
+                animator.cancel();
+            }
         }
-    }
+        if(doubleDigitsAnim != null && doubleDigitsAnim.isRunning()){
+            doubleDigitsAnim.cancel();
+        }
+        if(lastDigitsAnim != null && lastDigitsAnim.isRunning()){
+            lastDigitsAnim.cancel();
+        }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        sensorManager.unregisterListener(this);
+        if(neededNumberAnim != null && neededNumberAnim.isRunning()){
+            neededNumberAnim.cancel();
+        }
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // Detekcija potresa za svako polje
-        for (int i = 0; i < textViews.length; i++) {
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
+        if(turn == 1 )
+        {
 
-            lastAccelerations[i] = currentAccelerations[i];
-            currentAccelerations[i] = (float) Math.sqrt((double) (x * x + y * y + z * z));
-            float delta = currentAccelerations[i] - lastAccelerations[i];
-            accelerations[i] = accelerations[i] * 0.9f + delta;
+                                if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                                    float x = event.values[0];
+                                    float y = event.values[1];
+                                    float z = event.values[2];
 
-            if (accelerations[i] > 10) { // Prag potresa za zaustavljanje animacije
-                animators[i].cancel();
-                confirmTxt.setText("CONFIRM");
-                confirmTxt.setClickable(true);
-                makeExpression();
+                                    float acceleration = (float) Math.sqrt(x * x + y * y + z * z);
+
+                                    if (acceleration > SHAKE_THRESHOLD) {
+                                        stopValueAnimations();
+
+                                        makeExpression();
+                                    }
+                                }
+
+        }
+        if(turn == 2)
+        {
+
+
+            SHAKE_THRESHOLD = 100000;
+
+        }
+        if(turn == 3)
+        {
+
+            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                float x = event.values[0];
+                float y = event.values[1];
+                float z = event.values[2];
+
+                float acceleration = (float) Math.sqrt(x * x + y * y + z * z);
+
+                if (acceleration > SHAKE_THRESHOLD) {
+                    stopValueAnimations();
+
+                    makeExpression();
+                    Toast.makeText(this, "Device shaken!", Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
     }
 
     public void setupUI() {
@@ -917,6 +961,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
 
     public void makeExpression() {
         generateNumbers();
+        confirmTxt.setText("CONFIRM");
         inputNumbers.setText("");
         clearInput.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1204,4 +1249,4 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
 
 
 
-    }
+}

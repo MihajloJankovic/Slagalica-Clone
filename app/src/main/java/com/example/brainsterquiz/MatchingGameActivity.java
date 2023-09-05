@@ -306,136 +306,136 @@ public class  MatchingGameActivity extends AppCompatActivity {
             }
 
             public void onFinish() {
-                if(round ==1 && turn != 3 && ff ==0)
-                {
-                    Map<String, Object> userForOrgs = new HashMap<>();
-
-                    db.collection("/matches").document(gameid)
-                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    if(documentSnapshot.getString("user1").equals(myid))
-                                    {
-                                        userForOrgs.put("m1",Integer.valueOf(rScore)-trScore );
-                                    }
-                                    if(documentSnapshot.getString("user2").equals(myid))
-                                    {
-                                        userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
-                                    }
-                                    documentSnapshot.getReference().update(userForOrgs);
-                                }
-
-                                //db get string and set it to int
-                            });
-                }
-                timer.setText("done!");
-
-                if(round == 1  && turn != 3)
-                {
-                    timera.cancel();
-                    Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
-                    intent.putExtra("rName", rName);
-                    intent.putExtra("bName", bName);
-                    intent.putExtra("rScore", rScore);
-                    intent.putExtra("bScore",bScore);
-                    intent.putExtra("gameid",String.valueOf(gameid));
-                    if(turn == 3)
-                    {
-                        intent.putExtra("solo", 1);
-                    }else{
-                        intent.putExtra("solo", 0);
-                    }
-                    intent.putExtra("round", 0);
-                    if(turn == 1){
-                        if(switcha == 0)
-                        {
-                            intent.putExtra("turn", 2);
-                        }
-                        else{
-                            intent.putExtra("turn", 1);
-                        }
-
-                    }
-                    if(turn == 2){
-                        if(switcha == 0)
-                        {
-                            intent.putExtra("turn", 1);
-                        }
-                        else{
-                            intent.putExtra("turn", 2);
-                        }
-                    }
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    finish();
-                    startActivity(intent);
-
-
-                }if(round == 0  && turn == 3)
-                {
-                    timera.cancel();
-                    Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
-                    intent.putExtra("rName", rName);
-                    intent.putExtra("bName", bName);
-                    intent.putExtra("rScore", rScore);
-                    intent.putExtra("bScore",bScore);
-
-                    if(turn == 3)
-                    {
-                        intent.putExtra("solo", 1);
-                    }else{
-                        intent.putExtra("solo", 0);
-                    }
-                    intent.putExtra("round", 0);
-                    intent.putExtra("turn", 3);
-                    finish();
-                    startActivity(intent);
-
-
-                }
-                if(round == 0 && turn !=3)
-                {
-                    timera.cancel();
-                    Intent intent = new Intent(getApplicationContext(), MatchingGameActivity.class);
-                    intent.putExtra("rName", rName);
-                    intent.putExtra("bName", bName);
-                    intent.putExtra("rScore", rScore);
-                    intent.putExtra("tscore",String.valueOf(trScore));
-                    intent.putExtra("gameid",String.valueOf(gameid));
-                    intent.putExtra("bScore",bScore);
-                    if(turn == 3)
-                    {
-                        intent.putExtra("solo", 1);
-                    }else{
-                        intent.putExtra("solo", 0);
-                    }
-                    if(turn == 1){
-                        if(switcha == 0)
-                        {
-                            intent.putExtra("turn", 2);
-                        }
-                        else{
-                            intent.putExtra("turn", 1);
-                        }
-
-                    }
-                    if(turn == 2){
-                        if(switcha == 0)
-                        {
-                            intent.putExtra("turn", 1);
-                        }
-                        else{
-                            intent.putExtra("turn", 2);
-                        }
-                    }
-                    intent.putExtra("round", 1);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    finish();
-                    startActivity(intent);
-
-
-
-
-                }
+//                if(round ==1 && turn != 3 && ff ==0)
+//                {
+//                    Map<String, Object> userForOrgs = new HashMap<>();
+//
+//                    db.collection("/matches").document(gameid)
+//                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                @Override
+//                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                    if(documentSnapshot.getString("user1").equals(myid))
+//                                    {
+//                                        userForOrgs.put("m1",Integer.valueOf(rScore)-trScore );
+//                                    }
+//                                    if(documentSnapshot.getString("user2").equals(myid))
+//                                    {
+//                                        userForOrgs.put("m2",Integer.valueOf(rScore)-trScore );
+//                                    }
+//                                    documentSnapshot.getReference().update(userForOrgs);
+//                                }
+//
+//                                //db get string and set it to int
+//                            });
+//                }
+//                timer.setText("done!");
+//
+//                if(round == 1  && turn != 3)
+//                {
+//                    timera.cancel();
+//                    Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
+//                    intent.putExtra("rName", rName);
+//                    intent.putExtra("bName", bName);
+//                    intent.putExtra("rScore", rScore);
+//                    intent.putExtra("bScore",bScore);
+//                    intent.putExtra("gameid",String.valueOf(gameid));
+//                    if(turn == 3)
+//                    {
+//                        intent.putExtra("solo", 1);
+//                    }else{
+//                        intent.putExtra("solo", 0);
+//                    }
+//                    intent.putExtra("round", 0);
+//                    if(turn == 1){
+//                        if(switcha == 0)
+//                        {
+//                            intent.putExtra("turn", 2);
+//                        }
+//                        else{
+//                            intent.putExtra("turn", 1);
+//                        }
+//
+//                    }
+//                    if(turn == 2){
+//                        if(switcha == 0)
+//                        {
+//                            intent.putExtra("turn", 1);
+//                        }
+//                        else{
+//                            intent.putExtra("turn", 2);
+//                        }
+//                    }
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    finish();
+//                    startActivity(intent);
+//
+//
+//                }if(round == 0  && turn == 3)
+//                {
+//                    timera.cancel();
+//                    Intent intent = new Intent(getApplicationContext(), AssociationsGame.class);
+//                    intent.putExtra("rName", rName);
+//                    intent.putExtra("bName", bName);
+//                    intent.putExtra("rScore", rScore);
+//                    intent.putExtra("bScore",bScore);
+//
+//                    if(turn == 3)
+//                    {
+//                        intent.putExtra("solo", 1);
+//                    }else{
+//                        intent.putExtra("solo", 0);
+//                    }
+//                    intent.putExtra("round", 0);
+//                    intent.putExtra("turn", 3);
+//                    finish();
+//                    startActivity(intent);
+//
+//
+//                }
+//                if(round == 0 && turn !=3)
+//                {
+//                    timera.cancel();
+//                    Intent intent = new Intent(getApplicationContext(), MatchingGameActivity.class);
+//                    intent.putExtra("rName", rName);
+//                    intent.putExtra("bName", bName);
+//                    intent.putExtra("rScore", rScore);
+//                    intent.putExtra("tscore",String.valueOf(trScore));
+//                    intent.putExtra("gameid",String.valueOf(gameid));
+//                    intent.putExtra("bScore",bScore);
+//                    if(turn == 3)
+//                    {
+//                        intent.putExtra("solo", 1);
+//                    }else{
+//                        intent.putExtra("solo", 0);
+//                    }
+//                    if(turn == 1){
+//                        if(switcha == 0)
+//                        {
+//                            intent.putExtra("turn", 2);
+//                        }
+//                        else{
+//                            intent.putExtra("turn", 1);
+//                        }
+//
+//                    }
+//                    if(turn == 2){
+//                        if(switcha == 0)
+//                        {
+//                            intent.putExtra("turn", 1);
+//                        }
+//                        else{
+//                            intent.putExtra("turn", 2);
+//                        }
+//                    }
+//                    intent.putExtra("round", 1);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    finish();
+//                    startActivity(intent);
+//
+//
+//
+//
+//                }
 
             }
         }.start();
