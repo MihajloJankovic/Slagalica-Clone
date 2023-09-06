@@ -106,6 +106,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/quiz_font"
                     android:text="Monthly ranking"
+                    android:textColor="@color/white"
                     android:gravity="center"
                     android:textSize="20dp">
                 </TextView>
@@ -180,16 +181,16 @@
                                     android:layout_width="30dp"
                                     android:layout_height="match_parent"
                                     android:orientation="vertical">
+
                                     <TextView
                                         android:id="@+id/peopleStarsQuantity"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:fontFamily="@font/quiz_font"
+                                        android:gravity="center"
                                         android:text="45"
-                                        android:textSize="20dp"
                                         android:textColor="#FF9800"
-                                        android:gravity="center">
-                                    </TextView>
+                                        android:textSize="18dp"></TextView>
                                 </LinearLayout>
                             </LinearLayout>
                             <LinearLayout
@@ -275,16 +276,16 @@
                                     android:layout_width="30dp"
                                     android:layout_height="match_parent"
                                     android:orientation="vertical">
+
                                     <TextView
                                         android:id="@+id/peopleStarsQuantity2"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:fontFamily="@font/quiz_font"
+                                        android:gravity="center"
                                         android:text="39"
-                                        android:textSize="20dp"
                                         android:textColor="#FF9800"
-                                        android:gravity="center">
-                                    </TextView>
+                                        android:textSize="18dp"></TextView>
                                 </LinearLayout>
                             </LinearLayout>
                             <LinearLayout
@@ -370,16 +371,16 @@
                                     android:layout_width="30dp"
                                     android:layout_height="match_parent"
                                     android:orientation="vertical">
+
                                     <TextView
                                         android:id="@+id/peopleStarsQuantity3"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:fontFamily="@font/quiz_font"
+                                        android:gravity="center"
                                         android:text="34"
-                                        android:textSize="20dp"
                                         android:textColor="#FF9800"
-                                        android:gravity="center">
-                                    </TextView>
+                                        android:textSize="18dp"></TextView>
                                 </LinearLayout>
                             </LinearLayout>
                             <LinearLayout
@@ -466,16 +467,16 @@
                                     android:layout_width="30dp"
                                     android:layout_height="match_parent"
                                     android:orientation="vertical">
+
                                     <TextView
                                         android:id="@+id/peopleStarsQuantity4"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:fontFamily="@font/quiz_font"
+                                        android:gravity="center"
                                         android:text="15"
-                                        android:textSize="20dp"
                                         android:textColor="#FF9800"
-                                        android:gravity="center">
-                                    </TextView>
+                                        android:textSize="18dp"></TextView>
                                 </LinearLayout>
                             </LinearLayout>
                             <LinearLayout
@@ -561,16 +562,16 @@
                                     android:layout_width="30dp"
                                     android:layout_height="match_parent"
                                     android:orientation="vertical">
+
                                     <TextView
                                         android:id="@+id/peopleStarsQuantity5"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:fontFamily="@font/quiz_font"
+                                        android:gravity="center"
                                         android:text="9"
-                                        android:textSize="20dp"
                                         android:textColor="#FF9800"
-                                        android:gravity="center">
-                                    </TextView>
+                                        android:textSize="18dp"></TextView>
                                 </LinearLayout>
                             </LinearLayout>
                             <LinearLayout
