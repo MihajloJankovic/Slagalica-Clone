@@ -43,6 +43,8 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.MonthDay;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
@@ -91,6 +93,24 @@ public class BrainsterHome extends AppCompatActivity {
     private TextView fifthBoxPointer;
     private TextView sixthBoxPointer;
 
+    private TextView peopleName;
+    private TextView peopleName2;
+    private TextView peopleName3;
+    private TextView peopleName4;
+    private TextView peopleName5;
+
+    private TextView peopleStarsQuantity;
+    private TextView peopleStarsQuantity2;
+    private TextView peopleStarsQuantity3;
+    private TextView peopleStarsQuantity4;
+    private TextView peopleStarsQuantity5;
+
+    private TextView peopleTokensQuantity;
+    private TextView peopleTokensQuantity2;
+    private TextView peopleTokensQuantity3;
+    private TextView peopleTokensQuantity4;
+    private TextView peopleTokensQuantity5;
+
     private LinearLayout peopleLayout;
     private LinearLayout peopleList;
 
@@ -105,6 +125,7 @@ public class BrainsterHome extends AppCompatActivity {
     private TextView row6Label;
     private TextView rankingWeekly;
     private TextView rankingMonthly;
+    private TextView seasonLayout;
     private BrainsterHome bh = this;
     private TextView row7Label;
     private Dialog notifications;
@@ -121,9 +142,8 @@ public class BrainsterHome extends AppCompatActivity {
     private ArrayList<LinearLayout> peopleListClone;
 
     private TextView peopleNumber;
-    private TextView peopleName;
-    private TextView peopleStarsQuantity;
-    private TextView peopleTokensQuantity;
+
+
     private String timeLeft;
 
     int totalnum =0;
@@ -154,33 +174,61 @@ public class BrainsterHome extends AppCompatActivity {
         peopleListClone = new ArrayList<>(10);
 
         ranking.setContentView(R.layout.ranking);
-        LocalDateTime startTime = LocalDateTime.now();
-        LocalDateTime endOfWeek = startTime.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
-        endOfWeek = endOfWeek.withHour(0).withMinute(0);
-        Duration duration = Duration.between(startTime, endOfWeek);
-        long totalMinutes = duration.toMinutes();
-        long days = totalMinutes / (60 * 24);
-        long hours = (totalMinutes % (60 * 24)) / 60;
-        long minutes = totalMinutes % 60;
+
+//       ----------------------------------------------------------------------------------------------------
+//        LocalDateTime startTime = LocalDateTime.now();
+//        LocalDateTime endOfWeek = startTime.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+//        endOfWeek = endOfWeek.withHour(0).withMinute(0);
+//        Duration duration = Duration.between(startTime, endOfWeek);
+//        long totalMinutes = duration.toMinutes();
+//        long days = totalMinutes / (60 * 24);
+//        long hours = (totalMinutes % (60 * 24)) / 60;
+//        long minutes = totalMinutes % 60;
+//
+//
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM. dd. yyyy HH:mm");
+//
+//        timeLeft = days + " d " + hours + " h " + minutes + " m";
+//
+//        timeLeftTextView = (TextView) ranking.findViewById(R.id.timeLeftTextView);
+//        timeLeftTextView.setText("Ends in: " + timeLeft);
+//        ----------------------------------------------------------------------------------------------------
+//
+//        TextView weekDatesTextView = ranking.findViewById(R.id.seasonDate);
+//
+//        LocalDate now = LocalDate.now();
+//        LocalDate startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+//        LocalDate endOfTheWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+//
+//        DateTimeFormatter formattered = DateTimeFormatter.ofPattern("dd. MM. yyyy.");
+//        String formattedDates = startOfWeek.format(formattered) + " - " + endOfTheWeek.format(formattered);
+//
+//        weekDatesTextView.setText(formattedDates);
+//
+//       ----------------------------------------------------------------------------------------------------
+//
+//        LocalDate start = LocalDate.now();
+//        LocalDate startOfMonth = start.with(TemporalAdjusters.firstDayOfMonth());
+//        LocalDate endOfMonth = start.with(TemporalAdjusters.lastDayOfMonth());
+//
+//        String formattedDates2 = startOfMonth.format(formattered) + " - " + endOfMonth.format(formatter);
+//
+//// Ispis datuma za mesecnu sezonu
+//        System.out.println("Monthly Season: " + formattedDates);
+//
+//
+//        LocalDateTime endOfMonthTime = LocalDateTime.of(endOfMonth, LocalTime.MAX);
+//        Duration duration2 = Duration.between(startTime, endOfMonthTime);
+//
+//        long totalMinutes2 = duration.toMinutes();
+//        long days2 = totalMinutes / (60 * 24);
+//        long hours2 = (totalMinutes % (60 * 24)) / 60;
+//        long minutes2 = totalMinutes % 60;
+//
+//// Formatiranje preostalog vremena
+//        String timeLeft2 = days2 + " d " + hours2 + " h " + minutes2 + " m";
 
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM. dd. yyyy HH:mm");
-
-        timeLeft = days + " d " + hours + " h " + minutes + " m";
-
-        timeLeftTextView = (TextView) ranking.findViewById(R.id.timeLeftTextView);
-        timeLeftTextView.setText("Ends in: " + timeLeft);
-
-        TextView weekDatesTextView = ranking.findViewById(R.id.seasonDate);
-
-        LocalDate now = LocalDate.now();
-        LocalDate startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        LocalDate endOfTheWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
-
-        DateTimeFormatter formattered = DateTimeFormatter.ofPattern("dd. MM. yyyy.");
-        String formattedDates = startOfWeek.format(formattered) + " - " + endOfTheWeek.format(formattered);
-
-        weekDatesTextView.setText(formattedDates);
 
         Konekcija  app = (Konekcija) BrainsterHome.this.getApplication();
         this.mSocket = app.getSocket();
@@ -233,20 +281,20 @@ public class BrainsterHome extends AppCompatActivity {
 
         mSocket.emit("Imena");
 
-                Intent intent = new Intent(getApplicationContext(), QuestionsGame.class);
+        Intent intent = new Intent(getApplicationContext(), QuestionsGame.class);
 
 
-                intent.putExtra("solo", 0);
-                intent.putExtra("round", 0);
-                intent.putExtra("bName", bname);
-                intent.putExtra("rName", rname);
-                intent.putExtra("rScore", "0");
-                intent.putExtra("bScore", "0");
-                intent.putExtra("gameid",gameid );
-                intent.putExtra("turn", 1);
+        intent.putExtra("solo", 0);
+        intent.putExtra("round", 0);
+        intent.putExtra("bName", bname);
+        intent.putExtra("rName", rname);
+        intent.putExtra("rScore", "0");
+        intent.putExtra("bScore", "0");
+        intent.putExtra("gameid",gameid );
+        intent.putExtra("turn", 1);
 
-                finish();
-                startActivity(intent);
+        finish();
+        startActivity(intent);
 
 
 
@@ -375,6 +423,40 @@ public class BrainsterHome extends AppCompatActivity {
         setUIViews();
         ranking.show();
 
+        String colorCode = "#FF9800";
+        int color = Color.parseColor(colorCode);
+        rankingWeeklyLayout.setBackgroundColor(color);
+        rankingWeekly.setTextColor(Color.BLACK);
+
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endOfWeek = startTime.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        endOfWeek = endOfWeek.withHour(0).withMinute(0);
+        Duration duration = Duration.between(startTime, endOfWeek);
+        long totalMinutes = duration.toMinutes();
+        long days = totalMinutes / (60 * 24);
+        long hours = (totalMinutes % (60 * 24)) / 60;
+        long minutes = totalMinutes % 60;
+
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM. dd. yyyy HH:mm");
+
+        timeLeft = days + " d " + hours + " h " + minutes + " m";
+
+        timeLeftTextView = (TextView) ranking.findViewById(R.id.timeLeftTextView);
+        timeLeftTextView.setText("Ends in: " + timeLeft);
+//        ----------------------------------------------------------------------------------------------------
+
+        TextView weekDatesTextView = ranking.findViewById(R.id.seasonDate);
+
+        LocalDate now = LocalDate.now();
+        LocalDate startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate endOfTheWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+
+        DateTimeFormatter formattered = DateTimeFormatter.ofPattern("dd. MM. yyyy.");
+        String formattedDates = startOfWeek.format(formattered) + " - " + endOfTheWeek.format(formattered);
+
+        weekDatesTextView.setText(formattedDates);
+
         closeButtonRanking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -387,8 +469,57 @@ public class BrainsterHome extends AppCompatActivity {
             public void onClick(View view) {
                 String colorCode = "#FF9800";
                 int color = Color.parseColor(colorCode);
+
+                peopleName.setText("Beska");
+                peopleName2.setText("Milojica");
+                peopleName3.setText("Pera");
+                peopleName4.setText("Dusan");
+                peopleName5.setText("Milan");
+
+                peopleStarsQuantity.setText("45");
+                peopleStarsQuantity2.setText("39");
+                peopleStarsQuantity3.setText("34");
+                peopleStarsQuantity4.setText("15");
+                peopleStarsQuantity5.setText("9");
+
+                peopleTokensQuantity.setText("7");
+                peopleTokensQuantity2.setText("5");
+                peopleTokensQuantity3.setText("3");
+                peopleTokensQuantity4.setText("1");
+                peopleTokensQuantity5.setText("1");
+
                 rankingWeeklyLayout.setBackgroundColor(color);
                 rankingWeekly.setTextColor(Color.BLACK);
+                rankingMonthlyLayout.setBackgroundResource(R.drawable.operations_clicked);
+                rankingMonthly.setTextColor(Color.WHITE);
+                seasonLayout.setText("Weekly Season");
+                LocalDateTime startTime = LocalDateTime.now();
+                LocalDateTime endOfWeek = startTime.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+                endOfWeek = endOfWeek.withHour(0).withMinute(0);
+                Duration duration = Duration.between(startTime, endOfWeek);
+                long totalMinutes = duration.toMinutes();
+                long days = totalMinutes / (60 * 24);
+                long hours = (totalMinutes % (60 * 24)) / 60;
+                long minutes = totalMinutes % 60;
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM. dd. yyyy HH:mm");
+
+                timeLeft = days + " d " + hours + " h " + minutes + " m";
+
+                timeLeftTextView = (TextView) ranking.findViewById(R.id.timeLeftTextView);
+                timeLeftTextView.setText("Ends in: " + timeLeft);
+//        ----------------------------------------------------------------------------------------------------
+
+                TextView weekDatesTextView = ranking.findViewById(R.id.seasonDate);
+
+                LocalDate now = LocalDate.now();
+                LocalDate startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+                LocalDate endOfTheWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+
+                DateTimeFormatter formattered = DateTimeFormatter.ofPattern("dd. MM. yyyy.");
+                String formattedDates = startOfWeek.format(formattered) + " - " + endOfTheWeek.format(formattered);
+
+                weekDatesTextView.setText(formattedDates);
 
             }
         });
@@ -396,10 +527,61 @@ public class BrainsterHome extends AppCompatActivity {
         rankingMonthlyLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int color = Color.parseColor("#FF9800");
-                ViewCompat.setBackgroundTintList(rankingMonthlyLayout, ColorStateList.valueOf(color));
+                String colorCode = "#FF9800";
+                int color = Color.parseColor(colorCode);
+
+                peopleName.setText("Pera");
+                peopleName2.setText("Beska");
+                peopleName3.setText("Milojica");
+                peopleName4.setText("Dusan");
+                peopleName5.setText("Milan");
+
+                peopleStarsQuantity.setText("227");
+                peopleStarsQuantity2.setText("146");
+                peopleStarsQuantity3.setText("139");
+                peopleStarsQuantity4.setText("67");
+                peopleStarsQuantity5.setText("13");
+
+                peopleTokensQuantity.setText("17");
+                peopleTokensQuantity2.setText("13");
+                peopleTokensQuantity3.setText("9");
+                peopleTokensQuantity4.setText("4");
+                peopleTokensQuantity5.setText("4");
+
+                rankingMonthlyLayout.setBackgroundColor(color);
+                rankingMonthly.setTextColor(Color.BLACK);
+                rankingWeeklyLayout.setBackgroundResource(R.drawable.operations_clicked);
+                rankingWeekly.setTextColor(Color.WHITE);
+                seasonLayout.setText("Monthly Season");
+                LocalDateTime startTime = LocalDateTime.now();
+                LocalDateTime startOfMonth = startTime.with(TemporalAdjusters.firstDayOfMonth());
+                LocalDateTime endOfMonth = startTime.with(TemporalAdjusters.lastDayOfMonth());
+                endOfMonth = endOfMonth.withHour(0).withMinute(0);
+                Duration duration = Duration.between(startTime, endOfMonth);
+                long totalMinutes = duration.toMinutes();
+                long days = totalMinutes / (60 * 24);
+                long hours = (totalMinutes % (60 * 24)) / 60;
+                long minutes = totalMinutes % 60;
+
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM. dd. yyyy HH:mm");
+
+                timeLeft = days + " d " + hours + " h " + minutes + " m";
+
+                timeLeftTextView = (TextView) ranking.findViewById(R.id.timeLeftTextView);
+                timeLeftTextView.setText("Ends in: " + timeLeft);
+//        ----------------------------------------------------------------------------------------------------
+
+                TextView monthDatesTextView = ranking.findViewById(R.id.seasonDate);
+
+
+                DateTimeFormatter formattered = DateTimeFormatter.ofPattern("dd. MM. yyyy.");
+                String formattedDates = startOfMonth.format(formattered) + " - " + endOfMonth.format(formattered);
+                monthDatesTextView.setText(formattedDates);
             }
         });
+
+
     }
     public void statisticsBoxListeners(View view) {
         setUIViews();
@@ -411,7 +593,7 @@ public class BrainsterHome extends AppCompatActivity {
 
 
 
-         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -483,7 +665,6 @@ public class BrainsterHome extends AppCompatActivity {
                 fourthBoxPointer.setVisibility(View.INVISIBLE);
                 fifthBoxPointer.setVisibility(View.INVISIBLE);
                 sixthBoxPointer.setVisibility(View.INVISIBLE);
-
                 boxHeader.setText("Number game - distance");
                 row1Label.setText("correct number: ");
                 row1Value.setText("73%");
@@ -780,15 +961,26 @@ public class BrainsterHome extends AppCompatActivity {
         rankingMonthlyLayout = (RelativeLayout) ranking.findViewById(R.id.rankingMonthlyLayout);
         rankingWeekly = (TextView) ranking.findViewById(R.id.weeklyRank);
         rankingMonthly = (TextView) ranking.findViewById(R.id.monthlyRank);
-
+        seasonLayout = (TextView) ranking.findViewById(R.id.seasonLayout);
         peopleList = (LinearLayout) ranking.findViewById(R.id.peopleList);
         peopleLayout = (LinearLayout) ranking.findViewById(R.id.peopleLayout);
         peoplePointsLayout = (LinearLayout) ranking.findViewById(R.id.peoplePointsLayout);
         peopleNumber = (TextView) ranking.findViewById(R.id.peopleNumber);
         peopleName = (TextView) ranking.findViewById(R.id.peopleName);
         peopleStarsQuantity = (TextView) ranking.findViewById(R.id.peopleStarsQuantity);
+        peopleStarsQuantity2 = (TextView) ranking.findViewById(R.id.peopleStarsQuantity2);
+        peopleStarsQuantity3 = (TextView) ranking.findViewById(R.id.peopleStarsQuantity3);
+        peopleStarsQuantity4 = (TextView) ranking.findViewById(R.id.peopleStarsQuantity4);
+        peopleStarsQuantity5 = (TextView) ranking.findViewById(R.id.peopleStarsQuantity5);
         peopleTokensQuantity = (TextView) ranking.findViewById(R.id.peopleTokensQuantity);
-
+        peopleTokensQuantity2 = (TextView) ranking.findViewById(R.id.peopleTokensQuantity2);
+        peopleTokensQuantity3 = (TextView) ranking.findViewById(R.id.peopleTokensQuantity3);
+        peopleTokensQuantity4 = (TextView) ranking.findViewById(R.id.peopleTokensQuantity4);
+        peopleTokensQuantity5 = (TextView) ranking.findViewById(R.id.peopleTokensQuantity5);
+        peopleName2 = (TextView) ranking.findViewById(R.id.peopleName2);
+        peopleName3 = (TextView) ranking.findViewById(R.id.peopleName3);
+        peopleName4 = (TextView) ranking.findViewById(R.id.peopleName4);
+        peopleName5 = (TextView) ranking.findViewById(R.id.peopleName5);
         messageIconLayout = (LinearLayout) notifications.findViewById(R.id.messageIconLayout);
         messageIcon = (LinearLayout) notifications.findViewById(R.id.messageIcon);
         notificationTextLayout = (RelativeLayout) notifications.findViewById(R.id.notificationTextLayout);
