@@ -109,7 +109,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
     private Socket mSocket;
 
     private Sensor accelerometerSensor;
-    private  int SHAKE_THRESHOLD = 45;
+    private  int SHAKE_THRESHOLD = 14;
     private ValueAnimator[] oneDigit = new ValueAnimator[4];
     private ValueAnimator doubleDigitsAnim = new ValueAnimator();
     private ValueAnimator lastDigitsAnim = new ValueAnimator();
@@ -549,69 +549,69 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
             }
 
             public void onFinish() {
-                timer.setText("done!");
-                if (round == 0 && turn != 3) {
-                    Map<String, Object> userForOrgs = new HashMap<>();
-
-                    db.collection("/matches").document(gameid)
-                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    Map<String, Object> map = new HashMap<>();
-                                    map.put("yourProperty", "yourValue");
-                                    if (documentSnapshot.getString("user1").equals(myid)) {
-                                        userForOrgs.put("n1", Integer.valueOf(rScore) - trScore);
-                                    }
-                                    if (documentSnapshot.getString("user2").equals(myid)) {
-                                        userForOrgs.put("n2", Integer.valueOf(rScore) - trScore);
-                                    }
-                                    db.collection("/matches").document(gameid).update(userForOrgs);
-                                }
-
-                                //db get string and set it to int
-                            });
-                }
-                if (round == 1 && turn != 3) {
-                    Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
-                    finish();
-                    startActivity(intent);
-
-                }
-                if (round == 0 && turn == 3) {
-                    Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
-                    finish();
-                    startActivity(intent);
-
-                }
-                if (round == 0 && turn != 3) {
-                    Intent intent = new Intent(getApplicationContext(), NumberGame.class);
-                    intent.putExtra("rName", rName);
-                    intent.putExtra("bName", bName);
-                    intent.putExtra("rScore", rScore);
-                    intent.putExtra("bScore", bScore);
-                    intent.putExtra("tscore", String.valueOf(trScore));
-                    intent.putExtra("gameid", String.valueOf(gameid));
-                    intent.putExtra("round", 1);
-                    if (turn == 3) {
-                        intent.putExtra("solo", 1);
-                    } else {
-                        intent.putExtra("solo", 0);
-                    }
-
-                    if (turn == 1) {
-                        intent.putExtra("turn", 2);
-                    }
-                    if (turn == 2) {
-                        intent.putExtra("turn", 1);
-                    }
-                    if (turn == 3) {
-                        intent.putExtra("turn", 3);
-                    }
-
-                    finish();
-                    startActivity(intent);
-
-                }
+//                timer.setText("done!");
+//                if (round == 0 && turn != 3) {
+//                    Map<String, Object> userForOrgs = new HashMap<>();
+//
+//                    db.collection("/matches").document(gameid)
+//                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                @Override
+//                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                    Map<String, Object> map = new HashMap<>();
+//                                    map.put("yourProperty", "yourValue");
+//                                    if (documentSnapshot.getString("user1").equals(myid)) {
+//                                        userForOrgs.put("n1", Integer.valueOf(rScore) - trScore);
+//                                    }
+//                                    if (documentSnapshot.getString("user2").equals(myid)) {
+//                                        userForOrgs.put("n2", Integer.valueOf(rScore) - trScore);
+//                                    }
+//                                    db.collection("/matches").document(gameid).update(userForOrgs);
+//                                }
+//
+//                                //db get string and set it to int
+//                            });
+//                }
+//                if (round == 1 && turn != 3) {
+//                    Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
+//                    finish();
+//                    startActivity(intent);
+//
+//                }
+//                if (round == 0 && turn == 3) {
+//                    Intent intent = new Intent(getApplicationContext(), BrainsterHome.class);
+//                    finish();
+//                    startActivity(intent);
+//
+//                }
+//                if (round == 0 && turn != 3) {
+//                    Intent intent = new Intent(getApplicationContext(), NumberGame.class);
+//                    intent.putExtra("rName", rName);
+//                    intent.putExtra("bName", bName);
+//                    intent.putExtra("rScore", rScore);
+//                    intent.putExtra("bScore", bScore);
+//                    intent.putExtra("tscore", String.valueOf(trScore));
+//                    intent.putExtra("gameid", String.valueOf(gameid));
+//                    intent.putExtra("round", 1);
+//                    if (turn == 3) {
+//                        intent.putExtra("solo", 1);
+//                    } else {
+//                        intent.putExtra("solo", 0);
+//                    }
+//
+//                    if (turn == 1) {
+//                        intent.putExtra("turn", 2);
+//                    }
+//                    if (turn == 2) {
+//                        intent.putExtra("turn", 1);
+//                    }
+//                    if (turn == 3) {
+//                        intent.putExtra("turn", 3);
+//                    }
+//
+//                    finish();
+//                    startActivity(intent);
+//
+//                }
             }
         }.start();
 
@@ -740,7 +740,7 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
         {
 
 
-            SHAKE_THRESHOLD = 100000;
+          //  SHAKE_THRESHOLD = 100000;
 
         }
         if(turn == 3)
@@ -870,10 +870,10 @@ public class NumberGame extends AppCompatActivity implements SensorEventListener
             }
         });
 
+
         if (turn == 1) {
             mSocket.emit("needed", Integer.valueOf((String) neededNumber.getText()));
         }
-
     }
 
     public void calculateExpression(View view) {

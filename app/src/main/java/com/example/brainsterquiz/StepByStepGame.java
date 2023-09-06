@@ -344,130 +344,130 @@ public class StepByStepGame extends AppCompatActivity {
             }
 
             public void onFinish() {
-                timer.setText("done!");
-                if(round ==1 && turn != 3)
-                {
-                    Map<String, Object> userForOrgs = new HashMap<>();
-
-                    db.collection("/matches").document(gameid)
-                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    Map<String, Object> map = new HashMap<>();
-                                    if(documentSnapshot.getString("user1").equals(myid))
-                                    {
-                                        userForOrgs.put("s1",Integer.valueOf(rScore)-trScore );
-                                    }
-                                    if(documentSnapshot.getString("user2").equals(myid))
-                                    {
-                                        userForOrgs.put("s2",Integer.valueOf(rScore)-trScore );
-                                    }
-                                    db.collection("/matches").document(gameid).update(userForOrgs);
-                                }
-
-                                //db get string and set it to int
-                            });
-                }
-                if (round == 1 && turn != 3) {
-                    Intent intent = new Intent(getApplicationContext(), NumberGame.class);
-                    intent.putExtra("rName", rName);
-                    intent.putExtra("bName", bName);
-                    intent.putExtra("tscore",String.valueOf(trScore));
-                    intent.putExtra("gameid",String.valueOf(gameid));
-                    intent.putExtra("rScore", rScore);
-                    intent.putExtra("bScore", bScore);
-                    if (turn == 3) {
-                        intent.putExtra("solo", 1);
-                    } else {
-                        intent.putExtra("solo", 0);
-                    }
-                    intent.putExtra("round", 0);
-                    if(turn == 1){
-
-
-                        intent.putExtra("turn", 2);
-
-
-
-
-
-                    }
-                    if(turn == 2){
-
-                        intent.putExtra("turn", 1);
-
-
-                    }
-                    finish();
-                    startActivity(intent);
-
-                }
-                if (round == 0 && turn == 3) {
-                    Intent intent = new Intent(getApplicationContext(), NumberGame.class);
-                    intent.putExtra("rName", rName);
-                    intent.putExtra("bName", bName);
-                    intent.putExtra("rScore", rScore);
-                    intent.putExtra("bScore", bScore);
-                    if (turn == 3) {
-                        intent.putExtra("solo", 1);
-                    } else {
-                        intent.putExtra("solo", 0);
-                    }
-                    intent.putExtra("round", 0);
-                    if(turn == 1){
-
-
-                        intent.putExtra("turn", 2);
-
-
-
-
-
-                    }
-                    if(turn == 2){
-
-                        intent.putExtra("turn", 1);
-
-
-                    }
-                    finish();
-                    startActivity(intent);
-
-                }
-                if (round == 0 && turn != 3) {
-                    Intent intent = new Intent(getApplicationContext(), StepByStepGame.class);
-                    intent.putExtra("rName", rName);
-                    intent.putExtra("bName", bName);
-                    intent.putExtra("rScore", rScore);
-                    intent.putExtra("gameid",String.valueOf(gameid));
-                    intent.putExtra("tscore",String.valueOf(trScore));
-                    intent.putExtra("bScore", bScore);
-                    if (turn == 3) {
-                        intent.putExtra("solo", 1);
-                    } else {
-                        intent.putExtra("solo", 0);
-                    }
-                    intent.putExtra("round", 1);
-                    if(turn == 1){
-
-
-                        intent.putExtra("turn", 2);
-
-
-
-
-
-                    }
-                    if(turn == 2){
-
-                        intent.putExtra("turn", 1);
-
-
-                    }
-                    finish();
-                    startActivity(intent);
-
-                }
+//                timer.setText("done!");
+//                if(round ==1 && turn != 3)
+//                {
+//                    Map<String, Object> userForOrgs = new HashMap<>();
+//
+//                    db.collection("/matches").document(gameid)
+//                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                @Override
+//                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                    Map<String, Object> map = new HashMap<>();
+//                                    if(documentSnapshot.getString("user1").equals(myid))
+//                                    {
+//                                        userForOrgs.put("s1",Integer.valueOf(rScore)-trScore );
+//                                    }
+//                                    if(documentSnapshot.getString("user2").equals(myid))
+//                                    {
+//                                        userForOrgs.put("s2",Integer.valueOf(rScore)-trScore );
+//                                    }
+//                                    db.collection("/matches").document(gameid).update(userForOrgs);
+//                                }
+//
+//                                //db get string and set it to int
+//                            });
+//                }
+//                if (round == 1 && turn != 3) {
+//                    Intent intent = new Intent(getApplicationContext(), NumberGame.class);
+//                    intent.putExtra("rName", rName);
+//                    intent.putExtra("bName", bName);
+//                    intent.putExtra("tscore",String.valueOf(trScore));
+//                    intent.putExtra("gameid",String.valueOf(gameid));
+//                    intent.putExtra("rScore", rScore);
+//                    intent.putExtra("bScore", bScore);
+//                    if (turn == 3) {
+//                        intent.putExtra("solo", 1);
+//                    } else {
+//                        intent.putExtra("solo", 0);
+//                    }
+//                    intent.putExtra("round", 0);
+//                    if(turn == 1){
+//
+//
+//                        intent.putExtra("turn", 2);
+//
+//
+//
+//
+//
+//                    }
+//                    if(turn == 2){
+//
+//                        intent.putExtra("turn", 1);
+//
+//
+//                    }
+//                    finish();
+//                    startActivity(intent);
+//
+//                }
+//                if (round == 0 && turn == 3) {
+//                    Intent intent = new Intent(getApplicationContext(), NumberGame.class);
+//                    intent.putExtra("rName", rName);
+//                    intent.putExtra("bName", bName);
+//                    intent.putExtra("rScore", rScore);
+//                    intent.putExtra("bScore", bScore);
+//                    if (turn == 3) {
+//                        intent.putExtra("solo", 1);
+//                    } else {
+//                        intent.putExtra("solo", 0);
+//                    }
+//                    intent.putExtra("round", 0);
+//                    if(turn == 1){
+//
+//
+//                        intent.putExtra("turn", 2);
+//
+//
+//
+//
+//
+//                    }
+//                    if(turn == 2){
+//
+//                        intent.putExtra("turn", 1);
+//
+//
+//                    }
+//                    finish();
+//                    startActivity(intent);
+//
+//                }
+//                if (round == 0 && turn != 3) {
+//                    Intent intent = new Intent(getApplicationContext(), StepByStepGame.class);
+//                    intent.putExtra("rName", rName);
+//                    intent.putExtra("bName", bName);
+//                    intent.putExtra("rScore", rScore);
+//                    intent.putExtra("gameid",String.valueOf(gameid));
+//                    intent.putExtra("tscore",String.valueOf(trScore));
+//                    intent.putExtra("bScore", bScore);
+//                    if (turn == 3) {
+//                        intent.putExtra("solo", 1);
+//                    } else {
+//                        intent.putExtra("solo", 0);
+//                    }
+//                    intent.putExtra("round", 1);
+//                    if(turn == 1){
+//
+//
+//                        intent.putExtra("turn", 2);
+//
+//
+//
+//
+//
+//                    }
+//                    if(turn == 2){
+//
+//                        intent.putExtra("turn", 1);
+//
+//
+//                    }
+//                    finish();
+//                    startActivity(intent);
+//
+//                }
             }
         }.start();
 
@@ -724,6 +724,17 @@ public class StepByStepGame extends AppCompatActivity {
                                                 intent.putExtra("solo", 0);
                                             }
                                             intent.putExtra("round", 0);
+                                            if(turn == 1){
+
+                                                intent.putExtra("turn", 2);
+
+
+                                            }
+                                            if(turn == 2){
+
+                                                intent.putExtra("turn", 1);
+
+                                            }
                                             finish();
                                             startActivity(intent);
 
@@ -746,6 +757,17 @@ public class StepByStepGame extends AppCompatActivity {
                                                 intent.putExtra("solo", 0);
                                             }
                                             intent.putExtra("round", 1);
+                                            if(turn == 1){
+
+                                                intent.putExtra("turn", 2);
+
+
+                                            }
+                                            if(turn == 2){
+
+                                                intent.putExtra("turn", 1);
+
+                                            }
                                             finish();
                                             startActivity(intent);
 
