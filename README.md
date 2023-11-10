@@ -1,2 +1,2 @@
 # MA2K23-Projekat
- ma2k23
+ We used java to build application and Firebase as storage. 
